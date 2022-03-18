@@ -5,7 +5,7 @@ import { MdContentCopy, MdOutlineAnalytics, MdOutlineAccountBalanceWallet, MdOut
 import { RiSettings5Fill, RiBarChart2Fill, RiHome5Fill, RiBookFill } from 'react-icons/ri'
 import { TiHome } from 'react-icons/ti'
 import { HiViewGrid, HiChartBar } from 'react-icons/hi'
-import { textColor, svgColor, selectTextColor, borderColor, backgroundLightBlue } from '../utils'
+import { textColor, svgColor, selectTextColor, borderColor, darkTextColor } from '../utils'
 
 function Sidebar() {
     return <Container>
@@ -61,7 +61,7 @@ const Logo = styled.img`
 `;
 
 const LogoText = styled.h2`
-    color: #2e3059;
+    color: ${darkTextColor};
     font: 1.5rem;
     margin-left: .75rem;
     margin-bottom: -0.5rem;
@@ -101,6 +101,7 @@ const Link = styled.div`
         font-size: 1.8rem;
         margin-top: -.25rem;
         color: ${ svgColor };
+        transition: 0.2s ease-in-out;
     }
     &:hover {    
         color: ${selectTextColor};

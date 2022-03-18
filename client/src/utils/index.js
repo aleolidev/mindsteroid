@@ -4,6 +4,7 @@ export const backgroundLightBlue = "#e8e9fe";
 export const textColor = "#584478";
 export const svgColor = "#7b64A4";
 export const selectTextColor = "#535ADF";
+export const darkTextColor = "#2E3059";
 export const placeholderColor = "#A298B5";
 export const primaryBlue = "#4E5FEE";
 export const primaryDarkBlue = "#392ECF";

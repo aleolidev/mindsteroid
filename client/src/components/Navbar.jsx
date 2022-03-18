@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+import MindsteroidIcon from '../assets/mindsteroid-logo.png'
 import { MdSearch } from 'react-icons/md'
-import { textColor, placeholderColor, borderColor, backgroundLightBlue, inputSvgColor } from '../utils'
+import { HiBell } from 'react-icons/hi'
+import { textColor, svgColor, placeholderColor, darkTextColor, borderColor, backgroundLightBlue, inputSvgColor, selectTextColor } from '../utils'
 
 function Navbar() {
     return <NavbarContainer>
@@ -11,7 +13,17 @@ function Navbar() {
             </Icon>
             <Input type="text" placeholder="Search" />
         </InputContainer>
-        <Text>Launch</Text>
+        <ProfileContainer>
+            <Notifications>
+                <HiBell />
+            </Notifications>
+            <Profile>
+                <UserIcon src={MindsteroidIcon}/>
+                <UserName>
+                    Alex Olivares
+                </UserName>
+            </Profile>
+        </ProfileContainer>
     </NavbarContainer>
 }
 
@@ -32,8 +44,55 @@ const Text = styled.h1`
 
 const InputContainer = styled.div`
     display: flex;
-    padding: 0 12rem 0 2.5rem;
-    width: 100%;
+    padding: 0 2.5rem 0 2.5rem;
+    width: 60%;
+`;
+
+const ProfileContainer = styled.div`
+    display: flex;
+    padding: 0 2em 0 0;
+`;
+
+const Notifications = styled.div`
+    height: 2.5rem;
+    width: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+        color: ${ svgColor };
+        font-size: 2rem;    
+        transition: 0.2s ease-in-out;
+    }
+    &:hover {    
+        svg {
+            color: ${ selectTextColor };
+        }
+    }
+`;
+
+const Profile = styled.div`
+    display: flex;
+    padding-left: 1em;
+    width: 70%;
+    justify-content: center;
+    align-items: center;
+`;
+
+
+const UserIcon = styled.img`
+    height: 1.5em;
+    // padding: 0 0 0 2em;
+`;
+
+
+const UserName = styled.h3`
+    padding-left: .5em;
+    margin-bottom: -0.3rem;
+    font-weight: 400;
+    font-size: 1rem;
+    color: ${ darkTextColor };
+    white-space: nowrap;
 `;
 
 const Icon = styled.div`
