@@ -1,30 +1,56 @@
 import React from 'react'
 import styled from 'styled-components'
-import MindsteroidIcon from '../assets/mindsteroid-logo.png'
+import MindsteroidLogo from '../assets/mindsteroid-logo.png'
 import { MdSearch } from 'react-icons/md'
-import { HiBell } from 'react-icons/hi'
+import { HiMenu } from 'react-icons/hi'
 import { textColor, svgColor, placeholderColor, darkTextColor, borderColor, backgroundLightBlue, inputSvgColor, selectTextColor } from '../utils'
+import { Grid, Hidden } from '@material-ui/core';
 
 function Navbar() {
-    return <NavbarContainer>
-        <InputContainer>
-            <Icon>
-                <MdSearch />
-            </Icon>
-            <Input type="text" placeholder="Search" />
-        </InputContainer>
-        <ProfileContainer>
-            <Notifications>
-                <HiBell />
-            </Notifications>
-            <Profile>
-                <UserIcon src={MindsteroidIcon}/>
-                <UserName>
-                    Alex Olivares
-                </UserName>
-            </Profile>
-        </ProfileContainer>
-    </NavbarContainer>
+    return (
+        <Grid container>
+            <NavbarContainer>
+                <Hidden mdUp>
+                    <Grid item xs={2} md={false} order={{ xs: 1, md: 0}}>
+                        <Menu>
+                            <HiMenu />
+                        </Menu>
+                    </Grid>
+                </Hidden>
+                <Grid item xs={8} md={3} order={{ xs: 1, md: 0}}>
+                    <LogoContainer>
+                        <Logo src={MindsteroidLogo} />
+                        <LogoText>Mindsteroid</LogoText>
+                    </LogoContainer>
+                </Grid>
+                <Hidden smDown>
+                    <Grid item xs={false} md={6}  order={{ xs: 3, md: 1}}>
+                        <InputContainer>
+                            <Icon>
+                                <MdSearch />
+                            </Icon>
+                            <Input type="text" placeholder="Search" />
+                        </InputContainer>
+                    </Grid>
+                </Hidden>
+                <Grid item xs={2} md={3}>
+                    <ProfileContainer>
+                        {/* <Notifications>
+                            <HiBell />
+                        </Notifications> */}
+                        <Profile>
+                            <UserIcon src={MindsteroidLogo}/>
+                            <Hidden smDown>
+                                <UserName>
+                                    Alex Olivares
+                                </UserName>
+                            </Hidden>
+                        </Profile>
+                    </ProfileContainer>
+                </Grid>
+            </NavbarContainer>
+        </Grid>
+    )
 }
 
 const NavbarContainer = styled.nav`
@@ -33,32 +59,45 @@ const NavbarContainer = styled.nav`
     align-items: center;
     height: 4em;
     border-bottom: 1px solid ${ borderColor };
+    width: 100%;
 `;
 
-const Text = styled.h1`
+const LogoContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    @media (min-width: 960px) {
+        justify-content: left;
+    }
+    align-items: center;  
+    height: 4em;
+    border-bottom: 1px solid ${ borderColor };
+`;
+
+const Logo = styled.img`
+    height: 1.5em;
+    padding-left: 0;
+    @media (min-width: 960px) {
+        padding-left: 2em;
+    }
+`;
+
+const LogoText = styled.h2`
+    color: ${darkTextColor};
     font: 1.5rem;
-    color: ${ textColor };
-    margin: 0;
-    padding-right: 1.5em;
+    margin-left: .75rem;
+    margin-bottom: -0.5rem;
+    font-weight: 600;
+    // padding: 0 2.5em 0 0;
 `;
 
-const InputContainer = styled.div`
-    display: flex;
-    padding: 0 2.5rem 0 2.5rem;
-    width: 60%;
-`;
-
-const ProfileContainer = styled.div`
-    display: flex;
-    padding: 0 2em 0 0;
-`;
-
-const Notifications = styled.div`
+const Menu = styled.div`
     height: 2.5rem;
     width: 3rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    padding-left: 1em;
     svg {
         color: ${ svgColor };
         font-size: 2rem;    
@@ -71,12 +110,44 @@ const Notifications = styled.div`
     }
 `;
 
+const InputContainer = styled.div`
+    display: flex;
+    padding: 0 2.5rem 0 2.5rem;
+`;
+
+const ProfileContainer = styled.div`
+    display: flex;
+    padding: 0 2em 0 0;
+    justify-content: right;
+`;
+
+/*
+const Notifications = styled.div`
+    height: 2.5rem;
+    width: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    svg {
+        color: ${ svgColor };
+        font-size: 2rem;    
+        transition: 0.2s ease-in-out;
+    }
+    &:hover {    
+        svg {
+            color: ${ selectTextColor };
+        }
+    }
+`;
+*/
+
 const Profile = styled.div`
     display: flex;
     padding-left: 1em;
-    width: 70%;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 `;
 
 
@@ -126,6 +197,5 @@ const Input = styled.input`
         color: ${ placeholderColor };
     }
 `;
-
 
 export default Navbar

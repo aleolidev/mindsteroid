@@ -26,6 +26,7 @@ const Dashboard = () => {
                     <TitleText>Top Launches</TitleText>
                     {/* <TopLaunches data={ posts } /> */}
                 </ColumnOne1>
+                <ColumnTwo2></ColumnTwo2>
             </SectionOne>
         </SubContainer>
     </Container>
@@ -69,7 +70,7 @@ const ColumnOne1 = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding-left: 2.5em;
+    padding-left: 3em;
 `;
 
 const ColumnOne2 = styled.div`

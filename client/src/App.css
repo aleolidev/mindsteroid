@@ -12,3 +12,27 @@ h1, h2, h3, h4, h5, h6, a, ul, li {
   margin: 0;
   padding: 0;
 }
+
+/* CUSTOM SCROLLBAR */
+/* width */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #fefcfc;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #cdcee1;
+  border-radius: 40px;
+  border: 3px solid #fefcfc;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #aeafcb;
+}
