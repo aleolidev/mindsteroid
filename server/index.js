@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 
 import postRoutes from './routes/decks.js';
+import folderRoutes from './routes/folder.js';
+import foldersRoutes from './routes/folders.js';
 
 import {} from 'dotenv/config';
 
@@ -14,6 +16,8 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true}));
 app.use(cors());
 
 app.use('/decks', postRoutes);
+app.use('/folder', folderRoutes);
+app.use('/folders', foldersRoutes);
 
 const PORT = process.env.PORT || 5000;
 
