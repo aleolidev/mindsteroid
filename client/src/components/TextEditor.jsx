@@ -19,11 +19,11 @@ function Editor () {
 	useEffect(() => {
 		if (quill) {
 		quill.on('text-change', (delta, oldContents) => {
-			console.log('Text change!');
-			console.log(delta);
+			// console.log('Text change!');
+			// console.log(delta);
 
 			let currrentContents = quill.getContents();
-			console.log(currrentContents.diff(oldContents));
+			// console.log(currrentContents.diff(oldContents));
 		});
 		}
 	}, [quill, Quill]);
