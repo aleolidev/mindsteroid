@@ -59,11 +59,15 @@ const Card = styled.div`
     border-radius: 1em;
     cursor: pointer;
     input {
-        margin-top: -.6em;
+        margin: 0em;
         font-size: .9em;
         font-weight: 400;
-        height: 3em;
-        padding: 0;
+        // height: 3em;
+        padding-left: .5em;
+        padding-right: .5em;
+        padding-bottom: 0;
+        padding-top: 0;
+        border-radius: 1em;
         background-color: #b6b9dc;
         // border-radius: 5em;
     };
@@ -76,7 +80,7 @@ const Card = styled.div`
     }
 `;
 
-const Icon = styled.div`
+const Icon = styled.span`
     height: 2.5rem;
     width: 3rem;
     background-color: ${ backgroundLightBlue };

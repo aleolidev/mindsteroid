@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { HiOutlinePlus } from 'react-icons/hi'
 import { darkTextColor, primaryEmerald, inputSvgColor } from '../../utils'
 import { useSelector, useDispatch } from 'react-redux';
-import { CircularProgress, Grid, Paper } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import 'react-edit-text/dist/index.css';
 
 import { createDeck, updateFolder, getDecks } from '../../actions/decks';
@@ -92,7 +92,7 @@ const Folders = () => {
                 && decksRef.current.children[1] !== null) 
                 
             {
-                decksRef.current.children[1].firstChild.firstChild.click();
+                decksRef.current.children[1].firstChild.children[1].click();
             }
         }
     }, [decksLength])
@@ -136,6 +136,7 @@ const Folders = () => {
                         <NewDeckIcon>
                             <HiOutlinePlus />
                         </NewDeckIcon>
+                        <NewDeckText>Mazo nuevo</NewDeckText>
                     </NewDeck>
                 </Grid>
                 
@@ -155,40 +156,54 @@ const Container = styled.div`
 
 const NewDeck = styled.div`
     width: 75%;
-    // display: flex;
+    display: flex;
     padding: .5em 1em;
     margin: 1em 2em 1em 0;
-    border: dashed 3px  ${inputSvgColor};
+    color: ${darkTextColor};
+    font-weight: 600;
     border-radius: 1em;
-    transition: 0.2s ease-in-out;
-    vertical-align: middle;
+    border: dashed 3px  ${inputSvgColor};
     cursor: pointer;
+    transition: 0.2s ease-in-out;
     &:hover {   
         border: dashed 3px  #7770b7; 
         svg {
+            color: #7770b7;
+        }
+        div {
             color: #7770b7;
         }
     }
 `;
 
 const NewDeckIcon = styled.div`
-    height: 100%;
+    height: 2.5rem;
+    width: 3rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
+    border-top-left-radius: .75rem;
+    border-bottom-left-radius: .75rem;
     svg {
-        margin: 0;
-        padding: 0;
         color: ${ inputSvgColor };
-        font-size: 2rem;    
+        font-size: 1.4rem;
         transition: 0.2s ease-in-out;
     }
-    &:hover {    
-        svg {
-            color: #7770b7;
-        }
-    }
+`;
+
+const NewDeckText = styled.div`
+    color: ${inputSvgColor};
+    font-weight: 600;
+    margin-top: .1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .25 .5em;
+    font-weight: 600;
+    outline: none;
+    border: 0
+    border-radius: .5em;
+    transition: 0.2s ease-in-out;
 `;
 
 const TitleText = styled.h1`
