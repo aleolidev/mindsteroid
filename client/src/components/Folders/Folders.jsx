@@ -128,7 +128,7 @@ const Folders = () => {
             <TitleText>Carpetas</TitleText>
             <TitleUnderline />
             <Grid container spacing={3} ref={decksRef}>
-                <Grid item xs={12} sm={6} md={2}>
+                <Grid item xs={12} sm={6} md={3}>
                     <NewDeck onClick={() => {
                                 handleDeckAdd()
                             }
@@ -140,7 +140,7 @@ const Folders = () => {
                 </Grid>
                 
                 {decks.slice(0).reverse().map((deck, index) => (
-                    <Grid key={deck._id} item xs={12} sm={6} md={2} >
+                    <Grid key={deck._id} item xs={12} sm={6} md={3} >
                         <Folder deck={deck} handleEditName={handleEditName} handleUpdateName={handleUpdateName} folderObj={decksData[decks.length - index - 1]} index={index} />
                     </Grid>
                 ))}
@@ -155,8 +155,8 @@ const Container = styled.div`
 
 const NewDeck = styled.div`
     width: 75%;
-    height: 7.5em;
-    padding: 1em;
+    // display: flex;
+    padding: .5em 1em;
     margin: 1em 2em 1em 0;
     border: dashed 3px  ${inputSvgColor};
     border-radius: 1em;

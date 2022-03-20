@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import Navbar from './components/Navbar';
 // import Sidebar from './components/Sidebar';
 // import Dashboard from './components/Dashboard';
-import Decks from './components/Decks/Decks';
 import Folders from './components/Folders/Folders';
 // import Hands from './components/Hands';
 // import CardInput from './components/CardInput';
