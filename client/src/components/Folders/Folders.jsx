@@ -9,15 +9,17 @@ import 'react-edit-text/dist/index.css';
 import { createDeck, updateFolder, getDecks } from '../../actions/decks';
 import Folder from './Folder/Folder';
 import { useParams } from 'react-router-dom';
+import NewFolderContainer from './NewFolderContainer';
+import NewDeckContainer from './NewDeckContainer';
 
 const Folders = () => {
-    const rootFolder = '62373faa8d7f44c7ec8c39a7';
+    // const rootFolder = '62373faa8d7f44c7ec8c39a7';
 
     const { decks, isLoading } = useSelector((state) => state.decks);
     const [decksData, setDecksData] = useState([]);
     const [decksLength, setDecksLength] = useState(0);
     const decksImported = useRef(false);
-    const folderName = useRef("");
+    // const folderName = useRef("");
     const dispatch = useDispatch();
 
     const decksRef = useRef();
@@ -32,13 +34,13 @@ const Folders = () => {
     console.log('decksData', decksData)
     
     
-    if (decks !== undefined && decks !== null && decks.length != decksLength) {
+    if (decks !== undefined && decks !== null && decks.length !== decksLength) {
             
         setDecksLength(decks.length);
     }
 
     const handleSubmit = async () => {
-        console.log('handleSubmit')
+        // console.log('handleSubmit')
         // Saves the last created deck
         // console.log('decksData:', {...decksData[0]})
         dispatch(await createDeck({...decksData[0]}, id))
@@ -124,34 +126,38 @@ const Folders = () => {
 
 
     return (
-        <Container>
+        <Container className="workspace">
             <TitleText>Carpetas</TitleText>
             <TitleUnderline />
-            <Grid container spacing={3} ref={decksRef}>
-                <Grid item xs={12} sm={6} md={3}>
-                    <NewDeck onClick={() => {
-                                handleDeckAdd()
-                            }
-                        }>
-                        <NewDeckIcon>
-                            <HiOutlinePlus />
-                        </NewDeckIcon>
-                        <NewDeckText>Mazo nuevo</NewDeckText>
-                    </NewDeck>
+            <NewFolderContainer>
+                <Grid container ref={decksRef}>
+                    {decks.slice(0).reverse().map((deck, index) => (
+                        <Grid key={deck._id} item xs={12} sm={6} md={3} >
+                            <Folder deck={deck} handleEditName={handleEditName} handleUpdateName={handleUpdateName} folderObj={decksData[decks.length - index - 1]} index={index} />
+                        </Grid>
+                    ))}
                 </Grid>
-                
-                {decks.slice(0).reverse().map((deck, index) => (
-                    <Grid key={deck._id} item xs={12} sm={6} md={3} >
-                        <Folder deck={deck} handleEditName={handleEditName} handleUpdateName={handleUpdateName} folderObj={decksData[decks.length - index - 1]} index={index} />
-                    </Grid>
-                ))}
-            </Grid>
+            </NewFolderContainer>
+            
+            <TitleText>Mazos</TitleText>
+            <TitleUnderline />
+            <NewDeckContainer>
+                <Grid container ref={decksRef}>
+                    {decks.slice(0).reverse().map((deck, index) => (
+                        <Grid key={deck._id} item xs={12} sm={6} md={3} >
+                            <Folder deck={deck} handleEditName={handleEditName} handleUpdateName={handleUpdateName} folderObj={decksData[decks.length - index - 1]} index={index} />
+                        </Grid>
+                    ))}
+                </Grid>
+            </NewDeckContainer>
         </Container>
+        // </Container>
     )
 }
 
 const Container = styled.div`
     padding: 2.5em;
+
 `;
 
 const NewDeck = styled.div`

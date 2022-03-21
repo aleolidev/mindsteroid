@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { getDecks } from './actions/decks';
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -9,29 +7,11 @@ import Navbar from './components/Navbar';
 // import Dashboard from './components/Dashboard';
 import Folders from './components/Folders/Folders';
 // import Hands from './components/Hands';
-// import CardInput from './components/CardInput';
-// import Test from './components/Test';
+import CardInput from './components/CardInput';
+import Test from './components/Test';
 import './App.css';
 
 const App = () => {
-    // const dispatch = useDispatch();
-
-    // useEffect(() => {
-    //     // dispatch(getDecks());
-    //     // console.log("DISPATCHED IN APP")
-    // }, [dispatch]);
-    
-    const currentFolder = "62373faa8d7f44c7ec8c39a7";
-
-    // const dispatch = useDispatch();
-
-    // const changeRootFolder = (id) => {
-    //     setCurrentFolder(id);
-    // }
-
-    // console.log('CURRENT FOLDER:', currentFolder)
-
-
 
     return (
         <BrowserRouter>
@@ -42,6 +22,8 @@ const App = () => {
                     <Route path="/" element={<Navigate replace to="/folder" />} />
                     <Route path="/folder" element={<Folders />}/>
                     <Route path="/folder/:id" element={<Folders />}/>
+                    <Route path="/cardinput" element={<CardInput />} />
+                    <Route path="/test" element={<Test />} />
                     {/* <Folders currentFolder={currentFolder}/> */}
                     {/* <Folders /> */}
                 </Routes>
@@ -54,9 +36,6 @@ const App = () => {
     )
 }
 
-const Container = styled.div`
-    // display:flex;
-    // height: 96vh;
-`;
+const Container = styled.div``;
 
 export default App;

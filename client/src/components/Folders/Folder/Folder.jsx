@@ -14,7 +14,7 @@ const Folder = ({ deck, handleEditName, handleUpdateName, folderObj, index }) =>
     const dispatch = useDispatch();
 
     const openFolder = (e) => {
-        if (e.target.getAttribute("name") == "card" && folderObj !== undefined && folderObj !== null) {
+        if (e.target.getAttribute("name") === "card" && folderObj !== undefined && folderObj !== null) {
             // console.log("CLICK")
             dispatch(getDecks(folderObj._id));
             navigate(`/folder/${folderObj._id}`)
