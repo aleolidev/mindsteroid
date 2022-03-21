@@ -9,8 +9,7 @@ import 'react-edit-text/dist/index.css';
 import { createDeck, updateFolder, getDecks } from '../../actions/decks';
 import Folder from './Folder/Folder';
 import { useParams } from 'react-router-dom';
-import NewFolderContainer from './NewFolderContainer';
-import NewDeckContainer from './NewDeckContainer';
+import CustomContainer from './CustomContainer';
 
 const Folders = () => {
     // const rootFolder = '62373faa8d7f44c7ec8c39a7';
@@ -124,32 +123,43 @@ const Folders = () => {
     
     console.log("==== END ITER: FULL CONTENT ==== ")
 
+    const foo = () => {
+        console.log('foo')
+    }
+
+    const foldersActions = [
+        {action: handleDeckAdd, title: "Nueva carpeta"},
+        {action: foo, title: "Foo 2"},
+        {action: foo, title: "Foo 3"},
+        {action: foo, title: "Foo 4"},
+    ]
+
 
     return (
         <Container className="workspace">
             <TitleText>Carpetas</TitleText>
             <TitleUnderline />
-            <NewFolderContainer>
+            <CustomContainer actions={foldersActions} availableSpaces={['folderContainer', 'folderGrid']}>
                 <Grid container ref={decksRef}>
                     {decks.slice(0).reverse().map((deck, index) => (
-                        <Grid key={deck._id} item xs={12} sm={6} md={3} >
+                        <Grid name="folderGrid" key={deck._id} item xs={12} sm={6} md={3} >
                             <Folder deck={deck} handleEditName={handleEditName} handleUpdateName={handleUpdateName} folderObj={decksData[decks.length - index - 1]} index={index} />
                         </Grid>
                     ))}
                 </Grid>
-            </NewFolderContainer>
+            </CustomContainer>
             
             <TitleText>Mazos</TitleText>
             <TitleUnderline />
-            <NewDeckContainer>
+            <CustomContainer actions={[]} availableSpaces={['folderContainer', 'deckGrid']}>
                 <Grid container ref={decksRef}>
                     {decks.slice(0).reverse().map((deck, index) => (
-                        <Grid key={deck._id} item xs={12} sm={6} md={3} >
+                        <Grid name="deckGrid"key={deck._id} item xs={12} sm={6} md={3} >
                             <Folder deck={deck} handleEditName={handleEditName} handleUpdateName={handleUpdateName} folderObj={decksData[decks.length - index - 1]} index={index} />
                         </Grid>
                     ))}
                 </Grid>
-            </NewDeckContainer>
+            </CustomContainer>
         </Container>
         // </Container>
     )

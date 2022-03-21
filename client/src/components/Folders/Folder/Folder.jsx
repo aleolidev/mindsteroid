@@ -21,8 +21,12 @@ const Folder = ({ deck, handleEditName, handleUpdateName, folderObj, index }) =>
         }
     }
 
+    const test = (e) => {
+        console.log("OPEN MENU 2")
+    }
+
     return (
-        <Card name="card" onClick={(e) => openFolder(e)}>
+        <Card name="card" onContextMenu={(e) => test(e)} onClick={(e) => openFolder(e)}>
             <Icon>
                 <HiFolder />
             </Icon>
