@@ -8,6 +8,8 @@ export default (state = { decks: [], isLoading: true }, action) => {
             return {...state, decks: action.payload };
         case 'CREATE':
             return {...state, decks: [...state.decks, action.payload] };
+        case 'DELETE':
+            return { ...state, decks: state.decks.filter((deck) => deck._id !== action.payload) };
         case 'UPDATE':
             return {...state, decks: state.decks.map((deck) => (deck._id === action.payload._id ? action.payload : deck)) };
         default:

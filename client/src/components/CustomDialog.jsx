@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useRef } from 'react';
 import { alpha, styled } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -9,16 +9,8 @@ import InputBase from '@material-ui/core/InputBase';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { backgroundLightBlue, darkTextColor, primaryRed, primaryEmerald } from '../utils/index';
 
-export default function CustomDialog( { open, handleClose, title, currentValue } ) {
-    // const [open, setOpen] = React.useState(false);
-
-    // const handleClickOpen = () => {
-    //     setOpen(true);
-    // };
-
-    // const handleClose = () => {
-    //     setOpen(false);
-    // };
+export default function CustomDialog( { open, handleClose, handleSave, title, currentValue } ) {
+    const inputRef = useRef();
 
     return (
         <div>
@@ -26,12 +18,12 @@ export default function CustomDialog( { open, handleClose, title, currentValue }
                 <DialogTitle>{ title }</DialogTitle>
                 <DialogContent>
                 <FormControl variant="standard">
-                    <CustomInput defaultValue={ currentValue } id="bootstrap-input" />
+                    <CustomInput autoFocus defaultValue={ currentValue } id="bootstrap-input" ref={ inputRef }/>
                 </FormControl>
                 </DialogContent>
                 <DialogActions>
                 <CustomCancelButton onClick={handleClose}>Cancelar</CustomCancelButton>
-                <CustomConfirmButton onClick={handleClose}>Aceptar</CustomConfirmButton>
+                <CustomConfirmButton type="submit" onClick= { () => handleSave(inputRef.current.firstChild.value) } >Aceptar</CustomConfirmButton>
                 </DialogActions>
             </CustomDialogComponent>
         </div>
@@ -89,20 +81,15 @@ const CustomConfirmButton = styled(Button)(({ theme }) => ({
 }));
 
 const CustomInput = styled(InputBase)(() => ({
-    // 'label + &': {
-    //   marginTop: theme.spacing(3),
-    // },
     '& .MuiInputBase-input': {
-      borderRadius: '1em',
-      position: 'relative',
-      padding: '1em 1.5em',
-      color: darkTextColor,
-      fontSize: '1em',
-      fontFamily: '\'Khula\', sans-serif',
-      backgroundColor: backgroundLightBlue,
-    //   border: '1px solid #ced4da',
-      fontWeight: 600,
-      width: 'auto',
-    //   padding: '10px 12px',
+        borderRadius: '1em',
+        position: 'relative',
+        padding: '1em 1.5em',
+        color: darkTextColor,
+        fontSize: '1em',
+        fontFamily: '\'Khula\', sans-serif',
+        backgroundColor: backgroundLightBlue,
+        fontWeight: 600,
+        width: 'auto',
     },
 }));

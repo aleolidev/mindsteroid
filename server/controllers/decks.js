@@ -52,9 +52,19 @@ export const updateFolder = async (req, res) => {
     const { id: _id } = req.params;
     const folder = req.body;
 
-    if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No post with that id');
+    if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No folder with that id');
 
     const updatedFolder = await Deck.findByIdAndUpdate(_id, folder, { new: true });
 
     res.json(updatedFolder);
+}
+
+export const deleteFolder = async (req, res) => {
+    const { id } = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No folder with that id');
+
+    await Deck.findByIdAndRemove(id);
+
+    res.json({ message: 'Folder deleted successfully' });
 }

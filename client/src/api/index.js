@@ -10,3 +10,4 @@ export const fetchPosts = () => axios.get(url);
 export const createDeck = (newDeck) => axios.post(url, newDeck);
 export const getFolderById = (id) => axios.get(`${folderUrl}/${id}`);
 export const updateFolder = (id, updatedFolder) => axios.patch(`${folderUrl}/${id}`, updatedFolder);
+export const deleteFolder = (id) => axios.delete(`${folderUrl}/${id}`);

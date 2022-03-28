@@ -8,19 +8,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
 import 'react-edit-text/dist/index.css';
 
-import { createDeck, updateFolder, getDecks } from '../../actions/decks';
+import { createDeck, updateFolder, getDecks } from '../../actions/folders';
 import Folder from './Folder/Folder';
 import { useParams } from 'react-router-dom';
 import CustomContainer from './CustomContainer';
+import CustomDialog from '../CustomDialog';
 
 const Folders = () => {
     // const rootFolder = '62373faa8d7f44c7ec8c39a7';
 
     const { decks, isLoading } = useSelector((state) => state.decks);
-    const [decksData, setDecksData] = useState([]);
-    const [decksLength, setDecksLength] = useState(0);
+    const [ decksData, setDecksData ] = useState([]);
+    const [ decksLength, setDecksLength ] = useState(null);
+    const [ decksLastLength, setDecksLastLength ] = useState(null);
+    const [ openDialog, setOpenDialog ] = useState(false);
     const decksImported = useRef(false);
-    // const folderName = useRef("");
     const dispatch = useDispatch();
 
     const foldersRef = useRef();
@@ -29,21 +31,29 @@ const Folders = () => {
     const [ folderId, setFolderId ] = useState(id);
 
     
-    console.log("==== START ITER ==== ")
-    console.log('route-id:', id)
-    console.log('decks', decks)
-    console.log('decksData', decksData)
+    // console.log("==== START ITER ==== ")
+    // console.log('route-id:', id)
+    // console.log('decks', decks)
+    // console.log('decksData', decksData)
     
     
-    if (decks !== undefined && decks !== null && decks.length !== decksLength) {
-            
-        setDecksLength(decks.length);
+    if (decks !== undefined && decks !== null){
+        if (decksLength === null) {
+            setDecksLastLength(decks.length);
+            setDecksLength(decks.length);
+        }
+        
+        if (decks.length !== decksLength) {
+            setDecksLength(decks.length);
+        }
+        // if (decksLength === null) {
+        //     setDecksLastLength(decks.length);
+        // }
     }
 
+    // Saves the last created deck
     const handleSubmit = async () => {
         // console.log('handleSubmit')
-        // Saves the last created deck
-        // console.log('decksData:', {...decksData[0]})
         dispatch(await createDeck({...decksData[0]}, id))
     }
     
@@ -51,21 +61,31 @@ const Folders = () => {
     // Adds a new item to local array of decks
     const handleDeckAdd = () => {
         // console.log('handleDeckAdd')
-        setDecksData([{ name: 'Nuevo mazo'}, ...decksData])
+        setDecksData([{ name: 'Nueva carpeta'}, ...decksData])
     }
     
     const handleEditName = (index, e) => {
         // console.log('handleEditName')
         const values = [...decks];
-        // Due to it's loaded reversed, we need to reverse the index too
         values[index].name = e
         setDecksData(values);
     }
     
-    const handleUpdateName = (index, e) => {
+    const handleUpdateName = (index, name) => {
         // console.log('handleUpdateName')
+        const values = [...decks];
+        values[index].name = name
+        setDecksData(values);
         dispatch(updateFolder(decksData[index]))
     }
+
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
     
     useEffect(() => {
         // console.log('useEffect[dispatch]')
@@ -87,17 +107,16 @@ const Folders = () => {
     // If the decks array of the db changes his length...
     useEffect(() => {
         // console.log('useEffect[decksLength]')
-        if (decksImported.current)
+        if (decksImported.current 
+            && foldersRef.current !== undefined 
+            && foldersRef.current !== null 
+            && foldersRef.current.children[decksData.length - 1] !== undefined 
+            && foldersRef.current.children[decksData.length - 1] !== null
+            && decksLength > decksLastLength)
         {
-            if (foldersRef.current !== undefined 
-                && foldersRef.current !== null 
-                && foldersRef.current.children[decksData.length - 1] !== undefined 
-                && foldersRef.current.children[decksData.length - 1] !== null) 
-                
-            {
-                foldersRef.current.children[decksData.length - 1].firstChild.children[1].click();
-            }
+            handleOpenDialog();
         }
+        setDecksLastLength(decksLength);
     }, [decksLength])
 
     useEffect(() => {
@@ -110,6 +129,7 @@ const Folders = () => {
     
     // Import db changes to local whenever they change...
     useEffect(() => {
+        // console.log(decks);
         // console.log('useEffect[decks2]')
         if(decks !== undefined && decks.length > 0) {
             setDecksData(decks);
@@ -118,12 +138,12 @@ const Folders = () => {
     }, [decks])
 
     if(!decks || isLoading) {
-        console.log("==== END ITER: NULL ==== ")
+        // console.log("==== END ITER: NULL ==== ")
         return null;
     } 
 
     
-    console.log("==== END ITER: FULL CONTENT ==== ")
+    // console.log("==== END ITER: FULL CONTENT ==== ")
 
     const foo = () => {
         console.log('foo')
@@ -164,6 +184,18 @@ const Folders = () => {
                     <Grid name="deckGrid" item xs={3}></Grid><Grid name="deckGrid" item xs={3}></Grid>
                 </Grid>
             </CustomContainer>
+
+            {/* Dialogs */}
+            <CustomDialog 
+                open={ openDialog } 
+                handleClose={ handleCloseDialog } 
+                title="Cambiar nombre" 
+                currentValue="Nueva carpeta"
+                handleSave={(newName) => {
+                    handleUpdateName(decks.length - 1, newName);
+                    handleCloseDialog();
+                }} 
+            />
         </Container>
         // </Container>
     )

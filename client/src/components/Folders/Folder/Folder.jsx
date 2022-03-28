@@ -1,29 +1,30 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
-import { darkTextColor, backgroundLightBlue, inputSvgColor } from '../../../utils'
+import { darkTextColor, primaryLightEmerald1, primaryLightEmerald2, backgroundLightBlue, inputSvgColor, primaryEmerald } from '../../../utils'
 import { EditText } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getDecks } from '../../../actions/decks';
+import { getDecks, deleteFolder } from '../../../actions/folders';
 import { createTheme, Menu, MenuItem } from '@material-ui/core';
 import { HiFolder } from 'react-icons/hi';
 import CustomDialog from '../../CustomDialog';
 
 const Folder = ({ deck, handleEditName, handleUpdateName, folderObj, index, availableSpaces, actions }) => {
 
-    const [ contextMenu, setContextMenu ] = React.useState(null);
-    const [ openDialog, setOpenDialog ] = React.useState(false);
+    const [ contextMenu, setContextMenu ] = useState(null);
+    const [ openDialog, setOpenDialog ] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const folderRef = useRef();
 
     const openFolder = (e) => {
-        if (e.target.getAttribute("name") === "card" && folderObj !== undefined && folderObj !== null) {
-            // console.log("CLICK")
-            dispatch(getDecks(folderObj._id));
-            navigate(`/folder/${folderObj._id}`)
+        if(contextMenu === null)
+        {
+                console.log(e);
+                dispatch(getDecks(folderObj._id));
+                navigate(`/folder/${folderObj._id}`)
         }
     }
 
@@ -62,92 +63,92 @@ const Folder = ({ deck, handleEditName, handleUpdateName, folderObj, index, avai
     };
 
     return (
-        <Card name="card" onContextMenu={(e) => handleContextMenu(e)} onClick={(e) => openFolder(e)}>
-            <StyledMenu
-                // PaperProps={customClass}
-                sx={{
-                    width: 300,
-                    color: 'success.main',
-                    '& .MuiPaper-root': {
-                            backgroundColor: 'red',
-                    },
-                }}
-                open={contextMenu !== null}
-                onClose={handleClose}
-                anchorReference="anchorPosition"
-                anchorPosition={
-                contextMenu !== null
-                    ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
-                    : undefined
-                }
-                >
-                {actions.map((item, index) => (
-                    <StyledMenuItem key={index} onClick={() => {
-                        handleClose();
-                        console.log(item.title.props.children)
-                        if (item.title.props.children == 'Cambiar nombre')
-                        {
-                            handleOpenDialog();
-                        } else if (item.action !== null && item.action !== undefined) {
-                            item.action();
-                        }
-                    }}>{item.title}</StyledMenuItem>
-                ))}
-            </StyledMenu>
-            <Icon>
-                <HiFolder />
-            </Icon>
-            <FolderName> { deck.name } </FolderName>
-            {/* <EditText ref={ folderRef }
-                defaultValue='Mazo nuevo' 
-                readonly={true}
-                value={deck.name}
-                onChange={e => handleEditName(index, e)}
-                onSave={e => handleUpdateName(index, e)}
-                style={
-                    {
-                        // whiteSpace: 'normal',
-                        boxSizing: 'border-box',
-                        padding: '.25 .5em',
-                        color: darkTextColor,
-                        fontWeight: 600,
-                        outline: 'none',
-                        border: 20,
-                        borderRadius: '.5em',
-                        cursor: 'pointer',
+        <div>
+
+            <Card name="card" onContextMenu={(e) => handleContextMenu(e)} onDoubleClick={(e) => openFolder(e)}>
+                <StyledMenu
+                    sx={{
+                        width: 300,
+                        color: 'success.main',
+                        '& .MuiPaper-root': {
+                                backgroundColor: 'red',
+                        },
+                    }}
+                    open={contextMenu !== null}
+                    onClose={handleClose}
+                    anchorReference="anchorPosition"
+                    anchorPosition={
+                    contextMenu !== null
+                        ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+                        : undefined
                     }
-                }
-            /> */}
-            <CustomDialog open={ openDialog } handleClose={ handleCloseDialog } title="Cambiar nombre" currentValue={ deck.name }/>
-        </Card>
+                    >
+                    {actions.map((item, index) => (
+                        <StyledMenuItem key={index} onClick={() => {
+                            handleClose();
+                            console.log(item.title.props.children)
+                            if (item.title.props.children == 'Cambiar nombre')
+                            {
+                                handleOpenDialog();
+                            }
+                            else if (item.title.props.children == 'Eliminar') {  
+                                // TODO: Remove all it's content
+                                dispatch(deleteFolder(folderObj._id));
+                            }
+                            else if (item.action !== null && item.action !== undefined) {
+                                item.action();
+                            }
+                        }}>{item.title}</StyledMenuItem>
+                    ))}
+                </StyledMenu>
+                <Icon>
+                    <HiFolder />
+                </Icon>
+                <FolderName> { deck.name } </FolderName>
+                    
+            </Card>
+            <CustomDialog 
+                open={ openDialog } 
+                handleClose={ handleCloseDialog } 
+                title="Cambiar nombre" 
+                currentValue={ deck.name }
+                handleSave={(newName) => {
+                    handleUpdateName(index, newName);
+                    handleCloseDialog();
+                }} 
+            />
+        </div>
     )
 }
 
-const Card = styled.div`
-    width: 75%;
+const Card = styled.button`
+    width: 85%;
     display: flex;
+    align-items: center;
     padding: .5em 1em;
     margin: 1em 2em 1em 0;
     background-color: ${ backgroundLightBlue };
     color: ${darkTextColor};
     font-weight: 600;
+    font-size: 1em;
+    font-family: 'Khula', sans-serif;
     border-radius: 1em;
     cursor: pointer;
-    input {
-        margin: 0em;
-        font-size: .9em;
-        font-weight: 400;
-        padding-left: .5em;
-        padding-right: .5em;
-        padding-bottom: 0;
-        padding-top: 0;
-        border-radius: 1em;
-        background-color: #b6b9dc;
-    };
+    border: 0;
+    border: 2px solid transparent;
+    transition: 0.2s ease-in-out;
     div {
         &:hover {
             cursor: pointer!important;
             background-color: transparent;
+        }
+    }
+    &:focus {
+        background-color: ${ primaryLightEmerald1 };
+        color: ${ primaryEmerald };
+        border: 2px solid ${ primaryLightEmerald2 };
+        svg {
+            color: ${ primaryLightEmerald2 };
         }
     }
 `;
@@ -155,12 +156,9 @@ const Card = styled.div`
 const Icon = styled.span`
     height: 2.5rem;
     width: 3rem;
-    background-color: ${ backgroundLightBlue };
     display: flex;
     justify-content: center;
     align-items: center;
-    border-top-left-radius: .75rem;
-    border-bottom-left-radius: .75rem;
     svg {
         color: ${ inputSvgColor };
         font-size: 1.4rem;
