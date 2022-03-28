@@ -12,7 +12,7 @@ export const primaryDarkBlue = "#392ECF";
 export const primaryEmerald = "#33BC61";
 export const primaryRed = "#F86376";
 export const inputSvgColor = "#A3A7CF";
-export const borderColor = "#e8e9fe";
+export const lightSvg = "#53557B";
 
 // export const hoverEffect = `rgba(255, 255, 255, 1) 0 0 50px 0`;
 export const hoverEffect = `rgba(16, 16, 48, 1) 0 0 18px -4px`;

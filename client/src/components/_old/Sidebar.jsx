@@ -5,7 +5,7 @@ import { MdContentCopy, MdOutlineAnalytics, MdOutlineAccountBalanceWallet, MdOut
 import { RiSettings5Fill, RiBarChart2Fill, RiHome5Fill, RiBookFill } from 'react-icons/ri'
 import { TiHome } from 'react-icons/ti'
 import { HiViewGrid, HiChartBar } from 'react-icons/hi'
-import { textColor, svgColor, selectTextColor, borderColor, darkTextColor } from '../utils'
+import { textColor, svgColor, selectTextColor, backgroundLightBlue, darkTextColor } from '../utils'
 
 function Sidebar() {
     return <Container>
@@ -44,7 +44,7 @@ const Container = styled.div`
     flex-direction: column;
     align-items: left;
     gap: 3rem;
-    border-right: 1px solid ${ borderColor };
+    border-right: 1px solid ${ backgroundLightBlue };
 `;
 
 const LogoContainer = styled.div`
@@ -52,7 +52,7 @@ const LogoContainer = styled.div`
     justify-content: left;
     align-items: center;  
     height: 4em;
-    border-bottom: 1px solid ${ borderColor };
+    border-bottom: 1px solid ${ backgroundLightBlue };
 `;
 
 const Logo = styled.img`

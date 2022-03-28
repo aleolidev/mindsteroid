@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import MindsteroidIcon from '../assets/mindsteroid-logo.png'
 import { MdSearch } from 'react-icons/md'
 import { HiBell } from 'react-icons/hi'
-import { textColor, svgColor, placeholderColor, darkTextColor, borderColor, backgroundLightBlue, inputSvgColor, selectTextColor } from '../utils'
+import { textColor, svgColor, placeholderColor, darkTextColor, backgroundLightBlue, inputSvgColor, selectTextColor } from '../utils'
 
 function Navbar() {
     return <NavbarContainer>
@@ -32,7 +32,7 @@ const NavbarContainer = styled.nav`
     justify-content: space-between;
     align-items: center;
     height: 4em;
-    border-bottom: 1px solid ${ borderColor };
+    border-bottom: 1px solid ${ backgroundLightBlue };
 `;
 
 const Text = styled.h1`

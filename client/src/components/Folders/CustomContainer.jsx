@@ -1,7 +1,7 @@
 import React from 'react'
-import styled, { ThemeProvider } from 'styled-components'
+import styled from 'styled-components'
 import { isMobile } from '../../utils/index';
-import { createTheme, Menu, MenuItem } from '@material-ui/core';
+import { Menu, MenuItem } from '@material-ui/core';
 import { darkTextColor } from '../../utils'
 
 const CustomContainer = ({ children, availableSpaces, actions }) => {
@@ -40,7 +40,6 @@ const CustomContainer = ({ children, availableSpaces, actions }) => {
         return (
             <Container name="folderContainer" onContextMenu={handleContextMenu} style={{ cursor: 'context-menu' }}>
                 <StyledMenu
-                    // PaperProps={customClass}
                     sx={{
                         width: 300,
                         color: 'success.main',
@@ -58,7 +57,10 @@ const CustomContainer = ({ children, availableSpaces, actions }) => {
                     }
                     >
                     {actions.map((item, index) => (
-                        <StyledMenuItem key={index} onClick={item.action}>{item.title}</StyledMenuItem>
+                        <StyledMenuItem key={index} onClick={() => {
+                            handleClose();
+                            item.action();
+                        }}>{item.title}</StyledMenuItem>
                     ))}
                 </StyledMenu>
                 { children }
@@ -86,7 +88,7 @@ const StyledMenu = styled(Menu)(() => ({
 const StyledMenuItem = styled(MenuItem)(() => ({
     borderRadius: '.5em',
     color: darkTextColor,
-    fontWeight: 600,
+    fontWeight: 400,
     fontSize: '.9em',
 }));
 

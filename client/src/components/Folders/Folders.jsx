@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
-import { HiOutlinePlus } from 'react-icons/hi'
-import { darkTextColor, primaryEmerald, inputSvgColor } from '../../utils'
+import { MdOutlineCreateNewFolder } from 'react-icons/md'
+import { HiOutlinePencil } from 'react-icons/hi'
+import { CgTrashEmpty } from 'react-icons/cg'
+import { darkTextColor, primaryEmerald, inputSvgColor, lightSvg } from '../../utils'
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
 import 'react-edit-text/dist/index.css';
@@ -21,7 +23,7 @@ const Folders = () => {
     // const folderName = useRef("");
     const dispatch = useDispatch();
 
-    const decksRef = useRef();
+    const foldersRef = useRef();
 
     const { id } = useParams();
     const [ folderId, setFolderId ] = useState(id);
@@ -56,13 +58,13 @@ const Folders = () => {
         // console.log('handleEditName')
         const values = [...decks];
         // Due to it's loaded reversed, we need to reverse the index too
-        values[decks.length - index - 1].name = e
+        values[index].name = e
         setDecksData(values);
     }
     
     const handleUpdateName = (index, e) => {
         // console.log('handleUpdateName')
-        dispatch(updateFolder(decksData[decks.length - index - 1]))
+        dispatch(updateFolder(decksData[index]))
     }
     
     useEffect(() => {
@@ -87,13 +89,13 @@ const Folders = () => {
         // console.log('useEffect[decksLength]')
         if (decksImported.current)
         {
-            if (decksRef.current !== undefined 
-                && decksRef.current !== null 
-                && decksRef.current.children[1] !== undefined 
-                && decksRef.current.children[1] !== null) 
+            if (foldersRef.current !== undefined 
+                && foldersRef.current !== null 
+                && foldersRef.current.children[decksData.length - 1] !== undefined 
+                && foldersRef.current.children[decksData.length - 1] !== null) 
                 
             {
-                decksRef.current.children[1].firstChild.children[1].click();
+                foldersRef.current.children[decksData.length - 1].firstChild.children[1].click();
             }
         }
     }, [decksLength])
@@ -128,10 +130,12 @@ const Folders = () => {
     }
 
     const foldersActions = [
-        {action: handleDeckAdd, title: "Nueva carpeta"},
-        {action: foo, title: "Foo 2"},
-        {action: foo, title: "Foo 3"},
-        {action: foo, title: "Foo 4"},
+        {action: handleDeckAdd, title: <Item icon={ <MdOutlineCreateNewFolder/ > }>Nueva carpeta</Item>},
+    ]
+
+    const folderActions = [
+        {action: null, title: <Item icon={ <HiOutlinePencil/ > }>Cambiar nombre</Item>},
+        {action: handleDeckAdd, title: <Item icon={ <CgTrashEmpty/ > }>Eliminar</Item>},
     ]
 
 
@@ -140,30 +144,56 @@ const Folders = () => {
             <TitleText>Carpetas</TitleText>
             <TitleUnderline />
             <CustomContainer actions={foldersActions} availableSpaces={['folderContainer', 'folderGrid']}>
-                <Grid container ref={decksRef}>
-                    {decks.slice(0).reverse().map((deck, index) => (
+                <Grid container ref={foldersRef}>
+                    {decks.map((deck, index) => (
                         <Grid name="folderGrid" key={deck._id} item xs={12} sm={6} md={3} >
-                            <Folder deck={deck} handleEditName={handleEditName} handleUpdateName={handleUpdateName} folderObj={decksData[decks.length - index - 1]} index={index} />
+                            <Folder deck={deck} handleEditName={handleEditName} handleUpdateName={handleUpdateName} folderObj={decksData[index]} index={index} actions={folderActions} availableSpaces={['folderContainer', 'folderGrid']}/>
                         </Grid>
                     ))}
+                    <Grid name="folderGrid" item xs={3}></Grid><Grid name="folderGrid" item xs={3}></Grid>
+                    <Grid name="folderGrid" item xs={3}></Grid><Grid name="folderGrid" item xs={3}></Grid>
                 </Grid>
             </CustomContainer>
             
             <TitleText>Mazos</TitleText>
             <TitleUnderline />
             <CustomContainer actions={[]} availableSpaces={['folderContainer', 'deckGrid']}>
-                <Grid container ref={decksRef}>
-                    {decks.slice(0).reverse().map((deck, index) => (
-                        <Grid name="deckGrid"key={deck._id} item xs={12} sm={6} md={3} >
-                            <Folder deck={deck} handleEditName={handleEditName} handleUpdateName={handleUpdateName} folderObj={decksData[decks.length - index - 1]} index={index} />
-                        </Grid>
-                    ))}
+                <Grid container>
+                    
+                    <Grid name="deckGrid" item xs={3}></Grid><Grid name="deckGrid" item xs={3}></Grid>
+                    <Grid name="deckGrid" item xs={3}></Grid><Grid name="deckGrid" item xs={3}></Grid>
                 </Grid>
             </CustomContainer>
         </Container>
         // </Container>
     )
 }
+
+const Item = ({ children, icon }) => {
+    return (
+        <ItemContainer>
+            { icon }
+            <ItemText> { children } </ItemText>
+        </ItemContainer>
+    )
+}
+
+const ItemContainer = styled.div`
+    display: flex;
+    align-items: center;
+    color: ${darkTextColor};
+    font-weight: 400;
+    font-size: 1em;
+    svg {
+        font-size: 1.2rem;
+        color: ${ lightSvg };
+    }
+`;
+
+const ItemText = styled.span`
+    padding-left: .8em;
+    margin-top: .15em;
+`;
 
 const Container = styled.div`
     padding: 2.5em;
