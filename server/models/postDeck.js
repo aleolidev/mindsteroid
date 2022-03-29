@@ -30,6 +30,10 @@ const handSchema = mongoose.Schema({
 const deckSchema = mongoose.Schema({
     name: String,
     creator: String,
+    parent: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: null
+    },
     subfolders: {
         type: [{
             type: mongoose.Schema.Types.ObjectId,

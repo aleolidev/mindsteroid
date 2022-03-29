@@ -9,6 +9,7 @@ import { getDecks, deleteFolder } from '../../../actions/folders';
 import { createTheme, Menu, MenuItem } from '@material-ui/core';
 import { HiFolder } from 'react-icons/hi';
 import CustomDialog from '../../CustomDialog';
+import * as api from '../../../api';
 
 const Folder = ({ deck, handleEditName, handleUpdateName, folderObj, index, availableSpaces, actions }) => {
 
@@ -19,12 +20,11 @@ const Folder = ({ deck, handleEditName, handleUpdateName, folderObj, index, avai
 
     const folderRef = useRef();
 
-    const openFolder = (e) => {
+    const openFolder = () => {
         if(contextMenu === null)
         {
-                console.log(e);
-                dispatch(getDecks(folderObj._id));
-                navigate(`/folder/${folderObj._id}`)
+            dispatch(getDecks(folderObj._id));
+            navigate(`/folder/${folderObj._id}`)
         }
     }
 
@@ -34,6 +34,30 @@ const Folder = ({ deck, handleEditName, handleUpdateName, folderObj, index, avai
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+    };
+
+    const recursiveFolders = async (id) => {
+        let folders = [];
+        const { data } = await api.fetchDecksById(id);
+        
+        if (data !== null && data !== undefined) {
+            for (let folder in data) {
+                folders.unshift(data[folder]._id);
+                folders = [...await recursiveFolders(data[folder]._id), ...folders];
+            }
+        }
+
+        return folders
+    }
+
+    const deleteFolderAndContent = async (id) => {  
+        // TODO: Do all in a single API call   
+        // TODO: Remove flashcards too
+        let folders = [id];
+        folders = [...await recursiveFolders(id), ...folders];
+        for(let folder in folders) {
+            dispatch(deleteFolder(folders[folder]));
+        }
     };
 
 
@@ -86,14 +110,13 @@ const Folder = ({ deck, handleEditName, handleUpdateName, folderObj, index, avai
                     {actions.map((item, index) => (
                         <StyledMenuItem key={index} onClick={() => {
                             handleClose();
-                            console.log(item.title.props.children)
+                            // console.log(item.title.props.children)
                             if (item.title.props.children == 'Cambiar nombre')
                             {
                                 handleOpenDialog();
                             }
                             else if (item.title.props.children == 'Eliminar') {  
-                                // TODO: Remove all it's content
-                                dispatch(deleteFolder(folderObj._id));
+                                deleteFolderAndContent(folderObj._id);
                             }
                             else if (item.action !== null && item.action !== undefined) {
                                 item.action();

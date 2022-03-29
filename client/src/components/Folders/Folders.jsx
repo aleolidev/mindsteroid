@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
 import { MdOutlineCreateNewFolder } from 'react-icons/md'
 import { HiOutlinePencil } from 'react-icons/hi'
+import { FiChevronRight } from 'react-icons/fi'
 import { CgTrashEmpty } from 'react-icons/cg'
-import { darkTextColor, primaryEmerald, inputSvgColor, lightSvg } from '../../utils'
+import { darkTextColor, primaryEmerald, backgroundLightBlue, inputSvgColor, lightSvg } from '../../utils'
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import 'react-edit-text/dist/index.css';
 
 import { createDeck, updateFolder, getDecks } from '../../actions/folders';
@@ -13,6 +16,7 @@ import Folder from './Folder/Folder';
 import { useParams } from 'react-router-dom';
 import CustomContainer from './CustomContainer';
 import CustomDialog from '../CustomDialog';
+import * as api from '../../api';
 
 const Folders = () => {
     // const rootFolder = '62373faa8d7f44c7ec8c39a7';
@@ -22,7 +26,9 @@ const Folders = () => {
     const [ decksLength, setDecksLength ] = useState(null);
     const [ decksLastLength, setDecksLastLength ] = useState(null);
     const [ openDialog, setOpenDialog ] = useState(false);
+    const [ folderPath, setFolderPath] = useState([]);
     const decksImported = useRef(false);
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const foldersRef = useRef();
@@ -51,6 +57,56 @@ const Folders = () => {
         // }
     }
 
+    const openFolder = (openId) => {
+        dispatch(getDecks(openId));
+        navigate(`/folder/${openId}`)
+    }
+
+    const getFolderHierarchy = async () => {
+        let currentId = id;
+        let hierarchy = [];
+        let obj;
+
+        while(currentId !== null && currentId !== undefined) {
+            obj = await api.getFolderById(currentId);
+            // console.log(obj);
+            if (obj !== null 
+                && obj !== undefined
+                && obj.data !== null 
+                && obj.data !== undefined
+            ) {
+                hierarchy.push({name: obj.data.name, _id: obj.data._id});
+                try {
+                    if (obj.data.parent !== null && obj.data.parent !== undefined) {
+                        obj = obj.data.parent.toString();
+                    } else {
+                        obj = null;
+                    }
+                } catch (err) {
+                    console.log(err);
+                    obj = null;
+                }
+            }
+            currentId = obj;
+            
+            // console.log(currentId);
+        }
+
+        hierarchy.reverse();
+        // let path = "";
+
+        // for (const node in hierarchy) {
+        //     path += hierarchy[node].name;
+        //     if (hierarchy[hierarchy.length - 1] != hierarchy[node]) {
+        //         path += " > ";
+        //     }
+        // }
+
+        // console.log(path);
+
+        return hierarchy;
+    }
+
     // Saves the last created deck
     const handleSubmit = async () => {
         // console.log('handleSubmit')
@@ -61,7 +117,7 @@ const Folders = () => {
     // Adds a new item to local array of decks
     const handleDeckAdd = () => {
         // console.log('handleDeckAdd')
-        setDecksData([{ name: 'Nueva carpeta'}, ...decksData])
+        setDecksData([{ name: 'Nueva carpeta', parent: id}, ...decksData])
     }
     
     const handleEditName = (index, e) => {
@@ -88,7 +144,6 @@ const Folders = () => {
     };
     
     useEffect(() => {
-        // console.log('useEffect[dispatch]')
         dispatch(getDecks(id));
     }, [dispatch]);
 
@@ -119,9 +174,10 @@ const Folders = () => {
         setDecksLastLength(decksLength);
     }, [decksLength])
 
-    useEffect(() => {
+    useEffect(async () => {
         dispatch(getDecks(id));
         setFolderId(id);
+        setFolderPath([...await getFolderHierarchy()]);
     }, [id])
 
     // console.log(dispatch(getDecks(id)));
@@ -161,6 +217,25 @@ const Folders = () => {
 
     return (
         <Container className="workspace">
+            <PathFullContainer>
+                {folderPath.map((folder, index) => {
+                    if (index < folderPath.length - 1) {
+                        return (
+                            <PathContainer key={folder._id}>
+                                <PathButton onClick={() => openFolder(folder._id)}> { folder.name } </PathButton>
+                                <PathArrow />
+                            </PathContainer>
+                        );
+                    }
+                    return (
+                        <PathContainer key={folder._id}>
+                            <PathButton onClick={() => openFolder(folder._id)}> { folder.name } </PathButton>
+                        </PathContainer>
+                    );
+                    //     return (<PathButton>folder.name</PathButton><PathArrow />)
+                    // return ( pathName );    
+                })}
+            </PathFullContainer>
             <TitleText>Carpetas</TitleText>
             <TitleUnderline />
             <CustomContainer actions={foldersActions} availableSpaces={['folderContainer', 'folderGrid']}>
@@ -201,6 +276,7 @@ const Folders = () => {
     )
 }
 
+
 const Item = ({ children, icon }) => {
     return (
         <ItemContainer>
@@ -209,6 +285,45 @@ const Item = ({ children, icon }) => {
         </ItemContainer>
     )
 }
+
+const PathArrow = styled(FiChevronRight)(() => ({
+    
+    color: darkTextColor,
+    fontSize: '1.3em',
+    margin: '-.2em .5em 0 0',
+}));
+
+const PathButton = styled(Button)(() => ({
+    borderRadius: '.5em',
+    padding: '.25em .75em',
+    marginRight: '.5em',
+    color: darkTextColor,
+    fontSize: '1.3em',
+    fontWeight: 800,
+    fontFamily: '\'Khula\', sans-serif',
+    backgroundColor: 'transparent',
+    transition: '0.2s ease-in-out',
+    textTransform: 'none',
+    '&:hover': {
+          backgroundColor: backgroundLightBlue,
+        //   color: 'white',
+    },
+}));
+
+const PathContainer = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const PathFullContainer = styled.div`
+    display: flex;
+    align-items: center;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    margin-left: -1em;
+    border-bottom: 1px solid ${ backgroundLightBlue };
+
+`;
 
 const ItemContainer = styled.div`
     display: flex;
@@ -228,7 +343,7 @@ const ItemText = styled.span`
 `;
 
 const Container = styled.div`
-    padding: 2.5em;
+    padding: 1.5em 2.5em 2.5em 2.5em;
 
 `;
 
