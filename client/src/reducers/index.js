@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 
-import decks from './folders';
+import folders from './folders';
 
 export default combineReducers({
-    decks: decks,
+    folders: folders,
 });

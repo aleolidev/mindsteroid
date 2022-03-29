@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 
-import { createDeck, updateFolder, getDecks } from '../../actions/folders';
+import { createFolder, updateFolder, getFolders } from '../../actions/folders';
 import Folder from './Folder/Folder';
 import { useParams } from 'react-router-dom';
 import CustomContainer from './CustomContainer';
@@ -18,13 +18,13 @@ import CustomDialog from '../CustomDialog';
 import * as api from '../../api';
 
 const Folders = () => {
-    const { decks, isLoading } = useSelector((state) => state.decks);
-    const [ decksData, setDecksData ] = useState([]);
-    const [ decksLength, setDecksLength ] = useState(null);
-    const [ decksLastLength, setDecksLastLength ] = useState(null);
+    const { folders, isLoading } = useSelector((state) => state.folders);
+    const [ foldersData, setfoldersData ] = useState([]);
+    const [ foldersLength, setfoldersLength ] = useState(null);
+    const [ foldersLastLength, setfoldersLastLength ] = useState(null);
     const [ openDialog, setOpenDialog ] = useState(false);
     const [ folderPath, setFolderPath] = useState([]);
-    const decksImported = useRef(false);
+    const foldersImported = useRef(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -33,19 +33,19 @@ const Folders = () => {
     const { id } = useParams();
     const [ folderId, setFolderId ] = useState(id);
     
-    if (decks !== undefined && decks !== null){
-        if (decksLength === null) {
-            setDecksLastLength(decks.length);
-            setDecksLength(decks.length);
+    if (folders !== undefined && folders !== null){
+        if (foldersLength === null) {
+            setfoldersLastLength(folders.length);
+            setfoldersLength(folders.length);
         }
         
-        if (decks.length !== decksLength) {
-            setDecksLength(decks.length);
+        if (folders.length !== foldersLength) {
+            setfoldersLength(folders.length);
         }
     }
 
     const openFolder = (openId) => {
-        dispatch(getDecks(openId));
+        dispatch(getFolders(openId));
         navigate(`/folder/${openId}`)
     }
 
@@ -81,22 +81,22 @@ const Folders = () => {
         return hierarchy;
     }
 
-    // Saves the last created deck
+    // Saves the last created folder
     const handleSubmit = async () => {
-        dispatch(await createDeck({...decksData[0]}, id))
+        dispatch(await createFolder({...foldersData[0]}, id))
     }
     
     
-    // Adds a new item to local array of decks
-    const handleDeckAdd = () => {
-        setDecksData([{ name: 'Nueva carpeta', parent: id}, ...decksData])
+    // Adds a new item to local array of folders
+    const handleFolderAdd = () => {
+        setfoldersData([{ name: 'Nueva carpeta', parent: id}, ...foldersData])
     }
     
     const handleUpdateName = (index, name) => {
-        const values = [...decks];
+        const values = [...folders];
         values[index].name = name
-        setDecksData(values);
-        dispatch(updateFolder(decksData[index]))
+        setfoldersData(values);
+        dispatch(updateFolder(foldersData[index]))
     }
 
     const handleOpenDialog = () => {
@@ -108,59 +108,59 @@ const Folders = () => {
     };
     
     useEffect(() => {
-        dispatch(getDecks(id));
+        dispatch(getFolders(id));
     }, [dispatch]);
 
-    // If the local array of decks changes his length...
+    // If the local array of folders changes his length...
     useEffect(() => {
-        if (decks !== undefined) {
-            // If new item added to decksData, insert the new item
-            if (decksData[0] !== undefined && decksData[0] !== null && decksData.length > decks.length) {
+        if (folders !== undefined) {
+            // If new item added to foldersData, insert the new item
+            if (foldersData[0] !== undefined && foldersData[0] !== null && foldersData.length > folders.length) {
                 handleSubmit()
             }
         }
-    }, [decksData.length])
+    }, [foldersData.length])
 
     
-    // If the decks array of the db changes his length...
+    // If the folders array of the db changes his length...
     useEffect(() => {
-        if (decksImported.current 
+        if (foldersImported.current 
             && foldersRef.current !== undefined 
             && foldersRef.current !== null 
-            && foldersRef.current.children[decksData.length - 1] !== undefined 
-            && foldersRef.current.children[decksData.length - 1] !== null
-            && decksLength > decksLastLength)
+            && foldersRef.current.children[foldersData.length - 1] !== undefined 
+            && foldersRef.current.children[foldersData.length - 1] !== null
+            && foldersLength > foldersLastLength)
         {
             handleOpenDialog();
         }
-        setDecksLastLength(decksLength);
-    }, [decksLength])
+        setfoldersLastLength(foldersLength);
+    }, [foldersLength])
 
     useEffect(async () => {
-        dispatch(getDecks(id));
+        dispatch(getFolders(id));
         setFolderId(id);
         setFolderPath([...await getFolderHierarchy()]);
     }, [id])
     
     // Import db changes to local whenever they change...
     useEffect(() => {
-        if(decks !== undefined && decks.length > 0) {
-            setDecksData(decks);
-            decksImported.current = true;
+        if(folders !== undefined && folders.length > 0) {
+            setfoldersData(folders);
+            foldersImported.current = true;
         }
-    }, [decks])
+    }, [folders])
 
-    if(!decks || isLoading) {
+    if(!folders || isLoading) {
         return null;
     } 
 
     const foldersActions = [
-        {action: handleDeckAdd, title: <Item icon={ <MdOutlineCreateNewFolder/ > }>Nueva carpeta</Item>},
+        {action: handleFolderAdd, title: <Item icon={ <MdOutlineCreateNewFolder/ > }>Nueva carpeta</Item>},
     ]
 
     const folderActions = [
         {action: null, title: <Item icon={ <HiOutlinePencil/ > }>Cambiar nombre</Item>},
-        {action: handleDeckAdd, title: <Item icon={ <CgTrashEmpty/ > }>Eliminar</Item>},
+        {action: handleFolderAdd, title: <Item icon={ <CgTrashEmpty/ > }>Eliminar</Item>},
     ]
 
 
@@ -187,9 +187,9 @@ const Folders = () => {
             <TitleUnderline />
             <CustomContainer actions={foldersActions} availableSpaces={['folderContainer', 'folderGrid']}>
                 <Grid container ref={foldersRef}>
-                    {decks.map((deck, index) => (
-                        <Grid name="folderGrid" key={deck._id} item xs={12} sm={6} md={3} >
-                            <Folder deck={deck} handleUpdateName={handleUpdateName} folderObj={decksData[index]} index={index} actions={folderActions}/>
+                    {folders.map((folder, index) => (
+                        <Grid name="folderGrid" key={folder._id} item xs={12} sm={6} md={3} >
+                            <Folder folder={folder} handleUpdateName={handleUpdateName} folderObj={foldersData[index]} index={index} actions={folderActions}/>
                         </Grid>
                     ))}
                     <Grid name="folderGrid" item xs={3}></Grid><Grid name="folderGrid" item xs={3}></Grid>
@@ -199,11 +199,11 @@ const Folders = () => {
             
             <TitleText>Mazos</TitleText>
             <TitleUnderline />
-            <CustomContainer actions={[]} availableSpaces={['folderContainer', 'deckGrid']}>
+            <CustomContainer actions={[]} availableSpaces={['folderContainer', 'folderGrid']}>
                 <Grid container>
                     
-                    <Grid name="deckGrid" item xs={3}></Grid><Grid name="deckGrid" item xs={3}></Grid>
-                    <Grid name="deckGrid" item xs={3}></Grid><Grid name="deckGrid" item xs={3}></Grid>
+                    <Grid name="folderGrid" item xs={3}></Grid><Grid name="folderGrid" item xs={3}></Grid>
+                    <Grid name="folderGrid" item xs={3}></Grid><Grid name="folderGrid" item xs={3}></Grid>
                 </Grid>
             </CustomContainer>
             <CustomDialog 
@@ -212,7 +212,7 @@ const Folders = () => {
                 title="Cambiar nombre" 
                 currentValue="Nueva carpeta"
                 handleSave={(newName) => {
-                    handleUpdateName(decks.length - 1, newName);
+                    handleUpdateName(folders.length - 1, newName);
                     handleCloseDialog();
                 }} 
             />

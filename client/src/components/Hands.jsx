@@ -1,21 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
 import { HiOutlinePlus } from 'react-icons/hi'
-import { darkTextColor, primaryEmerald, backgroundLightBlue, inputSvgColor, selectTextColor } from '../utils'
+import { backgroundLightGray, darkTextColor, primaryEmerald, backgroundLightBlue, primaryYellow, inputSvgColor, selectTextColor } from '../utils'
 import { Grid } from '@material-ui/core';
 
-function Decks() {
+function folders() {
     return (
         <Container>
             <TitleText>Manos</TitleText>
             <TitleUnderline />
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={6} md={2}>
-                    <NewDeck>
-                        <NewDeckIcon>
+                    <NewFolder>
+                        <NewFolderIcon>
                             <HiOutlinePlus />
-                        </NewDeckIcon>
-                    </NewDeck>
+                        </NewFolderIcon>
+                    </NewFolder>
                 </Grid>
                 <Grid item xs={12} sm={6} md={2}>
                     <Hand>
@@ -38,7 +38,7 @@ function Decks() {
                 <Grid item xs={12} sm={6} md={2}>
                     <Hand>
                         <HandTitle>Tema 2</HandTitle>
-                        <HandStatus style={{backgroundColor: '#DDBE22', color: 'white'}}>
+                        <HandStatus style={{backgroundColor: '${ primaryYellow }', color: 'white'}}>
                             <HandStatusText>7/10</HandStatusText>
                         </HandStatus>
                     </Hand>
@@ -80,7 +80,7 @@ const Container = styled.div`
     padding: 2.5em;
 `;
 
-const NewDeck = styled.div`
+const NewFolder = styled.div`
     width: 75%;
     height: 7.5em;
     padding: 1em;
@@ -98,7 +98,7 @@ const NewDeck = styled.div`
     }
 `;
 
-const NewDeckIcon = styled.div`
+const NewFolderIcon = styled.div`
     height: 100%;
     display: flex;
     justify-content: center;
@@ -140,7 +140,7 @@ const HandStatus = styled.div`
     position: absolute;
     right: -.5em;
     top: -.5em;
-    background-color: #B7BBE5;
+    background-color: ${ backgroundLightGray };
     height: 1em;
     padding: .3em 1em 0 1em;
     border-radius: 1em;
@@ -167,14 +167,14 @@ const Practice = styled.div`
     background-color: ${ backgroundLightBlue };
     color: ${ darkTextColor };
     font-weight: 600;
-    border-top: 1px solid #B7BBE5;
+    border-top: 1px solid ${ backgroundLightGray };
     cursor: pointer;
     transition: 0.2s ease-in-out;
     &:hover {
         p {
             color: white;
         }
-        background-color: #DDBE22;   
+        background-color: ${ primaryYellow };   
         border-top: 1px solid ${ backgroundLightBlue };
     }
 `;
@@ -199,7 +199,7 @@ const Study = styled.div`
     border-radius: 0 0 1em 1em;
     color: ${ darkTextColor };
     font-weight: 600;
-    border-top: 1px solid #B7BBE5;
+    border-top: 1px solid ${ backgroundLightGray };
     cursor: pointer;
     transition: 0.2s ease-in-out;
     &:hover {
@@ -235,4 +235,4 @@ const TitleUnderline = styled.div`
     background-color: ${primaryEmerald};
 `;
 
-export default Decks;
+export default folders;

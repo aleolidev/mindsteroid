@@ -1,12 +1,12 @@
 
 import mongoose from 'mongoose';
-import Deck from '../models/postDeck.js';
+import Folder from '../models/models.js';
 
-export const getDecks = async (req, res) => {
+export const getFolders = async (req, res) => {
     try {
-        const postDeck = await Deck.find();
+        const postFolder = await Folder.find();
 
-        res.status(200).json(postDeck);
+        res.status(200).json(postFolder);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -14,7 +14,7 @@ export const getDecks = async (req, res) => {
 
 export const getFolderById = async (req, res) => {
     try {
-        const postFolder = await Deck.findById(req.params.id);
+        const postFolder = await Folder.findById(req.params.id);
 
         res.status(200).json(postFolder);
     } catch (error) {
@@ -24,9 +24,9 @@ export const getFolderById = async (req, res) => {
 
 export const getFoldersById = async (req, res) => {
     try {
-        const postFolder = await Deck.findById(req.params.id);
+        const postFolder = await Folder.findById(req.params.id);
 
-        let subfolders = await Deck.find({ "_id": { "$in": postFolder.subfolders}});
+        let subfolders = await Folder.find({ "_id": { "$in": postFolder.subfolders}});
 
         res.status(200).json(subfolders);
     } catch (error) {
@@ -37,12 +37,12 @@ export const getFoldersById = async (req, res) => {
 export const createPost = async (req, res) => {
     const post = req.body;
 
-    const newDeck = new Deck(post);
+    const newFolder = new Folder(post);
 
     try {
-        await newDeck.save();
+        await newFolder.save();
 
-        res.status(201).json(newDeck);
+        res.status(201).json(newFolder);
     } catch (error) {
         res.status(409).json({ message: error.message });
     }
@@ -54,7 +54,7 @@ export const updateFolder = async (req, res) => {
 
     if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No folder with that id');
 
-    const updatedFolder = await Deck.findByIdAndUpdate(_id, folder, { new: true });
+    const updatedFolder = await Folder.findByIdAndUpdate(_id, folder, { new: true });
 
     res.json(updatedFolder);
 }
@@ -64,15 +64,15 @@ export const deleteFolder = async (req, res) => {
 
     if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No folder with that id');
 
-    let parentId = await Deck.findById(id);
+    let parentId = await Folder.findById(id);
     parentId = parentId.parent.toString();
 
     // Remove the ObjectId from the parent's subfolder array
-    await Deck.findOneAndUpdate({ _id: parentId }, { 
+    await Folder.findOneAndUpdate({ _id: parentId }, { 
         $pull: { subfolders: id } 
     })
 
-    await Deck.findByIdAndRemove(id);
+    await Folder.findByIdAndRemove(id);
 
     res.json({ message: 'Folder deleted successfully' });
 }

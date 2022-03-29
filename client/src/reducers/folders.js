@@ -1,18 +1,18 @@
-export default (state = { decks: [], isLoading: true }, action) => {
+export default (state = { folders: [], isLoading: true }, action) => {
     switch (action.type) {
         case 'START_LOADING':
             return { ...state, isLoading: true };
         case 'END_LOADING':
             return { ...state, isLoading: false };
         case 'FETCH_ALL':
-            return {...state, decks: action.payload };
+            return {...state, folders: action.payload };
         case 'CREATE':
-            return {...state, decks: [...state.decks, action.payload] };
+            return {...state, folders: [...state.folders, action.payload] };
         case 'DELETE':
-            return { ...state, decks: state.decks.filter((deck) => deck._id !== action.payload) };
+            return { ...state, folders: state.folders.filter((folder) => folder._id !== action.payload) };
         case 'UPDATE':
-            return {...state, decks: state.decks.map((deck) => (deck._id === action.payload._id ? action.payload : deck)) };
+            return {...state, folders: state.folders.map((folder) => (folder._id === action.payload._id ? action.payload : folder)) };
         default:
-            return state.decks;
+            return state.folders;
     }
 }

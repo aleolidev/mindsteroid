@@ -1,10 +1,10 @@
 import * as api from '../api';
 
 // Action Creators
-export const getDecks = (id) => async (dispatch) => {
+export const getFolders = (id) => async (dispatch) => {
     try {
         dispatch({ type: 'START_LOADING' });
-        const { data } = await api.fetchDecksById(id);
+        const { data } = await api.fetchFoldersById(id);
         
         dispatch({ type: 'FETCH_ALL', payload: data });
         dispatch({ type: 'END_LOADING' });
@@ -13,9 +13,9 @@ export const getDecks = (id) => async (dispatch) => {
     }
 }
 
-export const createDeck = (deck, id) => async (dispatch) => {
+export const createFolder = (folder, id) => async (dispatch) => {
     try {
-        const { data } = await api.createDeck(deck)
+        const { data } = await api.createFolder(folder)
         dispatch({type: 'CREATE', payload: data});
         
         const fatherFolder = await api.getFolderById(id);

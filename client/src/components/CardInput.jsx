@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { darkTextColor, primaryEmerald, primaryRed } from '../utils'
+import { darkTextColor, primaryEmerald, primaryDarkEmerald, primaryRed, primaryRed2 } from '../utils'
 import { Grid } from '@material-ui/core';
 import Editor from './TextEditor';
 
@@ -88,7 +88,7 @@ const SaveButton = styled.div`
     cursor: pointer;
     transition: 0.2s ease-in-out;
     &:hover {
-        background-color: #00a84b;
+        background-color: ${ primaryDarkEmerald };
     }
     
 `;
@@ -107,7 +107,7 @@ const CancelButton = styled.div`
     cursor: pointer;
     transition: 0.2s ease-in-out;
     &:hover {
-        background-color: #EE342B;
+        background-color: ${ primaryRed2 };
     }
 `;
 

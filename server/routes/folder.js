@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { getFolderById, updateFolder, deleteFolder } from '../controllers/decks.js';
+import { getFolderById, updateFolder, deleteFolder } from '../controllers/folders.js';
 
 const router = express.Router();
 

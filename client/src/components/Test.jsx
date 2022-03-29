@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { darkTextColor, primaryEmerald, primaryRed } from '../utils'
+import { backgroundLightGray, darkTextColor, backgroundLightBlue, primaryEmerald } from '../utils'
+import { primaryDarkEmerald, primaryYellow, primaryDarkYellow, primaryRed, primaryRed2 } from '../utils'
 import { Grid } from '@material-ui/core';
 
 function Test() {
@@ -67,7 +68,7 @@ const CurrentMark = styled.div`
     align-items: center;
     justify-content: center;
     height: 1em;
-    background-color: #ebcb2b;
+    background-color: ${ primaryYellow };
     padding: 0 1.6em;
     border-radius: .7em;
     font-weight: 600;
@@ -84,7 +85,7 @@ const Flashcard = styled.div`
     padding: 1.5em;
     width: 100%;
     height: 18em;
-    background-color: #E8E9fE;
+    background-color: ${ backgroundLightBlue };
     border-radius: 1.5em;
     color: ${ darkTextColor };
 `;
@@ -98,7 +99,7 @@ const ShowAnswer = styled.div`
     align-items: center;
     justify-content: center;
     height: 2.5em;
-    background-color: #E8E9fE;
+    background-color: ${ backgroundLightBlue };
     padding: 0 2em;
     margin-right: 1em;
     border-radius: .7em;
@@ -106,9 +107,8 @@ const ShowAnswer = styled.div`
     color: ${ darkTextColor };
     cursor: pointer;
     transition: 0.2s ease-in-out;
-    // border: 1px solid #CDCEE1;
     &:hover {
-        background-color: #CDCEE1;
+        background-color: ${ backgroundLightGray };
     }
 `;
 
@@ -126,7 +126,7 @@ const Hard = styled.div`
     cursor: pointer;
     transition: 0.2s ease-in-out;
     &:hover {
-        background-color: #EE342B;
+        background-color: ${ primaryRed2 };
     }
 `;
 
@@ -135,7 +135,7 @@ const Review = styled.div`
     align-items: center;
     justify-content: center;
     height: 2.5em;
-    background-color: #EBCB2B;
+    background-color: ${ primaryYellow };
     padding: 0 2em;
     margin-right: 1em;
     border-radius: .7em;
@@ -144,7 +144,7 @@ const Review = styled.div`
     cursor: pointer;
     transition: 0.2s ease-in-out;
     &:hover {
-        background-color: #e0a21c;
+        background-color: ${ primaryDarkYellow };
     }
 `;
 
@@ -162,7 +162,7 @@ const Easy = styled.div`
     cursor: pointer;
     transition: 0.2s ease-in-out;
     &:hover {
-        background-color: #00a84b;
+        background-color: ${ primaryDarkEmerald };
     }
 `;
 

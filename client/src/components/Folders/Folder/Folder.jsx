@@ -3,13 +3,13 @@ import styled from 'styled-components'
 import { darkTextColor, primaryLightEmerald1, primaryLightEmerald2, backgroundLightBlue, inputSvgColor, primaryEmerald } from '../../../utils'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getDecks, deleteFolder } from '../../../actions/folders';
+import { getFolders, deleteFolder } from '../../../actions/folders';
 import { Menu, MenuItem } from '@material-ui/core';
 import { HiFolder } from 'react-icons/hi';
 import CustomDialog from '../../CustomDialog';
 import * as api from '../../../api';
 
-const Folder = ({ deck, handleUpdateName, folderObj, index, actions }) => {
+const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
 
     const [ contextMenu, setContextMenu ] = useState(null);
     const [ openDialog, setOpenDialog ] = useState(false);
@@ -19,7 +19,7 @@ const Folder = ({ deck, handleUpdateName, folderObj, index, actions }) => {
     const openFolder = () => {
         if(contextMenu === null)
         {
-            dispatch(getDecks(folderObj._id));
+            dispatch(getFolders(folderObj._id));
             navigate(`/folder/${folderObj._id}`)
         }
     }
@@ -34,7 +34,7 @@ const Folder = ({ deck, handleUpdateName, folderObj, index, actions }) => {
 
     const recursiveFolders = async (id) => {
         let folders = [];
-        const { data } = await api.fetchDecksById(id);
+        const { data } = await api.fetchFoldersById(id);
         
         if (data !== null && data !== undefined) {
             for (let folder in data) {
@@ -117,14 +117,14 @@ const Folder = ({ deck, handleUpdateName, folderObj, index, actions }) => {
                 <Icon>
                     <HiFolder />
                 </Icon>
-                <FolderName> { deck.name } </FolderName>
+                <FolderName> { folder.name } </FolderName>
                     
             </Card>
             <CustomDialog 
                 open={ openDialog } 
                 handleClose={ handleCloseDialog } 
                 title="Cambiar nombre" 
-                currentValue={ deck.name }
+                currentValue={ folder.name }
                 handleSave={(newName) => {
                     handleUpdateName(index, newName);
                     handleCloseDialog();
@@ -196,7 +196,7 @@ const FolderName = styled.span`
 const StyledMenu = styled(Menu)(() => ({
     '& .MuiPaper-root': {
         borderRadius: '.5em',
-        backgroundColor: '#e8e9fe',
+        backgroundColor: backgroundLightBlue,
         padding: '.5em',
     },
     '& .MuiList-padding': {

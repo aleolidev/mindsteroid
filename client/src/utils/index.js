@@ -1,26 +1,46 @@
 /* eslint-disable */ 
+
+// == COLORS ==
+
+// = Background =
+export const backgroundLightGray = "#B7BBE5";
+
+export const backgroundLightBlue = "#E8E9FE";
 export const backgroundDarkBlue = "#141832";
 export const backgroundRegularBlue = "#1D2242";
-export const backgroundLightBlue = "#e8e9fe";
-export const textColor = "#584478";
-export const svgColor = "#7b64A4";
-export const selectTextColor = "#535ADF";
-export const darkTextColor = "#2E3059";
-export const placeholderColor = "#A298B5";
+
+// = Primary =
 export const primaryBlue = "#4E5FEE";
 export const primaryDarkBlue = "#392ECF";
+
 export const primaryLightEmerald1 = "#D2FDD4";
 export const primaryLightEmerald2 = "#6CCF8D";
 export const primaryEmerald = "#33BC61";
-export const primaryRed = "#F86376";
-export const inputSvgColor = "#A3A7CF";
-export const lightSvg = "#53557B";
+export const primaryDarkEmerald = "#00A84B";
 
+export const primaryRed = "#F86376";
+export const primaryRed2 = "#EE342B";
+
+export const primaryYellow = "#DDBE22";
+export const primaryDarkYellow = "#E0A21C";
+
+// = Text =
+export const textColor = "#584478";
+export const darkTextColor = "#2E3059";
+export const selectTextColor = "#535ADF";
+export const placeholderColor = "#A298B5";
+
+// = SVG =
+export const lightSvg = "#53557B";
+export const svgColor = "#7b64A4";
+export const inputSvgColor = "#A3A7CF";
+
+// = Special =
 export const hoverEffect = `rgba(16, 16, 48, 1) 0 0 18px -4px`;
 export const cardShadow = `rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
     rgba (0, 0, 0, 0.04) 0px 10px 10px -5px`;
     
-
+// == SPECIAL FUNCTIONS ==
 
 export const isMobile = () => {
     let check = false;

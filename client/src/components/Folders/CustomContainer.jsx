@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { isMobile } from '../../utils/index';
 import { Menu, MenuItem } from '@material-ui/core';
-import { darkTextColor } from '../../utils'
+import { darkTextColor, backgroundLightBlue } from '../../utils'
 
 const CustomContainer = ({ children, availableSpaces, actions }) => {
     const [contextMenu, setContextMenu] = React.useState(null);
@@ -76,7 +76,7 @@ const Container = styled.div`
 const StyledMenu = styled(Menu)(() => ({
     '& .MuiPaper-root': {
         borderRadius: '.5em',
-        backgroundColor: '#e8e9fe',
+        backgroundColor: backgroundLightBlue,
         padding: '.5em',
     },
     '& .MuiList-padding': {
