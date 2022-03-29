@@ -12,7 +12,6 @@ function Editor () {
 	});
 
 	if (Quill && !quill) {
-		// const BlotFormatter = require('quill-blot-formatter');
 		Quill.register('modules/blotFormatter', BlotFormatter);
 	}
 

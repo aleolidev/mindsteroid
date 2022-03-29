@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { alpha, styled } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Dialog from '@material-ui/core/Dialog';
@@ -12,19 +12,26 @@ import { backgroundLightBlue, darkTextColor, primaryRed, primaryEmerald } from '
 export default function CustomDialog( { open, handleClose, handleSave, title, currentValue } ) {
     const inputRef = useRef();
 
+    const submitNewName = (event) => {
+        event.preventDefault();
+        handleSave(inputRef.current.firstChild.value)
+    } 
+
     return (
         <div>
             <CustomDialogComponent open={open} onClose={handleClose}>
-                <DialogTitle>{ title }</DialogTitle>
-                <DialogContent>
-                <FormControl variant="standard">
-                    <CustomInput autoFocus defaultValue={ currentValue } id="bootstrap-input" ref={ inputRef }/>
-                </FormControl>
-                </DialogContent>
-                <DialogActions>
-                <CustomCancelButton onClick={handleClose}>Cancelar</CustomCancelButton>
-                <CustomConfirmButton type="submit" onClick= { () => handleSave(inputRef.current.firstChild.value) } >Aceptar</CustomConfirmButton>
-                </DialogActions>
+                <form onSubmit= { (e) => submitNewName(e) }>
+                    <DialogTitle>{ title }</DialogTitle>
+                    <DialogContent>
+                    <FormControl variant="standard">
+                        <CustomInput autoFocus onFocus={(e) => e.currentTarget.select()} defaultValue={ currentValue } id="bootstrap-input" ref={ inputRef }/>
+                    </FormControl>
+                    </DialogContent>
+                    <DialogActions>
+                    <CustomCancelButton onClick={handleClose}>Cancelar</CustomCancelButton>
+                    <CustomConfirmButton type="submit">Aceptar</CustomConfirmButton>
+                    </DialogActions>
+                </form>
             </CustomDialogComponent>
         </div>
     );

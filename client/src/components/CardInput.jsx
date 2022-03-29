@@ -5,9 +5,6 @@ import { Grid } from '@material-ui/core';
 import Editor from './TextEditor';
 
 function CardInput() {
-
-    
-
     return (
         <Container>
             <TitleText>Crear nueva tarjeta</TitleText>

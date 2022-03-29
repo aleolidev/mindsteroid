@@ -29,7 +29,7 @@ function Navbar() {
                             <Icon>
                                 <MdSearch />
                             </Icon>
-                            <Input type="text" placeholder="Search" />
+                            <Input type="text" placeholder="Buscar..." />
                         </InputContainer>
                     </Grid>
                 </Hidden>

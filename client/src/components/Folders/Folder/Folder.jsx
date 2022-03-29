@@ -1,24 +1,20 @@
 import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import { darkTextColor, primaryLightEmerald1, primaryLightEmerald2, backgroundLightBlue, inputSvgColor, primaryEmerald } from '../../../utils'
-import { EditText } from 'react-edit-text';
-import 'react-edit-text/dist/index.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getDecks, deleteFolder } from '../../../actions/folders';
-import { createTheme, Menu, MenuItem } from '@material-ui/core';
+import { Menu, MenuItem } from '@material-ui/core';
 import { HiFolder } from 'react-icons/hi';
 import CustomDialog from '../../CustomDialog';
 import * as api from '../../../api';
 
-const Folder = ({ deck, handleEditName, handleUpdateName, folderObj, index, availableSpaces, actions }) => {
+const Folder = ({ deck, handleUpdateName, folderObj, index, actions }) => {
 
     const [ contextMenu, setContextMenu ] = useState(null);
     const [ openDialog, setOpenDialog ] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    const folderRef = useRef();
 
     const openFolder = () => {
         if(contextMenu === null)
@@ -63,9 +59,6 @@ const Folder = ({ deck, handleEditName, handleUpdateName, folderObj, index, avai
 
     const handleContextMenu = (event) => {
         // If click into a blank space (and not item)...
-        // const name = event.target.getAttribute('name')
-        // if (availableSpaces.includes(name) )
-        // {
         event.preventDefault();
         setContextMenu(
         contextMenu === null
@@ -78,8 +71,6 @@ const Folder = ({ deck, handleEditName, handleUpdateName, folderObj, index, avai
             // With this behavior we prevent contextmenu from the backdrop to re-locale existing context menus.
             null,
         );
-        // }
-        
     };
 
     const handleClose = () => {
@@ -110,7 +101,6 @@ const Folder = ({ deck, handleEditName, handleUpdateName, folderObj, index, avai
                     {actions.map((item, index) => (
                         <StyledMenuItem key={index} onClick={() => {
                             handleClose();
-                            // console.log(item.title.props.children)
                             if (item.title.props.children == 'Cambiar nombre')
                             {
                                 handleOpenDialog();

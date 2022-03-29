@@ -9,7 +9,6 @@ import { darkTextColor, primaryEmerald, backgroundLightBlue, inputSvgColor, ligh
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import 'react-edit-text/dist/index.css';
 
 import { createDeck, updateFolder, getDecks } from '../../actions/folders';
 import Folder from './Folder/Folder';
@@ -19,8 +18,6 @@ import CustomDialog from '../CustomDialog';
 import * as api from '../../api';
 
 const Folders = () => {
-    // const rootFolder = '62373faa8d7f44c7ec8c39a7';
-
     const { decks, isLoading } = useSelector((state) => state.decks);
     const [ decksData, setDecksData ] = useState([]);
     const [ decksLength, setDecksLength ] = useState(null);
@@ -35,13 +32,6 @@ const Folders = () => {
 
     const { id } = useParams();
     const [ folderId, setFolderId ] = useState(id);
-
-    
-    // console.log("==== START ITER ==== ")
-    // console.log('route-id:', id)
-    // console.log('decks', decks)
-    // console.log('decksData', decksData)
-    
     
     if (decks !== undefined && decks !== null){
         if (decksLength === null) {
@@ -52,9 +42,6 @@ const Folders = () => {
         if (decks.length !== decksLength) {
             setDecksLength(decks.length);
         }
-        // if (decksLength === null) {
-        //     setDecksLastLength(decks.length);
-        // }
     }
 
     const openFolder = (openId) => {
@@ -69,7 +56,6 @@ const Folders = () => {
 
         while(currentId !== null && currentId !== undefined) {
             obj = await api.getFolderById(currentId);
-            // console.log(obj);
             if (obj !== null 
                 && obj !== undefined
                 && obj.data !== null 
@@ -88,47 +74,25 @@ const Folders = () => {
                 }
             }
             currentId = obj;
-            
-            // console.log(currentId);
         }
 
         hierarchy.reverse();
-        // let path = "";
-
-        // for (const node in hierarchy) {
-        //     path += hierarchy[node].name;
-        //     if (hierarchy[hierarchy.length - 1] != hierarchy[node]) {
-        //         path += " > ";
-        //     }
-        // }
-
-        // console.log(path);
 
         return hierarchy;
     }
 
     // Saves the last created deck
     const handleSubmit = async () => {
-        // console.log('handleSubmit')
         dispatch(await createDeck({...decksData[0]}, id))
     }
     
     
     // Adds a new item to local array of decks
     const handleDeckAdd = () => {
-        // console.log('handleDeckAdd')
         setDecksData([{ name: 'Nueva carpeta', parent: id}, ...decksData])
     }
     
-    const handleEditName = (index, e) => {
-        // console.log('handleEditName')
-        const values = [...decks];
-        values[index].name = e
-        setDecksData(values);
-    }
-    
     const handleUpdateName = (index, name) => {
-        // console.log('handleUpdateName')
         const values = [...decks];
         values[index].name = name
         setDecksData(values);
@@ -149,7 +113,6 @@ const Folders = () => {
 
     // If the local array of decks changes his length...
     useEffect(() => {
-        // console.log('useEffect[decksData.length]')
         if (decks !== undefined) {
             // If new item added to decksData, insert the new item
             if (decksData[0] !== undefined && decksData[0] !== null && decksData.length > decks.length) {
@@ -161,7 +124,6 @@ const Folders = () => {
     
     // If the decks array of the db changes his length...
     useEffect(() => {
-        // console.log('useEffect[decksLength]')
         if (decksImported.current 
             && foldersRef.current !== undefined 
             && foldersRef.current !== null 
@@ -179,14 +141,9 @@ const Folders = () => {
         setFolderId(id);
         setFolderPath([...await getFolderHierarchy()]);
     }, [id])
-
-    // console.log(dispatch(getDecks(id)));
-    
     
     // Import db changes to local whenever they change...
     useEffect(() => {
-        // console.log(decks);
-        // console.log('useEffect[decks2]')
         if(decks !== undefined && decks.length > 0) {
             setDecksData(decks);
             decksImported.current = true;
@@ -194,16 +151,8 @@ const Folders = () => {
     }, [decks])
 
     if(!decks || isLoading) {
-        // console.log("==== END ITER: NULL ==== ")
         return null;
     } 
-
-    
-    // console.log("==== END ITER: FULL CONTENT ==== ")
-
-    const foo = () => {
-        console.log('foo')
-    }
 
     const foldersActions = [
         {action: handleDeckAdd, title: <Item icon={ <MdOutlineCreateNewFolder/ > }>Nueva carpeta</Item>},
@@ -229,11 +178,9 @@ const Folders = () => {
                     }
                     return (
                         <PathContainer key={folder._id}>
-                            <PathButton onClick={() => openFolder(folder._id)}> { folder.name } </PathButton>
+                            <PathButton> { folder.name } </PathButton>
                         </PathContainer>
                     );
-                    //     return (<PathButton>folder.name</PathButton><PathArrow />)
-                    // return ( pathName );    
                 })}
             </PathFullContainer>
             <TitleText>Carpetas</TitleText>
@@ -242,7 +189,7 @@ const Folders = () => {
                 <Grid container ref={foldersRef}>
                     {decks.map((deck, index) => (
                         <Grid name="folderGrid" key={deck._id} item xs={12} sm={6} md={3} >
-                            <Folder deck={deck} handleEditName={handleEditName} handleUpdateName={handleUpdateName} folderObj={decksData[index]} index={index} actions={folderActions} availableSpaces={['folderContainer', 'folderGrid']}/>
+                            <Folder deck={deck} handleUpdateName={handleUpdateName} folderObj={decksData[index]} index={index} actions={folderActions}/>
                         </Grid>
                     ))}
                     <Grid name="folderGrid" item xs={3}></Grid><Grid name="folderGrid" item xs={3}></Grid>
@@ -259,8 +206,6 @@ const Folders = () => {
                     <Grid name="deckGrid" item xs={3}></Grid><Grid name="deckGrid" item xs={3}></Grid>
                 </Grid>
             </CustomContainer>
-
-            {/* Dialogs */}
             <CustomDialog 
                 open={ openDialog } 
                 handleClose={ handleCloseDialog } 
@@ -272,7 +217,6 @@ const Folders = () => {
                 }} 
             />
         </Container>
-        // </Container>
     )
 }
 
@@ -306,7 +250,6 @@ const PathButton = styled(Button)(() => ({
     textTransform: 'none',
     '&:hover': {
           backgroundColor: backgroundLightBlue,
-        //   color: 'white',
     },
 }));
 
@@ -345,58 +288,6 @@ const ItemText = styled.span`
 const Container = styled.div`
     padding: 1.5em 2.5em 2.5em 2.5em;
 
-`;
-
-const NewDeck = styled.div`
-    width: 75%;
-    display: flex;
-    padding: .5em 1em;
-    margin: 1em 2em 1em 0;
-    color: ${darkTextColor};
-    font-weight: 600;
-    border-radius: 1em;
-    border: dashed 3px  ${inputSvgColor};
-    cursor: pointer;
-    transition: 0.2s ease-in-out;
-    &:hover {   
-        border: dashed 3px  #7770b7; 
-        svg {
-            color: #7770b7;
-        }
-        div {
-            color: #7770b7;
-        }
-    }
-`;
-
-const NewDeckIcon = styled.div`
-    height: 2.5rem;
-    width: 3rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-top-left-radius: .75rem;
-    border-bottom-left-radius: .75rem;
-    svg {
-        color: ${ inputSvgColor };
-        font-size: 1.4rem;
-        transition: 0.2s ease-in-out;
-    }
-`;
-
-const NewDeckText = styled.div`
-    color: ${inputSvgColor};
-    font-weight: 600;
-    margin-top: .1em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: .25 .5em;
-    font-weight: 600;
-    outline: none;
-    border: 0
-    border-radius: .5em;
-    transition: 0.2s ease-in-out;
 `;
 
 const TitleText = styled.h1`
