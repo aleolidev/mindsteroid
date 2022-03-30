@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 import Navbar from './components/Navbar';
-import Folders from './components/Folders/Folders';
+import Shelving from './components/Shelving/Shelving';
 import CardInput from './components/CardInput';
 import Test from './components/Test';
 import './App.css';
@@ -16,8 +16,8 @@ const App = () => {
                 <Navbar />
                 <Routes>
                     <Route path="/" element={<Navigate replace to="/folder" />} />
-                    <Route path="/folder" element={<Folders />}/>
-                    <Route path="/folder/:id" element={<Folders />}/>
+                    <Route path="/folder" element={<Shelving />}/>
+                    <Route path="/folder/:id" element={<Shelving />}/>
                     <Route path="/cardinput" element={<CardInput />} />
                     <Route path="/test" element={<Test />} />
                 </Routes>
