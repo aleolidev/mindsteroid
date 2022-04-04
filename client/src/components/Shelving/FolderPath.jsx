@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import { getFolders } from '../../actions/folders';
+import { getDecks } from '../../actions/decks';
 import { FiChevronRight } from 'react-icons/fi'
 import Button from '@material-ui/core/Button';
 import { darkTextColor, backgroundLightBlue } from '../../utils'
@@ -15,6 +16,7 @@ const FolderPath = ({ folderPath }) => {
 
     const openFolder = (openId) => {
         dispatch(getFolders(openId));
+        dispatch(getDecks(openId));
         navigate(`/folder/${openId}`)
     }
 

@@ -7,11 +7,13 @@ import Folders from './Folders';
 import Decks from './Decks';
 
 import { getFolders } from '../../actions/folders';
+import { getDecks } from '../../actions/decks';
 import { useParams } from 'react-router-dom';
 import * as api from '../../api';
 
 const Shelving = () => {
-    const { folders, isLoading } = useSelector((state) => state.folders);
+    const { folders, isLoading: foldersIsLoading } = useSelector((state) => state.folders);
+    // const { decks, isLoading: decksIsLoading } = useSelector((state) => state.decks);
     const [ folderPath, setFolderPath] = useState([]);
     const dispatch = useDispatch();
 
@@ -48,27 +50,22 @@ const Shelving = () => {
 
         return hierarchy;
     }
-
-    const handleUpdateName = (index, name) => {
-        const values = [...folders];
-        values[index].name = name
-        /* TODO: Uncomment
-        setFoldersData(values);
-        dispatch(updateFolder(foldersData[index]))*/
-    }
     
     useEffect(() => {
         dispatch(getFolders(id));
+        dispatch(getDecks(id));
     }, [dispatch]);
 
 
     useEffect(async () => {
         dispatch(getFolders(id));
+        dispatch(getDecks(id));
         setFolderPath([...await getFolderHierarchy()]);
     }, [id])
 
-    if(!folders || isLoading) {
-        return null;
+    // if(!folders || !decks || foldersIsLoading || decksIsLoading) {
+    if(!folders || foldersIsLoading) {
+            return null;
     } 
 
 

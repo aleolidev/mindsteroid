@@ -1,6 +1,6 @@
 
 import mongoose from 'mongoose';
-import Folder from '../models/models.js';
+import { Folder } from '../models/models.js';
 
 export const getFolders = async (req, res) => {
     try {

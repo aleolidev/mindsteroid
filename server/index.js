@@ -3,7 +3,8 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
-import postRoutes from './routes/folders.js';
+import deckRoutes from './routes/deck.js';
+import decksRoutes from './routes/decks.js';
 import folderRoutes from './routes/folder.js';
 import foldersRoutes from './routes/folders.js';
 
@@ -15,9 +16,10 @@ app.use(bodyParser.json({ limit: "30mb", extended: true}));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true}));
 app.use(cors());
 
-app.use('/folders', postRoutes);
 app.use('/folder', folderRoutes);
 app.use('/folders', foldersRoutes);
+app.use('/deck', deckRoutes);
+app.use('/decks', decksRoutes);
 
 const PORT = process.env.PORT || 5000;
 

@@ -13,9 +13,13 @@ const cardSchema = mongoose.Schema({
     },
 });
 
-const handSchema = mongoose.Schema({
+const deckSchema = mongoose.Schema({
     name: String,
     creator: String,
+    parent: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: null
+    },
     cardSet: [cardSchema],
     createdAt: {
         type: Date,
@@ -27,7 +31,7 @@ const handSchema = mongoose.Schema({
     },
 });
 
-const folderschema = mongoose.Schema({
+const folderSchema = mongoose.Schema({
     name: String,
     creator: String,
     parent: {
@@ -41,6 +45,13 @@ const folderschema = mongoose.Schema({
         }],
         default: []
     },
+    subdecks: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'deckschema'
+        }],
+        default: []
+    },
     createdAt: {
         type: Date,
         default: new Date()
@@ -51,6 +62,5 @@ const folderschema = mongoose.Schema({
     },
 });
 
-const Folder = mongoose.model('Folder', folderschema);
-
-export default Folder;
+export const Folder = mongoose.model('Folder', folderSchema);
+export const Deck = mongoose.model('Deck', deckSchema);

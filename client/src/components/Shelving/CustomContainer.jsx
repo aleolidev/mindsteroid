@@ -75,9 +75,9 @@ const Container = styled.div`
 
 const StyledMenu = styled(Menu)(() => ({
     '& .MuiPaper-root': {
-        borderRadius: '.5em',
+        // borderRadius: '.5em',
         backgroundColor: backgroundLightBlue,
-        padding: '.5em',
+        padding: '.5em 0',
     },
     '& .MuiList-padding': {
         padding: 0,

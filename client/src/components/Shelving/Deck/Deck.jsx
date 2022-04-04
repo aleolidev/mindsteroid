@@ -3,26 +3,26 @@ import styled from 'styled-components'
 import { darkTextColor, primaryLightEmerald1, primaryLightEmerald2, backgroundLightBlue, inputSvgColor, primaryEmerald } from '../../../utils'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getFolders, deleteFolder } from '../../../actions/folders';
-import { deleteDeck, getDecks} from '../../../actions/decks';
+import { getDecks, deleteDeck } from '../../../actions/decks';
+import { getFolders} from '../../../actions/folders';
 import { Menu, MenuItem } from '@material-ui/core';
-import { HiFolder } from 'react-icons/hi';
+import { MdCollectionsBookmark } from 'react-icons/md';
 import CustomDialog from '../../CustomDialog';
 import * as api from '../../../api';
 
-const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
+const Deck = ({ deck, handleUpdateName, deckObj, index, actions }) => {
 
     const [ contextMenu, setContextMenu ] = useState(null);
     const [ openDialog, setOpenDialog ] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const openFolder = () => {
+    const openDeck = () => {
         if(contextMenu === null)
         {
-            dispatch(getFolders(folderObj._id));
-            dispatch(getDecks(folderObj._id));
-            navigate(`/folder/${folderObj._id}`)
+            dispatch(getFolders(deckObj._id));
+            dispatch(getDecks(deckObj._id));
+            navigate(`/deck/${deckObj._id}`)
         }
     }
 
@@ -34,51 +34,16 @@ const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
         setOpenDialog(false);
     };
 
-    const getFolderDecks = async (id) => {
-        let decks = [];
-        const { data } = await api.fetchDecksById(id);
-        
-        if (data !== null && data !== undefined) {
-            for (let deck in data) {
-                decks = [data[deck]._id, ...decks];
-                // decks.unshift(data[deck]._id);
-                // decks = [...await recursiveFolders(data[folder]._id), ...folders];
-            }
-        }
-
-        return decks
-    }
-
-    const recursiveFolders = async (id) => {
-        let folders = [];
-        const { data } = await api.fetchFoldersById(id);
-        
-        if (data !== null && data !== undefined) {
-            for (let folder in data) {
-                folders.unshift(data[folder]._id);
-                folders = [...await recursiveFolders(data[folder]._id), ...folders];
-            }
-        }
-
-        return folders
-    }
-
-    const deleteFolderAndContent = async (id) => {  
-        // TODO: Do all in a single API call
-        let folders = [id];
-        folders = [...await recursiveFolders(id), ...folders];
-        for(const folder in folders) {
-            const decks = await getFolderDecks(folders[folder]);
-            for (const deck in decks) {
-                dispatch(deleteDeck(decks[deck]));
-            }
-            dispatch(deleteFolder(folders[folder]));
-        }
+    const deleteDeckAndContent = async (id) => {  
+        // TODO: Do all in a single API call   
+        // TODO: Remove questions too
+        dispatch(deleteDeck(id));
     };
 
 
     const handleContextMenu = (event) => {
         // If click into a blank space (and not item)...
+        console.log("HANDLE CONTEXT MENU!!")
         event.preventDefault();
         setContextMenu(
         contextMenu === null
@@ -100,7 +65,7 @@ const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
     return (
         <div>
 
-            <Card name="card" onContextMenu={(e) => handleContextMenu(e)} onDoubleClick={(e) => openFolder(e)}>
+            <Card name="card" onContextMenu={(e) => handleContextMenu(e)} onDoubleClick={(e) => openDeck(e)}>
                 <StyledMenu
                     sx={{
                         width: 300,
@@ -126,7 +91,7 @@ const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
                                 handleOpenDialog();
                             }
                             else if (item.title.props.children == 'Eliminar') {  
-                                deleteFolderAndContent(folderObj._id);
+                                deleteDeckAndContent(deckObj._id);
                             }
                             else if (item.action !== null && item.action !== undefined) {
                                 item.action();
@@ -135,16 +100,16 @@ const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
                     ))}
                 </StyledMenu>
                 <Icon>
-                    <HiFolder />
+                    <MdCollectionsBookmark />
                 </Icon>
-                <FolderName> { folder.name } </FolderName>
+                <DeckName> { deck.name } </DeckName>
                     
             </Card>
             <CustomDialog 
                 open={ openDialog } 
                 handleClose={ handleCloseDialog } 
                 title="Cambiar nombre" 
-                currentValue={ folder.name }
+                currentValue={ deck.name }
                 handleSave={(newName) => {
                     handleUpdateName(index, newName);
                     handleCloseDialog();
@@ -198,7 +163,7 @@ const Icon = styled.span`
     }
 `;
 
-const FolderName = styled.span`
+const DeckName = styled.span`
     display: flex;
     align-items: center;
     box-sizing: border-box;
@@ -233,4 +198,4 @@ const StyledMenuItem = styled(MenuItem)(() => ({
 }));
 
 
-export default Folder;
+export default Deck;
