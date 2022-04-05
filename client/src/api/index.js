@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const cardUrl = 'http://localhost:5000/card';
+const cardsUrl = 'http://localhost:5000/cards';
 const folderUrl = 'http://localhost:5000/folder';
 const foldersUrl = 'http://localhost:5000/folders';
 const deckUrl = 'http://localhost:5000/deck';
@@ -20,3 +22,11 @@ export const deleteDeck = (id) => axios.delete(`${deckUrl}/${id}`);
 export const fetchDecks = () => axios.get(decksUrl);
 export const createDeck = (newDeck) => axios.post(decksUrl, newDeck);
 export const fetchDecksById = (id) => axios.get(`${decksUrl}/${id}`)
+
+export const getCardById = (id) => axios.get(`${cardUrl}/${id}`);
+export const updateCard = (id, updatedCard) => axios.patch(`${cardUrl}/${id}`, updatedCard);
+export const deleteCard = (id) => axios.delete(`${cardUrl}/${id}`);
+
+export const fetchCards = () => axios.get(cardsUrl);
+export const createCard = (newCard) => axios.post(cardsUrl, newCard);
+export const fetchCardsById = (id) => axios.get(`${cardsUrl}/${id}`)

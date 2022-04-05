@@ -1,18 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
-import { MdOutlineCreateNewFolder } from 'react-icons/md'
 import { HiOutlinePencil } from 'react-icons/hi'
 import { CgTrashEmpty } from 'react-icons/cg'
 
 import Folder from './Folder/Folder';
-import CustomContainer from './CustomContainer';
 import CustomDialog from '../CustomDialog';
 import { createFolder, updateFolder } from '../../actions/folders';
 import { darkTextColor, primaryEmerald, lightSvg } from '../../utils'
+import Item from './Item';
 
-const Folders = ({ id }) => {
+const Folders = forwardRef(({ id }, ref) => {
     
     const { folders } = useSelector((state) => state.folders);
     
@@ -61,6 +60,9 @@ const Folders = ({ id }) => {
         setOpenDialog(false);
     };
     
+    useImperativeHandle(ref, () => ({
+        handleFolderAdd
+    }));
     
     // If the local array of folders changes his length...
     useEffect(() => {
@@ -94,11 +96,6 @@ const Folders = ({ id }) => {
         }
     }, [folders])
 
-    
-    const foldersActions = [
-        {action: handleFolderAdd, title: <Item icon={ <MdOutlineCreateNewFolder/ > }>Nueva carpeta</Item>},
-    ]
-
     const folderActions = [
         {action: null, title: <Item icon={ <HiOutlinePencil/ > }>Cambiar nombre</Item>},
         {action: null, title: <Item icon={ <CgTrashEmpty/ > }>Eliminar</Item>},
@@ -108,17 +105,15 @@ const Folders = ({ id }) => {
         <div>
             <TitleText>Carpetas</TitleText>
             <TitleUnderline />
-            <CustomContainer actions={foldersActions} availableSpaces={['folderContainer', 'folderGrid']}>
-                <Grid container ref={foldersRef}>
-                    {folders.map((folder, index) => (
-                        <Grid name="folderGrid" key={folder._id} item xs={12} sm={6} md={3} >
-                            <Folder folder={folder} handleUpdateName={handleUpdateName} folderObj={foldersData[index]} index={index} actions={folderActions}/>
-                        </Grid>
-                    ))}
-                    <Grid name="folderGrid" item xs={3}></Grid><Grid name="folderGrid" item xs={3}></Grid>
-                    <Grid name="folderGrid" item xs={3}></Grid><Grid name="folderGrid" item xs={3}></Grid>
-                </Grid>
-            </CustomContainer>
+            <CustomGrid name="folderContainer" container ref={foldersRef}>
+                {folders.map((folder, index) => (
+                    <Grid name="folderGrid" key={folder._id} item xs={12} sm={6} md={3} >
+                        <Folder folder={folder} handleUpdateName={handleUpdateName} folderObj={foldersData[index]} index={index} actions={folderActions}/>
+                    </Grid>
+                ))}
+                <Grid name="folderGrid" item xs={3}></Grid><Grid name="folderGrid" item xs={3}></Grid>
+                <Grid name="folderGrid" item xs={3}></Grid><Grid name="folderGrid" item xs={3}></Grid>
+            </CustomGrid>
             
             <CustomDialog 
                 open={ openDialog } 
@@ -132,33 +127,11 @@ const Folders = ({ id }) => {
             />
         </div>
     )
-}
+})
 
-const Item = ({ children, icon }) => {
-    return (
-        <ItemContainer>
-            { icon }
-            <ItemText> { children } </ItemText>
-        </ItemContainer>
-    )
-}
-
-const ItemContainer = styled.div`
-    display: flex;
-    align-items: center;
-    color: ${darkTextColor};
-    font-weight: 400;
-    font-size: 1em;
-    svg {
-        font-size: 1.2rem;
-        color: ${ lightSvg };
-    }
-`;
-
-const ItemText = styled.span`
-    padding-left: .8em;
-    margin-top: .15em;
-`;
+const CustomGrid = styled(Grid)(() => ({
+    paddingBottom: '5em',
+}));
 
 const TitleText = styled.h1`
     color: ${darkTextColor};

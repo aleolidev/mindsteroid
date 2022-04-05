@@ -3,6 +3,10 @@ import mongoose from 'mongoose';
 const cardSchema = mongoose.Schema({
     question: String,
     answer: String,
+    parent: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: null
+    },
     createdAt: {
         type: Date,
         default: new Date()
@@ -20,7 +24,13 @@ const deckSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         default: null
     },
-    cardSet: [cardSchema],
+    cardset: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'cardschema'
+        }],
+        default: []
+    },
     createdAt: {
         type: Date,
         default: new Date()
@@ -64,3 +74,4 @@ const folderSchema = mongoose.Schema({
 
 export const Folder = mongoose.model('Folder', folderSchema);
 export const Deck = mongoose.model('Deck', deckSchema);
+export const Card = mongoose.model('Card', cardSchema);

@@ -1,18 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import styled from 'styled-components';
 import { Grid } from '@material-ui/core';
-import { MdOutlineAddToPhotos } from 'react-icons/md'
 import { HiOutlinePencil } from 'react-icons/hi';
 import { CgTrashEmpty } from 'react-icons/cg';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { darkTextColor, primaryEmerald, lightSvg } from '../../utils'
-import CustomContainer from './CustomContainer';
+import { darkTextColor, primaryEmerald } from '../../utils'
 import { createDeck, updateDeck } from '../../actions/decks';
 import Deck from './Deck/Deck';
+import Item from './Item';
 import CustomDialog from '../CustomDialog';
 
-const Decks = ({ id }) => {
+const Decks = forwardRef(({ id }, ref) => {
 
     const { decks } = useSelector((state) => state.decks);
 
@@ -38,7 +37,6 @@ const Decks = ({ id }) => {
 
     // Adds a new item to local array of folders
     const handleDeckAdd = () => {
-        console.log("ADDING!")
         setDecksData([{ name: 'Nuevo mazo', parent: id}, ...decksData])
     }
 
@@ -61,6 +59,10 @@ const Decks = ({ id }) => {
     const handleCloseDialog = () => {
         setOpenDialog(false);
     };
+    
+    useImperativeHandle(ref, () => ({
+        handleDeckAdd
+    }));
 
     // If the local array of decks changes his length...
     useEffect(() => {
@@ -92,12 +94,6 @@ const Decks = ({ id }) => {
             setDecksData(decks);
         }
     }, [decks])
-    
-
-    
-    const decksActions = [
-        {action: handleDeckAdd, title: <Item icon={ <MdOutlineAddToPhotos/ > }>Nuevo mazo</Item>},
-    ]
 
     const deckActions = [
         {action: null, title: <Item icon={ <HiOutlinePencil/ > }>Cambiar nombre</Item>},
@@ -108,18 +104,16 @@ const Decks = ({ id }) => {
         <div>
             <TitleText>Mazos</TitleText>
             <TitleUnderline />
-            <CustomContainer actions={ decksActions } availableSpaces={['folderContainer', 'folderGrid']}>
-                <Grid container ref={ decksRef }>
-                    {decks.map((deck, index) => (
-                        <Grid name="deckGrid" key={deck._id} item xs={12} sm={6} md={3} >
-                            {/* { deck.name } */}
-                            <Deck deck={deck} handleUpdateName={handleUpdateName} deckObj={decksData[index]} index={index} actions={deckActions}/>
-                        </Grid>
-                    ))}
-                    <Grid name="folderGrid" item xs={3}></Grid><Grid name="folderGrid" item xs={3}></Grid>
-                    <Grid name="folderGrid" item xs={3}></Grid><Grid name="folderGrid" item xs={3}></Grid>
-                </Grid>
-            </CustomContainer>
+            <CustomGrid name='deckContainer' container ref={ decksRef }>
+                {decks.map((deck, index) => (
+                    <Grid name="deckGrid" key={deck._id} item xs={12} sm={6} md={3} >
+                        {/* { deck.name } */}
+                        <Deck deck={deck} handleUpdateName={handleUpdateName} deckObj={decksData[index]} index={index} actions={deckActions}/>
+                    </Grid>
+                ))}
+                <Grid name="deckGrid" item xs={3}></Grid><Grid name="deckGrid" item xs={3}></Grid>
+                <Grid name="deckGrid" item xs={3}></Grid><Grid name="deckGrid" item xs={3}></Grid>
+            </CustomGrid>
 
             <CustomDialog 
                 open={ openDialog } 
@@ -133,33 +127,11 @@ const Decks = ({ id }) => {
             />
         </div>
     )
-}
+})
 
-const Item = ({ children, icon }) => {
-    return (
-        <ItemContainer>
-            { icon }
-            <ItemText> { children } </ItemText>
-        </ItemContainer>
-    )
-}
-
-const ItemContainer = styled.div`
-    display: flex;
-    align-items: center;
-    color: ${darkTextColor};
-    font-weight: 400;
-    font-size: 1em;
-    svg {
-        font-size: 1.2rem;
-        color: ${ lightSvg };
-    }
-`;
-
-const ItemText = styled.span`
-    padding-left: .8em;
-    margin-top: .15em;
-`;
+const CustomGrid = styled(Grid)(() => ({
+    paddingBottom: '5em',
+}));
 
 const TitleText = styled.h1`
     color: ${darkTextColor};

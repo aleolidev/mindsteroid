@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 
 import FolderPath from './FolderPath';
 import Folders from './Folders';
 import Decks from './Decks';
+import Item from './Item';
 
 import { getFolders } from '../../actions/folders';
 import { getDecks } from '../../actions/decks';
 import { useParams } from 'react-router-dom';
 import * as api from '../../api';
+import CustomContainer from './CustomContainer';
+import { MdOutlineAddToPhotos, MdOutlineCreateNewFolder } from 'react-icons/md';
+import { darkTextColor, lightSvg } from '../../utils'
 
 const Shelving = () => {
     const { folders, isLoading: foldersIsLoading } = useSelector((state) => state.folders);
@@ -18,6 +22,9 @@ const Shelving = () => {
     const dispatch = useDispatch();
 
     const { id } = useParams();
+
+    const foldersRef = useRef();
+    const decksRef = useRef();
 
     const getFolderHierarchy = async () => {
         let currentId = id;
@@ -68,14 +75,19 @@ const Shelving = () => {
             return null;
     } 
 
+    const actions = [
+        {action: foldersRef.current?.handleFolderAdd, title: <Item icon={ <MdOutlineCreateNewFolder/ > }>Nueva carpeta</Item>},
+        {action: decksRef.current?.handleDeckAdd, title: <Item icon={ <MdOutlineAddToPhotos/ > }>Nuevo mazo</Item>},
+    ]
 
     return (
         <Container className="workspace">
-            <FolderPath folderPath={ folderPath } />
+            <FolderPath folderPath={ folderPath } lastIsDeck={ false } />
 
-            <Folders id={ id } />
-
-            <Decks id={ id } />
+            <CustomContainer actions={actions} availableSpaces={['folderContainer', 'folderGrid', 'folderBox', 'deckContainer', 'deckGrid', 'deckBox']}>
+                <Folders id={ id } ref={ foldersRef } />
+                <Decks id={ id } ref={ decksRef } />
+            </CustomContainer>
         </Container>
     )
 }

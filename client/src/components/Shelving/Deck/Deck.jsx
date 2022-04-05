@@ -3,12 +3,10 @@ import styled from 'styled-components'
 import { darkTextColor, primaryLightEmerald1, primaryLightEmerald2, backgroundLightBlue, inputSvgColor, primaryEmerald } from '../../../utils'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getDecks, deleteDeck } from '../../../actions/decks';
-import { getFolders} from '../../../actions/folders';
+import { deleteDeck } from '../../../actions/decks';
 import { Menu, MenuItem } from '@material-ui/core';
 import { MdCollectionsBookmark } from 'react-icons/md';
 import CustomDialog from '../../CustomDialog';
-import * as api from '../../../api';
 
 const Deck = ({ deck, handleUpdateName, deckObj, index, actions }) => {
 
@@ -20,8 +18,6 @@ const Deck = ({ deck, handleUpdateName, deckObj, index, actions }) => {
     const openDeck = () => {
         if(contextMenu === null)
         {
-            dispatch(getFolders(deckObj._id));
-            dispatch(getDecks(deckObj._id));
             navigate(`/deck/${deckObj._id}`)
         }
     }
@@ -43,7 +39,6 @@ const Deck = ({ deck, handleUpdateName, deckObj, index, actions }) => {
 
     const handleContextMenu = (event) => {
         // If click into a blank space (and not item)...
-        console.log("HANDLE CONTEXT MENU!!")
         event.preventDefault();
         setContextMenu(
         contextMenu === null
@@ -63,8 +58,7 @@ const Deck = ({ deck, handleUpdateName, deckObj, index, actions }) => {
     };
 
     return (
-        <div>
-
+        <div name='deckBox'>
             <Card name="card" onContextMenu={(e) => handleContextMenu(e)} onDoubleClick={(e) => openDeck(e)}>
                 <StyledMenu
                     sx={{

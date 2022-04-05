@@ -18,7 +18,37 @@
     height: 18em;
     overflow-y: auto;
 }
+
+.ql-snow .ql-tooltip[data-mode=image]::before {
+    content: "Enter image URL:";
+}
+
+.ql-tooltip {
+    left: 0 !important;
+    top: 0 !important;
+    transform: translateY(0) !important;
+    margin: 1em;
+    padding: .7em 1.6em !important;
+    border-radius: .5em;
+    font-weight: 400 !important;
+    color: #2E3059 !important;
+    background-color: #E8E9FE !important;
+    border: 1px solid #cdcee1 !important;
+    box-shadow: none !important;
+}
+
+.ql-tooltip input {
+    border: 2px solid transparent !important;
+    border-radius: .5em;
+    padding: 1.4em 1em !important;
+}
   
+.ql-tooltip input:focus {
+    outline: none !important;
+    border: 2px solid #3b91e7 !important;
+    box-shadow: none;
+}
+
 .ql-toolbar .ql-stroke {
     fill: none;
     stroke: #2E3059;

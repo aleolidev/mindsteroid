@@ -9,10 +9,10 @@ const CustomContainer = ({ children, availableSpaces, actions }) => {
 
     const handleContextMenu = (event) => {
         // If click into a blank space (and not item)...
+        event.preventDefault();
         const name = event.target.getAttribute('name')
         if (name !== null && name !== undefined && availableSpaces.includes(name) )
         {
-            event.preventDefault();
             setContextMenu(
             contextMenu === null
                 ? {
@@ -38,7 +38,7 @@ const CustomContainer = ({ children, availableSpaces, actions }) => {
         ); 
     } else {
         return (
-            <Container name="folderContainer" onContextMenu={handleContextMenu} style={{ cursor: 'context-menu' }}>
+            <Container onContextMenu={handleContextMenu} style={{ cursor: 'context-menu' }}>
                 <StyledMenu
                     sx={{
                         width: 300,
@@ -70,7 +70,7 @@ const CustomContainer = ({ children, availableSpaces, actions }) => {
 }
 
 const Container = styled.div`
-    padding-bottom: 5em;
+    // padding-bottom: 5em;
 `;
 
 const StyledMenu = styled(Menu)(() => ({

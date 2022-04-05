@@ -3,6 +3,8 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
+import cardRoutes from './routes/card.js';
+import cardsRoutes from './routes/cards.js';
 import deckRoutes from './routes/deck.js';
 import decksRoutes from './routes/decks.js';
 import folderRoutes from './routes/folder.js';
@@ -16,6 +18,8 @@ app.use(bodyParser.json({ limit: "30mb", extended: true}));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true}));
 app.use(cors());
 
+app.use('/card', cardRoutes);
+app.use('/cards', cardsRoutes);
 app.use('/folder', folderRoutes);
 app.use('/folders', foldersRoutes);
 app.use('/deck', deckRoutes);

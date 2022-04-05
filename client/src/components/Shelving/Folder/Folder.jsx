@@ -98,8 +98,7 @@ const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
     };
 
     return (
-        <div>
-
+        <div name='folderBox'>
             <Card name="card" onContextMenu={(e) => handleContextMenu(e)} onDoubleClick={(e) => openFolder(e)}>
                 <StyledMenu
                     sx={{
