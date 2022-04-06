@@ -6,9 +6,11 @@ import { MdCollectionsBookmark } from 'react-icons/md';
 
 import { getFolders } from '../../actions/folders';
 import { getDecks } from '../../actions/decks';
+import { getCards } from '../../actions/cards';
 import { FiChevronRight } from 'react-icons/fi'
 import Button from '@material-ui/core/Button';
 import { darkTextColor, backgroundLightBlue, inputSvgColor, primaryEmerald, primaryDarkBlue, primaryBlue } from '../../utils'
+import { Grid } from '@material-ui/core';
 
 const FolderPath = ({ folderPath, lastIsDeck, rightPanel }) => {
 
@@ -18,12 +20,13 @@ const FolderPath = ({ folderPath, lastIsDeck, rightPanel }) => {
     const openFolder = (openId) => {
         dispatch(getFolders(openId));
         dispatch(getDecks(openId));
+        dispatch(getCards(openId));
         navigate(`/folder/${openId}`)
     }
 
     return (
-        <PathFullContainer>
-            <div style={{display: 'flex'}}>
+        <PathFullContainer container>
+            <Grid item xs={8} style={{display: 'flex'}}>
                 {folderPath.map((folder, index) => {
                     if (index < folderPath.length - 1) {
                         return (
@@ -40,10 +43,10 @@ const FolderPath = ({ folderPath, lastIsDeck, rightPanel }) => {
                         </PathContainer>
                     );
                 })}
-            </div>
-            <div>
+            </Grid>
+            <Grid container item justifyContent='flex-end' xs={4}>
                 { rightPanel }
-            </div>
+            </Grid>
         </PathFullContainer>
     )
 };
@@ -60,7 +63,6 @@ const DeckIcon = styled(MdCollectionsBookmark)(() => ({
 }));
 
 const PathArrow = styled(FiChevronRight)(() => ({
-    
     color: darkTextColor,
     fontSize: '1.3em',
     margin: '-.2em .5em 0 0',
@@ -93,15 +95,14 @@ const PathContainer = styled.div`
     align-items: center;
 `;
 
-const PathFullContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 1em;
-    margin-bottom: 1em;
-    margin-left: -1em;
-    border-bottom: 1px solid ${ backgroundLightBlue };
-
-`;
+const PathFullContainer = styled(Grid)(() => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: '1em',
+    marginBottom: '1em',
+    marginLeft: '-1em',
+    borderBottom: `1px solid ${ backgroundLightBlue }`,
+}));
 
 export default FolderPath;

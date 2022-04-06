@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef, useImperativeHandle } from 'react'
 import { useEffect } from 'react';
 import { useQuill } from 'react-quilljs';
 import BlotFormatter from 'quill-blot-formatter';
@@ -6,7 +6,7 @@ import 'quill/dist/quill.snow.css';
 import '../styles.css';
 
 
-function Editor () {
+const Editor = forwardRef(({props}, ref) => {
 	
 	const myToolbar = [
 		['bold', 'italic', 'underline', 'strike'],
@@ -19,6 +19,7 @@ function Editor () {
 		[{ header: [1, 2, 3, 4, 5, 6, false] }],
 		['link', 'image', 'video'],
 		[{ color: [] }, { background: [] }],
+		['code-block'],
 	
 		['clean'],
 	];
@@ -29,6 +30,7 @@ function Editor () {
 		'size', 'header',
 		'link', 'image', 'video',
 		'color', 'background',
+		'code-block',
 		'clean',
 	];
 	
@@ -47,8 +49,6 @@ function Editor () {
 	}
 
 	const selectURLImage = () => {
-		console.log("SELECTING!!!");
-		console.log('quill', quill, '\nquillRef', quillRef, '\nQuill', Quill)
 		const tooltip = quill.theme.tooltip;
 		const originalSave = tooltip.save;
 		const originalHide = tooltip.hide;
@@ -71,16 +71,36 @@ function Editor () {
 
 	};
 
+	const getInnerHtml = () => {
+		return quill.root.innerHTML;
+	}
+
+	const setInnerHtml = (content) => {
+		// quill.setContents(content);
+		quill.root.innerHTML = content;
+	}
+
+	const cleanInnerHtml = () => {
+		quill.setContents([{ insert: '\n' }]);
+	}
+
+    useImperativeHandle(ref, () => ({
+        getInnerHtml,
+		cleanInnerHtml,
+		setInnerHtml
+    }));
+
 	useEffect(() => {
 		if (quill) {
 			quill.getModule('toolbar').addHandler('image', selectURLImage);
-			quill.on('text-change', (delta, oldContents) => {
+			/*quill.on('text-change', (delta, oldContents) => {
 				// console.log('Text change!');
 				// console.log(delta);
 
 				let currrentContents = quill.getContents();
+				// console.log(currrentContents.);
 				// console.log(currrentContents.diff(oldContents));
-			});
+			});*/
 		}
 	}, [quill, Quill]);
 
@@ -89,6 +109,6 @@ function Editor () {
 		<div ref={quillRef} />
 		</div>
 	);
-};
+});
 
 export default Editor;

@@ -1,6 +1,6 @@
 
 import mongoose from 'mongoose';
-import { Card, Deck } from '../models/models.js';
+import { Card, Deck, Folder } from '../models/models.js';
 
 export const getCards = async (req, res) => {
     try {

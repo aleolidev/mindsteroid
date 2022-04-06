@@ -7,39 +7,34 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import InputBase from '@material-ui/core/InputBase';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { backgroundLightBlue, darkTextColor, primaryRed, primaryEmerald } from '../utils/index';
+import { backgroundLightBlue, darkTextColor, primaryRed, primaryEmerald } from '../../utils/index';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
 
-export default function CustomDialog( { open, handleClose, handleSave, title, currentValue } ) {
+export default function ConfigDialog( { open, handleClose, title, keepAdding, keepAddingHandle } ) {
     const inputRef = useRef();
-
-    const submitNewName = (event) => {
-        event.preventDefault();
-        handleSave(inputRef.current.firstChild.value)
-    } 
 
     return (
         <div>
-            <CustomDialogComponent open={open} onClose={handleClose}>
-                <form onSubmit= { (e) => submitNewName(e) }>
+            <ConfigDialogComponent open={open} onClose={handleClose}>
+                {/* <form onSubmit= { handleClose }> */}
+                <form>
                     <DialogTitle>{ title }</DialogTitle>
                     <DialogContent>
-                    <FormControl variant="standard">
-                        <CustomInput autoFocus onFocus={(e) => e.currentTarget.select()} defaultValue={ currentValue } id="bootstrap-input" ref={ inputRef }/>
-                    </FormControl>
+                        <CustomCheckbox control={<Checkbox checked={ keepAdding } onChange={ keepAddingHandle } />} label="Continuar creando tarjetas" />
                     </DialogContent>
                     <DialogActions>
-                    <CustomCancelButton onClick={handleClose}>Cancelar</CustomCancelButton>
-                    <CustomConfirmButton type="submit">Aceptar</CustomConfirmButton>
+                        <CustomCancelButton onClick={handleClose}>Cancelar</CustomCancelButton>
+                        <CustomConfirmButton onClick={handleClose}>Aceptar</CustomConfirmButton>
                     </DialogActions>
                 </form>
-            </CustomDialogComponent>
+            </ConfigDialogComponent>
         </div>
     );
 }
 
-const CustomDialogComponent = styled(Dialog)(() => ({
+const ConfigDialogComponent = styled(Dialog)(() => ({
     '& .MuiDialogTitle-root': {
-        padding: '1.5em 1.5em 1em 1.5em',
+        padding: '1.5em 1.5em .5em 1.5em',
     },
     '& .MuiTypography-h6': {
         fontFamily: '\'Khula\', sans-serif',
@@ -51,7 +46,7 @@ const CustomDialogComponent = styled(Dialog)(() => ({
         borderRadius: '1em',
     },
     '& .MuiDialogActions-root': {
-        padding: '1.5em',
+        padding: '.5em 1.5em 1.5em 1.5em',
         justifyContent: 'space-between',
     },
     '& .MuiButton-root': {
@@ -87,16 +82,20 @@ const CustomConfirmButton = styled(Button)(({ theme }) => ({
     },
 }));
 
-const CustomInput = styled(InputBase)(() => ({
-    '& .MuiInputBase-input': {
-        borderRadius: '1em',
+const CustomCheckbox = styled(FormControlLabel)(() => ({
+    '& .MuiButtonBase-root': {
         position: 'relative',
-        padding: '1em 1.5em',
-        color: darkTextColor,
-        fontSize: '1em',
-        fontFamily: '\'Khula\', sans-serif',
-        backgroundColor: backgroundLightBlue,
-        fontWeight: 600,
-        width: 'auto',
+        // padding: '1em 1.5em',
+        color: primaryEmerald,
+        // fontSize: '1em',
+        // fontFamily: '\'Khula\', sans-serif',
+        // backgroundColor: backgroundLightBlue,
+        // fontWeight: 600,
+        // width: 'auto',
     },
+    '& .MuiTypography-root': {
+        fontFamily: '\'Khula\', sans-serif',
+        color: darkTextColor,
+        marginTop: '.25em',
+    }
 }));

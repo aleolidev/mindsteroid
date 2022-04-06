@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import { useParams } from 'react-router-dom';
 import * as api from '../../api';
-import { getFolders } from '../../actions/folders';
-import { getDecks } from '../../actions/decks';
 import FolderPath from '../Shelving/FolderPath';
 import DeckQuestions from './DeckQuestions';
-import { MdOutlineCheck, MdOutlineRefresh } from 'react-icons/md';
-import { backgroundLightBlue, darkTextColor, inputSvgColor, primaryBlue } from '../../utils';
+import { MdAdd, MdOutlineCheck, MdOutlineRefresh } from 'react-icons/md';
+import { backgroundLightBlue, darkTextColor, inputSvgColor, primaryBlue, primaryDarkEmerald, primaryEmerald, primaryLightEmerald1, primaryLightEmerald2 } from '../../utils';
 
 const Deck = () => {
     
     const [ folderPath, setFolderPath] = useState([]);
+    
     const dispatch = useDispatch();
 
+    const navigate = useNavigate();
+
     const { id } = useParams();
+
+    
+    const handleNewCard = () => {
+        navigate(`/deck/${ id }/new-card`);
+    }
 
     const getHierarchy = async () => {
         let currentId = id;
@@ -69,8 +76,9 @@ const Deck = () => {
         <Container className="workspace">
             <FolderPath folderPath={ folderPath } lastIsDeck={ true } rightPanel={
                 <RightIconsContainer>
-                    <RightButtons><MdOutlineCheck /> Examen</RightButtons>
-                    <RightButtons><MdOutlineRefresh /> Practicar</RightButtons>
+                    <RightButtons><MdOutlineCheck />Examen</RightButtons>
+                    <RightButtons><MdOutlineRefresh />Practicar</RightButtons>
+                    <AddNewCardButton onClick={ handleNewCard }><MdAdd /></AddNewCardButton>
                 </RightIconsContainer>
             } />
 
@@ -80,8 +88,7 @@ const Deck = () => {
 }
 
 const RightButtons = styled.div`
-    margin-left: 2em;
-    margin-right: -1em;
+    margin-right: 1em;
     padding: .75em 1.25em;
     display: flex;
     justify-content: center;
@@ -105,8 +112,38 @@ const RightButtons = styled.div`
     }
 `;
 
+
+const AddNewCardButton = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -.3em;
+    padding: 0em .5em;
+    height: 2.4em;
+    display: flex;
+    border-radius: .75em;
+    // background-color: ${ primaryEmerald };
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    border: 2px solid ${ primaryEmerald };
+    svg {
+        // margin-right: .4em;
+        transition: 0.2s ease-in-out;
+        font-size: 1.4rem;
+        color: ${ primaryEmerald };
+
+    }
+    &:hover {
+        background-color: ${ primaryEmerald };
+        svg {
+            color: ${ primaryLightEmerald1 };
+        }
+    }
+`;
+
 const RightIconsContainer = styled.div`
     display: flex;
+    align-items: center;
     margin-top: -.5em;
 `;
 

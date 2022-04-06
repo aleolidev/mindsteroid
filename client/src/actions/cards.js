@@ -14,20 +14,16 @@ export const getCards = (id) => async (dispatch) => {
 }
 
 export const createCard = (card, id) => async (dispatch) => {
-    try {
-        const { data } = await api.createCard(card)
-        dispatch({type: 'CREATE_CARD', payload: data});
-        
-        
-        const fatherDeck = await api.getDeckById(id);
-        const fatherData = fatherDeck.data;
-        fatherData.cardset.push(data._id)
-        const newFather = await api.updateDeck(id, fatherData);
-        
-        dispatch({ type: 'UPDATE_DECK', payload: newFather.data})
-    } catch (error) {
-        console.log(error.message);
-    }
+    const { data } = await api.createCard(card)
+    dispatch({type: 'CREATE_CARD', payload: data});
+    
+    
+    const fatherDeck = await api.getDeckById(id);
+    const fatherData = fatherDeck.data;
+    fatherData.cardset.push(data._id)
+    const newFather = await api.updateDeck(id, fatherData);
+    
+    dispatch({ type: 'UPDATE_DECK', payload: newFather.data})
 }
 
 export const updateCard = (card) => async (dispatch) => {
