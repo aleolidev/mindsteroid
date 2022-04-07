@@ -10,7 +10,7 @@ import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 
 import { getCards, deleteCard } from '../../actions/cards';
-import { backgroundLightBlue, primaryBlue, textColor, primaryEmerald, primaryLightEmerald1, primaryRed, primaryRed2 } from '../../utils/index';
+import { backgroundLightBlue, primaryBlue, textColor, primaryEmerald, primaryLightEmerald1, primaryRed, primaryRed2, darkTextColor } from '../../utils/index';
 
 const DeckQuestions = ({ id }) => {
 
@@ -35,6 +35,10 @@ const DeckQuestions = ({ id }) => {
     return(
         <Container>
             <ButtonsContainer container>
+            <TitleContainer>
+                <TitleText>Tarjetas</TitleText>
+                <TitleUnderline />
+            </TitleContainer>
                 {/* TODO: Add blank page message */}
                 {cards.map((card, index) => (
                     <Question onClick={ () => handleEditCard(card._id) } key={card._id} className='ql-snow'>
@@ -57,8 +61,25 @@ const DeckQuestions = ({ id }) => {
     )
 }
 
-const Container = styled.div`
+const Container = styled.div``;
 
+const TitleContainer = styled.div`
+    display: block;
+    margin-bottom: 2em;
+`;
+
+const TitleText = styled.h1`
+    color: ${darkTextColor};
+    font-weight: 600;
+`;
+
+const TitleUnderline = styled.div`
+    width: 0;
+    padding: 0 0 .25em 2.5em;
+    margin-top: -1em;
+    margin-bottom: 1em;
+    border-radius: 2em;
+    background-color: ${primaryEmerald};
 `;
 
 const ButtonsContainer = styled(Grid)(() => ({

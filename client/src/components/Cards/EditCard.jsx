@@ -78,9 +78,7 @@ const EditCard = () => {
 
     return (
         <Container>
-            <TitleContainer>
-                <TitleText>Crear nueva tarjeta</TitleText>
-            </TitleContainer>
+            <TitleText>Crear nueva tarjeta</TitleText>
             <TitleUnderline />
             <Grid container>
                 <Grid item xs={12} md={6}>
@@ -114,11 +112,6 @@ const EditCard = () => {
 
 const Container = styled.div`
     padding: 2.5em;
-`;
-
-const TitleContainer = styled.div`
-    display: flex;
-    align-items: center;
 `;
 
 const TitleText = styled.h1`
