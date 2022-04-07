@@ -75,9 +75,9 @@ const Deck = () => {
     return (
         <Container className="workspace">
             <FolderPath folderPath={ folderPath } lastIsDeck={ true } rightPanel={
-                <RightIconsContainer>
+                <RightIconsContainer style={{display: 'flex', flexWrap: 'wrap',}}>
                     <RightButtons><MdOutlineCheck />Examen</RightButtons>
-                    <RightButtons><MdOutlineRefresh />Practicar</RightButtons>
+                    <RightButtons style={{marginRight: 0,}}><MdOutlineRefresh />Practicar</RightButtons>
                     <AddNewCardButton onClick={ handleNewCard }><MdAdd /></AddNewCardButton>
                 </RightIconsContainer>
             } />
@@ -118,6 +118,7 @@ const AddNewCardButton = styled.div`
     align-items: center;
     justify-content: center;
     margin-top: -.3em;
+    margin: -.3em 0 0 1.25em;
     padding: 0em .5em;
     height: 2.4em;
     display: flex;

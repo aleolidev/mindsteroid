@@ -42,18 +42,20 @@ const DeckQuestions = ({ id }) => {
                 {/* TODO: Add blank page message */}
                 {cards.map((card, index) => (
                     <Question onClick={ () => handleEditCard(card._id) } key={card._id} className='ql-snow'>
-                        <Grid item container xs={1} direction='row' justifyContent='flex-end'>
-                            <IndexBox className='indexBox'>{index + 1}.</IndexBox>
-                        </Grid>
-                        <CardBox item xs={10} className='cardBox ql-editor'>
+                        <IndexBox className='indexBox'>{index + 1}.</IndexBox>
+                        <CardBox item xs={9} sm={10} className='cardBox ql-editor'>
                             { parse(card.question) }
                         </CardBox>
-                        <DeleteColumn item xs={1} className='cardBox'>
+                        <DeleteColumn className='cardBox'>
                             <DeleteButton onClick={(e) => {
                                 e.stopPropagation(); // Avoid the <Question> onClick call
                                 handleRemoveCard(card._id);
                             }}><IoMdTrash /></DeleteButton>
                         </DeleteColumn>
+                        {/* <Grid item container xs={2} sm={1} direction='row' justifyContent='flex-end'>
+                        </Grid>
+                        <Grid item container xs={1}>
+                        </Grid> */}
                     </Question>
                 ))}
             </ButtonsContainer>
@@ -87,21 +89,22 @@ const ButtonsContainer = styled(Grid)(() => ({
     justifyContent: 'space-between',
 }));
 
-const DeleteColumn =  styled(Grid)(() => ({
-    margin: '.5em 0',
-    padding: '0em .5em',
-    width: '2.4em',
-    borderRadius: '0 .75em .75em 0',
-    cursor: 'pointer',
-    border: `2px solid ${ backgroundLightBlue }`,
-    borderLeft: 0,
-    textAlign: 'right',
-}));
+const DeleteColumn = styled.div`
+    position: relative;
+    margin: .5em 0;
+    width: 2.4em;
+    border-radius: 0 .75em .75em 0;
+    cursor: pointer;
+    border: 2px solid ${ backgroundLightBlue };
+    border-left: 0;
+`;
 
 const DeleteButton = styled.div`
-    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 0;
     margin-top: .4em;
-    margin-right: 0em;
+    margin-right: .4em;
     transition: 0.2s ease-in-out;
     padding: .5em;
     width: 2.6em;
@@ -116,8 +119,6 @@ const DeleteButton = styled.div`
     &:hover {
         background-color: ${ primaryRed };
         svg {
-            // background-color: ${ primaryRed2 };
-            // background-color: blue;
             color: white;
         }
     }
@@ -159,28 +160,47 @@ const IndexBox = styled.div`
     flex-direction: column;
     justify-content: center;
     padding: .4em 1.1em;
-    margin: .5em 1em;
+    margin: .5em 1em .5em 0;
     height: 3em;
     border-radius: .5em;
     // background-color: ${ backgroundLightBlue };
 `;
 
-const CardBox = styled(Grid)(() => ({
-    height: 'auto !important',
-    overflowY: 'auto !important',
-    cursor: 'pointer',
-    padding: '1em 1.2em',
-    margin: '.5em 0',
-    borderRadius: '.5em 0 0 .5em',
-    border: '2px solid ' + backgroundLightBlue,
-    borderRight: 0,
-    cursor: 'pointer',
-    transition: '0.2s ease-in-out',
-    p: {
-        margin: 0,
-        padding: 0,
-    },
+// const CardBox = styled(Grid)(() => ({
+//     height: 'auto !important',
+//     overflowY: 'auto !important',
+//     cursor: 'pointer',
+//     padding: '1em 1.2em',
+//     margin: '.5em 0',
+//     borderRadius: '.5em 0 0 .5em',
+//     border: '2px solid ' + backgroundLightBlue,
+//     borderRight: 0,
+//     cursor: 'pointer',
+//     transition: '0.2s ease-in-out',
+//     p: {
+//         margin: 0,
+//         padding: 0,
+//     },
     
-}));
+// }));
+
+const CardBox = styled.div`
+    height: auto !important;
+    overflowY: auto !important;
+    width: 100%;
+    cursor: pointer;
+    padding: 1em 1.2em;
+    margin: .5em 0;
+    border-radius: .5em 0 0 .5em;
+    border: 2px solid ${ backgroundLightBlue };
+    border-right: 0;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    p: {
+        margin: 0;
+        padding: 0;
+    };
+    
+`;
 
 export default DeckQuestions;

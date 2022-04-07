@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import styled from 'styled-components';
+import Home from './components/Home';
 import Navbar from './components/Navbar';
 import Shelving from './components/Shelving/Shelving';
 import NewCard from './components/Cards/NewCard';
@@ -17,7 +18,8 @@ const App = () => {
             <Container>
                 <Navbar />
                 <Routes>
-                    <Route path="/" element={<Navigate replace to="/folder" />} />
+                    {/* <Route path="/" element={<Navigate replace to="/folder" />} /> */}
+                    <Route path="/" element={<Home />} />
                     <Route path="/folder" element={<Shelving />}/>
                     <Route path="/folder/:id" element={<Shelving />}/>
                     <Route path="/deck/:id" element={<Deck />} />

@@ -10,7 +10,7 @@ import { getCards } from '../../actions/cards';
 import { FiChevronRight } from 'react-icons/fi'
 import Button from '@material-ui/core/Button';
 import { darkTextColor, backgroundLightBlue, inputSvgColor, primaryEmerald, primaryDarkBlue, primaryBlue } from '../../utils'
-import { Grid } from '@material-ui/core';
+import { Grid, Box } from '@material-ui/core';
 
 const FolderPath = ({ folderPath, lastIsDeck, rightPanel }) => {
 
@@ -26,7 +26,7 @@ const FolderPath = ({ folderPath, lastIsDeck, rightPanel }) => {
 
     return (
         <PathFullContainer container>
-            <Grid item xs={8} style={{display: 'flex'}}>
+            <Grid item xs={12} md={8} style={{display: 'flex', flexWrap: 'wrap', marginLeft: '-1em',}}>
                 {folderPath.map((folder, index) => {
                     if (index < folderPath.length - 1) {
                         return (
@@ -44,9 +44,14 @@ const FolderPath = ({ folderPath, lastIsDeck, rightPanel }) => {
                     );
                 })}
             </Grid>
-            <Grid container item justifyContent='flex-end' xs={4}>
-                { rightPanel }
-            </Grid>
+            { rightPanel ? 
+                <RightPanel item xs={12} md={4}>
+                    <Box display='flex' justifyContent={{xs: 'flex-start', md: 'flex-end'}}>
+                        { rightPanel }
+                    </Box>
+                </RightPanel>
+                : null
+            }
         </PathFullContainer>
     )
 };
@@ -101,8 +106,16 @@ const PathFullContainer = styled(Grid)(() => ({
     justifyContent: 'space-between',
     paddingBottom: '1em',
     marginBottom: '1em',
-    marginLeft: '-1em',
+    width: '100%',
     borderBottom: `1px solid ${ backgroundLightBlue }`,
+}));
+
+const RightPanel = styled(Grid)(() => ({
+    '@media (max-width: 960px)': {
+        margin: '1.5em 0 .5em -1em',
+        // marginTop: '1.5em',
+        // marginBottom: '.5em',
+    }
 }));
 
 export default FolderPath;

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router';
 import styled from 'styled-components'
 import MindsteroidLogo from '../assets/mindsteroid-logo.png'
 import { MdSearch } from 'react-icons/md'
@@ -7,6 +8,13 @@ import { textColor, svgColor, placeholderColor, darkTextColor, backgroundLightBl
 import { Grid, Hidden } from '@material-ui/core';
 
 function Navbar() {
+
+    const navigate = useNavigate();
+
+    const goHome = () => {
+        navigate('/');
+    }
+
     return (
         <Grid container>
             <NavbarContainer>
@@ -18,7 +26,7 @@ function Navbar() {
                     </Grid>
                 </Hidden>
                 <Grid item xs={8} md={3} order={{ xs: 1, md: 0}}>
-                    <LogoContainer>
+                    <LogoContainer onClick={ () => goHome() }>
                         <Logo src={MindsteroidLogo} />
                         <LogoText>Mindsteroid</LogoText>
                     </LogoContainer>
@@ -35,9 +43,6 @@ function Navbar() {
                 </Hidden>
                 <Grid item xs={2} md={3}>
                     <ProfileContainer>
-                        {/* <Notifications>
-                            <HiBell />
-                        </Notifications> */}
                         <Profile>
                             <UserIcon src={MindsteroidLogo}/>
                             <Hidden smDown>
@@ -64,6 +69,7 @@ const NavbarContainer = styled.nav`
 
 const LogoContainer = styled.div`
     display: flex;
+    cursor: pointer;
     justify-content: center;
     @media (min-width: 960px) {
         justify-content: left;
@@ -120,27 +126,6 @@ const ProfileContainer = styled.div`
     padding: 0 2em 0 0;
     justify-content: right;
 `;
-
-/*
-const Notifications = styled.div`
-    height: 2.5rem;
-    width: 3rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    svg {
-        color: ${ svgColor };
-        font-size: 2rem;    
-        transition: 0.2s ease-in-out;
-    }
-    &:hover {    
-        svg {
-            color: ${ selectTextColor };
-        }
-    }
-`;
-*/
 
 const Profile = styled.div`
     display: flex;
