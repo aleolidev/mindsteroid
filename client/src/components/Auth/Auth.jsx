@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import styled from 'styled-components';
+import { FcGoogle } from 'react-icons/fc';
+import { GoogleLogin } from 'react-google-login';
+
 import { Button, Grid } from '@material-ui/core';
-import { backgroundLightBlue, darkTextColor, primaryDarkEmerald, primaryEmerald } from '../../utils';
+import { backgroundLightBlue, darkTextColor, googleBlue, googleDarkBlue, primaryBlue, primaryDarkBlue, primaryDarkEmerald, primaryEmerald } from '../../utils';
 import Input from './Input';
 
 const Auth = () => {
@@ -46,10 +49,23 @@ const Auth = () => {
             }}>
 
             <SignupContainer item xs={10} sm={8} md={12}>
-                <CustomTitle>Iniciar sesión</CustomTitle>
-                <p style={{padding: 0, margin: '0 0 .5em 0',}}>Saca el máximo provecho a tus horas de estudio.</p>
+                <CustomTitle>{ isSignup ? 'Registrarse' : 'Iniciar Sesión'}</CustomTitle>
+                <p style={{padding: 0, margin: '0 0 1.5em 0',}}>Saca el máximo provecho a tus horas de estudio.</p>
                 <form onSubmit={ handleSubmit }>
                     <Grid container spacing={2}>
+                        { !isSignup && 
+                            <GoogleContainer>
+                                <GoogleLogin 
+                                    clientId="GOOGLE ID"
+                                    render={(renderProps) => (
+                                        <GoogleButton fullWidth><FcGoogle /><span>Iniciar sesión con Google</span></GoogleButton>
+                                    )}
+                                />
+                                <LineContainer>
+                                    <HorizontalLine><p>o</p></HorizontalLine>
+                                </LineContainer>
+                            </GoogleContainer>
+                        }
                         {
                             isSignup && (
                                 <>
@@ -66,8 +82,8 @@ const Auth = () => {
                         </SigninButton>
                         <Grid container justifyContent='flex-end'>
                             <Grid item>
-                                <Button onClick={ switchMode } style={{ color: darkTextColor, fontSize: '.8em'}}>
-                                    { isSignup ? '¿Ya tienes una cuenta? Inicia sesión' : '¿Aún no tienes una cuenta? ¡Regístrate!'}
+                                <Button onClick={ switchMode } style={{ color: darkTextColor, fontSize: '.8em', textTransform: 'none',}}>
+                                    { isSignup ? '¿Ya dispones de una cuenta? Inicia sesión' : '¿Todavía no dispones de una cuenta? ¡Regístrate!'}
                                 </Button>
                             </Grid>
                         </Grid>
@@ -106,9 +122,9 @@ const SignupContainer = styled(Grid)(() => ({
 }));
 
 const SigninButton = styled(Button)(() => ({
-    borderRadius: '.75em',
+    borderRadius: '.5em',
     // padding: '.376em 1.25em',
-    margin: '8px',
+    margin: '1.75em .5em .5em .5em',
     color: 'white',
     fontSize: '1em',
     fontFamily: '\'Khula\', sans-serif',
@@ -120,6 +136,80 @@ const SigninButton = styled(Button)(() => ({
           backgroundColor: primaryDarkEmerald,
           color: 'white',
     },
+    span: {
+        marginTop: '.05em',
+        marginBottom: '-.05em',
+    },
 }));
+
+const GoogleButton = styled(Button)(() => ({
+    borderRadius: '.1em',
+    // padding: '.376em 1.25em',
+    // margin: '8px',
+    color: 'white',
+    fontSize: '1em',
+    fontFamily: '\'Khula\', sans-serif',
+    fontWeight: 400,
+    textTransform: 'none',
+    padding: '.1em',
+    backgroundColor: googleBlue,
+    transition: '0.2s ease-in-out',
+    '&:hover': {
+          backgroundColor: googleDarkBlue,
+          color: 'white',
+    },
+    'span > span': {
+        width: '100%',
+        marginTop: '.1em',
+        marginBottom: '-.1em',
+    },
+    'span > svg': {
+        backgroundColor: 'white',
+        padding: '.25em',
+        borderRadius: '.1em',
+        justifyContent: 'flex-start',
+        // marginLeft: '.25em',
+        fontSize: '1.6em',
+    },
+}));
+
+const GoogleContainer = styled.div`
+    width: 100%;
+    margin: .5em;
+`;
+
+const LineContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+`
+
+const HorizontalLine = styled.span`
+    display: block;
+    position: relative;
+    text-align: center;
+    width: 80%;
+    margin: 1em 0 0 0;
+
+    &:before {
+        content: "";
+        top: .75em;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: ${ darkTextColor };
+        display: inline-block;
+        position: absolute;
+    }
+    
+    p {
+        margin: 0;
+        background-color: white;
+        padding: 0 .5em;
+        color: ${ darkTextColor };
+        position: relative;
+        display: inline-block;
+    }
+`;
 
 export default Auth
