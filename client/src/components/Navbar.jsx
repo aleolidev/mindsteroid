@@ -4,15 +4,21 @@ import styled from 'styled-components'
 import MindsteroidLogo from '../assets/mindsteroid-logo.png'
 import { MdSearch } from 'react-icons/md'
 import { HiMenu } from 'react-icons/hi'
-import { textColor, svgColor, placeholderColor, darkTextColor, backgroundLightBlue, inputSvgColor, selectTextColor } from '../utils'
-import { Grid, Hidden } from '@material-ui/core';
+import { textColor, svgColor, placeholderColor, darkTextColor, backgroundLightBlue, inputSvgColor, selectTextColor, primaryEmerald, primaryDarkEmerald } from '../utils'
+import { Button, Grid, Hidden } from '@material-ui/core';
 
 function Navbar() {
 
     const navigate = useNavigate();
 
+    const user = null;
+
     const goHome = () => {
         navigate('/');
+    }
+
+    const goAuth = () => {
+        navigate('/auth');
     }
 
     return (
@@ -41,16 +47,24 @@ function Navbar() {
                         </InputContainer>
                     </Grid>
                 </Hidden>
+
                 <Grid item xs={2} md={3}>
                     <ProfileContainer>
-                        <Profile>
-                            <UserIcon src={MindsteroidLogo}/>
-                            <Hidden smDown>
-                                <UserName>
-                                    Alex Olivares
-                                </UserName>
-                            </Hidden>
-                        </Profile>
+                        { user ?
+                        (
+                                <Profile>
+                                    <UserIcon src={ user.result.imageUrl}/>
+                                    <Hidden smDown>
+                                        <UserName>
+                                            { user.result.name }
+                                        </UserName>
+                                    </Hidden>
+                                    <Button variant="contained" color="secondary">Logout</Button>
+                                    {/* TODO: Add a desplegable to let you logout */}
+                                </Profile>
+                        ) : (
+                            <LoginButton onClick={ () => goAuth() }>Iniciar sesión</LoginButton>
+                        )}
                     </ProfileContainer>
                 </Grid>
             </NavbarContainer>
@@ -182,5 +196,22 @@ const Input = styled.input`
         color: ${ placeholderColor };
     }
 `;
+
+
+const LoginButton = styled(Button)(() => ({
+    borderRadius: '.75em',
+    padding: '.376em 1.25em',
+    color: 'white',
+    fontSize: '1em',
+    fontFamily: '\'Khula\', sans-serif',
+    fontWeight: 600,
+    textTransform: 'none',
+    backgroundColor: primaryEmerald,
+    transition: '0.2s ease-in-out',
+    '&:hover': {
+          backgroundColor: primaryDarkEmerald,
+          color: 'white',
+    },
+}));
 
 export default Navbar

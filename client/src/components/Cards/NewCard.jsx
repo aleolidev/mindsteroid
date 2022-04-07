@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { Button, Grid, Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import Editor from '../TextEditor';
+import Editor from '../Utils/TextEditor';
 
 import { createCard } from '../../actions/cards';
 import { darkTextColor, primaryEmerald, primaryDarkEmerald, primaryRed, primaryRed2, inputSvgColor, primaryBlue, backgroundLightBlue } from '../../utils';

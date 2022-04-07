@@ -4,12 +4,10 @@ import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { Button, Grid, Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import Editor from '../TextEditor';
+import Editor from '../Utils/TextEditor';
 
-import { createCard, updateCard } from '../../actions/cards';
-import { darkTextColor, primaryEmerald, primaryDarkEmerald, primaryRed, primaryRed2, inputSvgColor, primaryBlue, backgroundLightBlue } from '../../utils';
-import { MdSettings } from 'react-icons/md';
-import ConfigDialog from './ConfigDialog';
+import { updateCard } from '../../actions/cards';
+import { darkTextColor, primaryEmerald, primaryDarkEmerald, primaryRed, primaryRed2} from '../../utils';
 import { getCardById } from '../../api';
 
 const EditCard = () => {

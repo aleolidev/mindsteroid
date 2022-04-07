@@ -7,7 +7,7 @@ import { getFolders, deleteFolder } from '../../../actions/folders';
 import { deleteDeck, getDecks} from '../../../actions/decks';
 import { Menu, MenuItem } from '@material-ui/core';
 import { HiFolder } from 'react-icons/hi';
-import CustomDialog from '../../CustomDialog';
+import CustomDialog from '../../Utils/CustomDialog';
 import * as api from '../../../api';
 
 const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {

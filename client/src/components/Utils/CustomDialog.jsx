@@ -5,9 +5,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import InputBase from '@material-ui/core/InputBase';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { backgroundLightBlue, darkTextColor, primaryRed, primaryEmerald } from '../utils/index';
+
+import CustomInput from './CustomInput';
+import { backgroundLightBlue, darkTextColor, primaryRed, primaryEmerald } from '../../utils/index';
 
 export default function CustomDialog( { open, handleClose, handleSave, title, currentValue } ) {
     const inputRef = useRef();
@@ -59,7 +60,7 @@ const CustomDialogComponent = styled(Dialog)(() => ({
     },
 }));
 
-const CustomCancelButton = styled(Button)(({ theme }) => ({
+const CustomCancelButton = styled(Button)(() => ({
     borderRadius: '.75em',
     padding: '.5em 1.25em',
     color: darkTextColor,
@@ -73,7 +74,7 @@ const CustomCancelButton = styled(Button)(({ theme }) => ({
     },
 }));
 
-const CustomConfirmButton = styled(Button)(({ theme }) => ({
+const CustomConfirmButton = styled(Button)(() => ({
     borderRadius: '.75em',
     padding: '.5em 1.25em',
     color: darkTextColor,
@@ -84,19 +85,5 @@ const CustomConfirmButton = styled(Button)(({ theme }) => ({
     '&:hover': {
           backgroundColor: primaryEmerald,
           color: 'white',
-    },
-}));
-
-const CustomInput = styled(InputBase)(() => ({
-    '& .MuiInputBase-input': {
-        borderRadius: '1em',
-        position: 'relative',
-        padding: '1em 1.5em',
-        color: darkTextColor,
-        fontSize: '1em',
-        fontFamily: '\'Khula\', sans-serif',
-        backgroundColor: backgroundLightBlue,
-        fontWeight: 600,
-        width: 'auto',
     },
 }));

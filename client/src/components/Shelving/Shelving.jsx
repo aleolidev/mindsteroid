@@ -11,7 +11,7 @@ import { getFolders } from '../../actions/folders';
 import { getDecks } from '../../actions/decks';
 import { useParams } from 'react-router-dom';
 import * as api from '../../api';
-import CustomContainer from './CustomContainer';
+import CustomContainer from '../Utils/CustomContainer';
 import { MdOutlineAddToPhotos, MdOutlineCreateNewFolder } from 'react-icons/md';
 import { darkTextColor, lightSvg } from '../../utils'
 
@@ -92,9 +92,6 @@ const Shelving = () => {
     )
 }
 
-const Container = styled.div`
-    padding: 1.5em 2.5em 2.5em 2.5em;
-
-`;
+const Container = styled.div``;
 
 export default Shelving;

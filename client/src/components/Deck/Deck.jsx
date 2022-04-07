@@ -8,7 +8,7 @@ import * as api from '../../api';
 import FolderPath from '../Shelving/FolderPath';
 import DeckQuestions from './DeckQuestions';
 import { MdAdd, MdOutlineCheck, MdOutlineRefresh } from 'react-icons/md';
-import { backgroundLightBlue, darkTextColor, inputSvgColor, primaryBlue, primaryDarkEmerald, primaryEmerald, primaryLightEmerald1, primaryLightEmerald2 } from '../../utils';
+import { backgroundLightBlue, darkTextColor, inputSvgColor, primaryBlue, primaryEmerald, primaryLightEmerald1 } from '../../utils';
 
 const Deck = () => {
     
@@ -148,9 +148,6 @@ const RightIconsContainer = styled.div`
     margin-top: -.5em;
 `;
 
-const Container = styled.div`
-    padding: 1.5em 2.5em 2.5em 2.5em;
-
-`;
+const Container = styled.div``;
 
 export default Deck;

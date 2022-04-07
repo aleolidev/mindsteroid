@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { backgroundLightGray, darkTextColor, backgroundLightBlue, primaryEmerald } from '../utils'
-import { primaryDarkEmerald, primaryYellow, primaryDarkYellow, primaryRed, primaryRed2 } from '../utils'
+import { backgroundLightGray, darkTextColor, backgroundLightBlue, primaryEmerald } from '../../utils'
+import { primaryDarkEmerald, primaryYellow, primaryDarkYellow, primaryRed, primaryRed2 } from '../../utils'
 import { Grid } from '@material-ui/core';
 
 function Test() {

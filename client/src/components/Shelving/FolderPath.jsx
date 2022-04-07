@@ -113,8 +113,6 @@ const PathFullContainer = styled(Grid)(() => ({
 const RightPanel = styled(Grid)(() => ({
     '@media (max-width: 960px)': {
         margin: '1.5em 0 .5em -1em',
-        // marginTop: '1.5em',
-        // marginBottom: '.5em',
     }
 }));
 

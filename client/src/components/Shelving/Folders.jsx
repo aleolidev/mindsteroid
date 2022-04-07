@@ -6,7 +6,7 @@ import { HiOutlinePencil } from 'react-icons/hi'
 import { CgTrashEmpty } from 'react-icons/cg'
 
 import Folder from './Folder/Folder';
-import CustomDialog from '../CustomDialog';
+import CustomDialog from '../Utils/CustomDialog';
 import { createFolder, updateFolder } from '../../actions/folders';
 import { darkTextColor, primaryEmerald, lightSvg } from '../../utils'
 import Item from './Item';

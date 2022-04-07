@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useQuill } from 'react-quilljs';
 import BlotFormatter from 'quill-blot-formatter';
 import 'quill/dist/quill.snow.css';
-import '../styles.css';
+import '../../styles.css';
 
 
 const Editor = forwardRef(({props}, ref) => {

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { darkTextColor, primaryLightEmerald1, primaryLightEmerald2, backgroundLightBlue, inputSvgColor, primaryEmerald } from '../../../utils'
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { deleteDeck } from '../../../actions/decks';
 import { Menu, MenuItem } from '@material-ui/core';
 import { MdCollectionsBookmark } from 'react-icons/md';
-import CustomDialog from '../../CustomDialog';
+import CustomDialog from '../../Utils/CustomDialog';
 
 const Deck = ({ deck, handleUpdateName, deckObj, index, actions }) => {
 

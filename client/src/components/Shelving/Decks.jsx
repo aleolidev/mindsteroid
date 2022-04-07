@@ -9,7 +9,7 @@ import { darkTextColor, primaryEmerald } from '../../utils'
 import { createDeck, updateDeck } from '../../actions/decks';
 import Deck from './Deck/Deck';
 import Item from './Item';
-import CustomDialog from '../CustomDialog';
+import CustomDialog from '../Utils/CustomDialog';
 
 const Decks = forwardRef(({ id }, ref) => {
 
