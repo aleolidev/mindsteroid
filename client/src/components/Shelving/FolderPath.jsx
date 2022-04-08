@@ -80,7 +80,7 @@ const PathButton = styled(Button)(() => ({
     color: darkTextColor,
     fontSize: '1.3em',
     fontWeight: 800,
-    fontFamily: '\'Khula\', sans-serif',
+    fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
     backgroundColor: 'transparent',
     transition: '0.2s ease-in-out',
     textTransform: 'none',

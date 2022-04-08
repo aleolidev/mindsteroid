@@ -37,7 +37,7 @@ const ConfigDialogComponent = styled(Dialog)(() => ({
         padding: '1.5em 1.5em .5em 1.5em',
     },
     '& .MuiTypography-h6': {
-        fontFamily: '\'Khula\', sans-serif',
+        fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
         fontWeight: 600,
         fontSize: '1.4em',
         color: darkTextColor,
@@ -59,7 +59,7 @@ const CustomCancelButton = styled(Button)(({ theme }) => ({
     padding: '.5em 1.25em',
     color: darkTextColor,
     fontSize: '1em',
-    fontFamily: '\'Khula\', sans-serif',
+    fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
     backgroundColor: backgroundLightBlue,
     transition: '0.2s ease-in-out',
     '&:hover': {
@@ -73,7 +73,7 @@ const CustomConfirmButton = styled(Button)(({ theme }) => ({
     padding: '.5em 1.25em',
     color: darkTextColor,
     fontSize: '1em',
-    fontFamily: '\'Khula\', sans-serif',
+    fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
     backgroundColor: backgroundLightBlue,
     transition: '0.2s ease-in-out',
     '&:hover': {
@@ -88,13 +88,13 @@ const CustomCheckbox = styled(FormControlLabel)(() => ({
         // padding: '1em 1.5em',
         color: primaryEmerald,
         // fontSize: '1em',
-        // fontFamily: '\'Khula\', sans-serif',
+        // fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
         // backgroundColor: backgroundLightBlue,
         // fontWeight: 600,
         // width: 'auto',
     },
     '& .MuiTypography-root': {
-        fontFamily: '\'Khula\', sans-serif',
+        fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
         color: darkTextColor,
         marginTop: '.25em',
     }

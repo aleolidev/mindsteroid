@@ -39,6 +39,7 @@ export const inputSvgColor = "#A3A7CF";
 export const googleBlue = "#4285F4";
 export const googleDarkBlue = "#1C5FCE";
 
+export const lightHoverEffect = `rgba(16, 16, 48, 1) 0 0 11px -4px`;
 export const hoverEffect = `rgba(16, 16, 48, 1) 0 0 18px -4px`;
 export const cardShadow = `rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
     rgba (0, 0, 0, 0.04) 0px 10px 10px -5px`;

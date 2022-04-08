@@ -163,7 +163,7 @@ const Card = styled.button`
     color: ${darkTextColor};
     font-weight: 600;
     font-size: 1em;
-    font-family: 'Khula', sans-serif;
+    font-family: 'Khula', 'Source Sans Pro', sans-serif;
     border-radius: 1em;
     cursor: pointer;
     border: 0;

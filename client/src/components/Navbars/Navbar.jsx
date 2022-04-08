@@ -1,17 +1,31 @@
-import React from 'react'
-import { useNavigate } from 'react-router';
+import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router';
 import styled from 'styled-components'
-import MindsteroidLogo from '../assets/mindsteroid-logo.png'
-import { MdSearch } from 'react-icons/md'
+import { Button, Divider, Grid, Hidden, MenuItem } from '@material-ui/core';
+import { MdLogout, MdSearch } from 'react-icons/md'
 import { HiMenu } from 'react-icons/hi'
-import { textColor, svgColor, placeholderColor, darkTextColor, backgroundLightBlue, inputSvgColor, selectTextColor, primaryEmerald, primaryDarkEmerald } from '../utils'
-import { Button, Grid, Hidden } from '@material-ui/core';
+
+import MindsteroidLogo from '../../assets/mindsteroid-logo.png'
+import { textColor, svgColor, placeholderColor, darkTextColor, backgroundLightBlue, inputSvgColor, selectTextColor, primaryEmerald, primaryDarkEmerald, hoverEffect, lightHoverEffect, primaryRed, primaryRed2 } from '../../utils'
+import CustomMenu from '../Utils/CustomMenu';
 
 function Navbar() {
 
-    const navigate = useNavigate();
+    
+    const [ user, setUser ] = useState(JSON.parse(localStorage.getItem('profile')));
 
-    const user = null;
+    const profileMenuRef = useRef(null);
+    
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const logout = () => {
+        dispatch({ type: 'LOGOUT' });
+        navigate('/')
+        setUser(null);
+    }
 
     const goHome = () => {
         navigate('/');
@@ -20,6 +34,18 @@ function Navbar() {
     const goAuth = () => {
         navigate('/auth');
     }
+
+    const handleMenu = (ref) => {
+        profileMenuRef?.current?.handleClick(ref);
+    }
+
+    useEffect(() => {
+        const token = user?.token;
+
+        // JWT...
+
+        setUser(JSON.parse(localStorage.getItem('profile')));
+    }, [location])
 
     return (
         <Grid container>
@@ -53,14 +79,23 @@ function Navbar() {
                         { user ?
                         (
                                 <Profile>
-                                    <UserIcon src={ user.result.imageUrl}/>
                                     <Hidden smDown>
                                         <UserName>
                                             { user.result.name }
                                         </UserName>
                                     </Hidden>
-                                    <Button variant="contained" color="secondary">Logout</Button>
-                                    {/* TODO: Add a desplegable to let you logout */}
+                                    <UserIcon src={ user.result.imageUrl } onClick={ handleMenu }/>
+                                    <CustomMenu ref={ profileMenuRef }>
+                                        <MenuContainer container>
+                                            <BigUserIcon src={ user.result.imageUrl } />
+                                            <UserNameTitle>
+                                                { user.result.name }
+                                            </UserNameTitle>
+                                            <Email>{ user.result.email }</Email>
+                                            <Divider />
+                                            <LogoutButton onClick={ logout }><MdLogout /><span>Cerrar sesión</span></LogoutButton>
+                                        </MenuContainer>
+                                    </CustomMenu>
                                 </Profile>
                         ) : (
                             <LoginButton onClick={ () => goAuth() }>Iniciar sesión</LoginButton>
@@ -151,19 +186,54 @@ const Profile = styled.div`
 
 
 const UserIcon = styled.img`
-    height: 1.5em;
-    // padding: 0 0 0 2em;
+    height: 2em;
+    border-radius: 100%;
+    transition: .3s ease-in-out;
+    &:hover {
+        box-shadow: ${ lightHoverEffect }
+    }
 `;
 
+const BigUserIcon = styled.img`
+    height: 5em;
+    border-radius: 100%;
+    border: 2px solid ${ backgroundLightBlue };
+`;
+
+const MenuContainer = styled(Grid)`
+    display: block;
+    text-align: center;
+    margin: 1em 0;
+    padding: 0 1.5em;
+`;
 
 const UserName = styled.h3`
-    padding-left: .5em;
-    margin-bottom: -0.3rem;
+    display: flex;
+    align-items: center;
+    margin-top: .1em;
+    margin-right: .75em;
+    height: 100%;
+
     font-weight: 400;
     font-size: 1rem;
     color: ${ darkTextColor };
     white-space: nowrap;
 `;
+
+const UserNameTitle = styled.h2`
+    font-weight: 600;
+    font-size: 1rem;
+    color: ${ darkTextColor };
+    white-space: nowrap;
+`;
+
+const Email = styled.h3`
+    font-weight: 400;
+    font-size: .9rem;
+    color: ${ darkTextColor };
+    white-space: nowrap;
+    margin-bottom: 1em;
+`
 
 const Icon = styled.div`
     height: 2.5rem;
@@ -203,7 +273,7 @@ const LoginButton = styled(Button)(() => ({
     padding: '.376em 1.25em',
     color: 'white',
     fontSize: '1em',
-    fontFamily: '\'Khula\', sans-serif',
+    fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
     fontWeight: 600,
     textTransform: 'none',
     backgroundColor: primaryEmerald,
@@ -211,6 +281,38 @@ const LoginButton = styled(Button)(() => ({
     '&:hover': {
           backgroundColor: primaryDarkEmerald,
           color: 'white',
+    },
+}));
+
+
+const LogoutButton = styled(Button)(() => ({
+    width: '100%',
+    borderRadius: '.75em',
+    padding: '.4em 1.1em',
+    marginTop: '1.25em',
+    color: 'white',
+    fontSize: '1em',
+    fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
+    fontWeight: 400,
+    textTransform: 'none',
+    padding: '.1em',
+    backgroundColor: primaryRed,
+    transition: '0.2s ease-in-out',
+    '&:hover': {
+          backgroundColor: primaryRed2,
+          color: 'white',
+    },
+    'span > span': {
+        width: '100%',
+        marginTop: '.1em',
+        marginBottom: '-.1em',
+    },
+    'span > svg': {
+        width: '1em',
+        padding: '.2em 0',
+        marginLeft: '.5em',
+        justifyContent: 'flex-start',
+        fontSize: '1.6em',
     },
 }));
 

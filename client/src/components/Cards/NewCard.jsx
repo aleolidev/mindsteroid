@@ -215,7 +215,7 @@ const ButtonsContainer = styled.div`
 const SaveButton = styled(Button)(() => ({
     display: 'flex',
     textTransform: 'none',
-    fontFamily: '\'Khula\', sans-serif',
+    fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
     fontSize: '1em',
     alignItems: 'center',
     justifyContent: 'center',
@@ -236,7 +236,7 @@ const SaveButton = styled(Button)(() => ({
 const CancelButton = styled(Button)(() => ({
     display: 'flex',
     textTransform: 'none',
-    fontFamily: '\'Khula\', sans-serif',
+    fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
     fontSize: '1em',
     alignItems: 'center',
     justifyContent: 'center',
