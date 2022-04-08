@@ -15,7 +15,7 @@ export default function CustomDialog( { open, handleClose, handleSave, title, cu
 
     const submitNewName = (event) => {
         event.preventDefault();
-        handleSave(inputRef.current.firstChild.value)
+        handleSave(inputRef.current.value)
     } 
 
     return (
@@ -25,7 +25,7 @@ export default function CustomDialog( { open, handleClose, handleSave, title, cu
                     <DialogTitle>{ title }</DialogTitle>
                     <DialogContent>
                     <FormControl variant="standard">
-                        <CustomInput autoFocus onFocus={(e) => e.currentTarget.select()} defaultValue={ currentValue } id="bootstrap-input" ref={ inputRef }/>
+                        <CustomInput autoFocus onFocus={(e) => e.currentTarget.select()} defaultValue={ currentValue } id="bootstrap-input" inputRef={ inputRef }/>
                     </FormControl>
                     </DialogContent>
                     <DialogActions>

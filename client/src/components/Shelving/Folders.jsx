@@ -47,7 +47,8 @@ const Folders = forwardRef(({ id }, ref) => {
 
     const handleUpdateName = (index, name) => {
         const values = [...folders];
-        values[index].name = name
+        console.log(index, name)
+        values[index].name = name;
         setFoldersData(values);
         dispatch(updateFolder(foldersData[index]))
     }

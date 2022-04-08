@@ -31,6 +31,7 @@ export const createFolder = (folder, id) => async (dispatch) => {
 
 export const updateFolder = (folder) => async (dispatch) => {
     try {
+        console.log('TRYING TO UPDATE FOLDER', folder)
         const { data } = await api.updateFolder(folder._id, folder);
         
         dispatch({ type: 'UPDATE_FOLDER', payload: data})

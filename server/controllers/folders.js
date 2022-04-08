@@ -15,7 +15,7 @@ export const getFolders = async (req, res) => {
 export const getFolderById = async (req, res) => {
     try {
         const postFolder = await Folder.findById(req.params.id);
-
+        
         res.status(200).json(postFolder);
     } catch (error) {
         res.status(404).json({ message: error.message });

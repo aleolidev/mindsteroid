@@ -37,7 +37,7 @@ const Deck = () => {
             } else {
                 obj = await api.getFolderById(currentId);
             }
-            // console.log(obj);
+            
             if (obj !== null 
                 && obj !== undefined
                 && obj.data !== null 

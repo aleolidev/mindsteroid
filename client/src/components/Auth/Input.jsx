@@ -32,8 +32,9 @@ const Input = ({ name, handleChange, label, half, autoFocus, type, handleShowPas
 }
 
 const CustomGrid = styled(Grid)(() => ({
-    '& .kAjBc .MuiInputBase-input': {
-        width: '100%',
+    '& div .MuiInputBase-input': {
+        width: '100%',    
+        fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif !important',
     }
 }));
 

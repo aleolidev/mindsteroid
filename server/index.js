@@ -10,6 +10,8 @@ import decksRoutes from './routes/decks.js';
 import folderRoutes from './routes/folder.js';
 import foldersRoutes from './routes/folders.js';
 
+import userRoutes from './routes/users.js';
+
 import {} from 'dotenv/config';
 
 const app = express();
@@ -24,6 +26,8 @@ app.use('/folder', folderRoutes);
 app.use('/folders', foldersRoutes);
 app.use('/deck', deckRoutes);
 app.use('/decks', decksRoutes);
+
+app.use('/user', userRoutes)
 
 const PORT = process.env.PORT || 5000;
 

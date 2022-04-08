@@ -145,6 +145,7 @@ const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
                 title="Cambiar nombre" 
                 currentValue={ folder.name }
                 handleSave={(newName) => {
+                    console.log('send update with index:', index, 'and name', newName)
                     handleUpdateName(index, newName);
                     handleCloseDialog();
                 }} 

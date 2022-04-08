@@ -76,7 +76,7 @@ const EditCard = () => {
 
     return (
         <Container>
-            <TitleText>Crear nueva tarjeta</TitleText>
+            <TitleText>Editar tarjeta</TitleText>
             <TitleUnderline />
             <Grid container>
                 <Grid item xs={12} md={6}>
@@ -152,61 +152,67 @@ const ButtonsContainer = styled.div`
 `;
 
 const SaveButton = styled(Button)(() => ({
-    display: 'flex',
-    textTransform: 'none',
-    fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
-    fontSize: '1em',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '2.5em',
-    backgroundColor: primaryEmerald,
-    padding: '0 2em',
-    marginRight: '1em',
-    borderRadius: '.7em',
-    fontWeight: 600,
-    color: 'white',
-    cursor: 'pointer',
-    transition: '0.2s ease-in-out',
-    '&:hover': {
-        backgroundColor: primaryDarkEmerald,
+    '&&&': {
+        display: 'flex',
+        textTransform: 'none',
+        fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
+        fontSize: '1em',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '2.5em',
+        backgroundColor: primaryEmerald,
+        padding: '0 2em',
+        marginRight: '1em',
+        borderRadius: '.7em',
+        fontWeight: 600,
+        color: 'white',
+        cursor: 'pointer',
+        transition: '0.2s ease-in-out',
+        '&:hover': {
+            backgroundColor: primaryDarkEmerald,
+        }
     }
 }));
 
 const CancelButton = styled(Button)(() => ({
-    display: 'flex',
-    textTransform: 'none',
-    fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
-    fontSize: '1em',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '2.5em',
-    backgroundColor: primaryRed,
-    padding: '0 2em',
-    marginRight: '1em',
-    borderRadius: '.7em',
-    fontWeight: 600,
-    color: 'white',
-    cursor: 'pointer',
-    transition: '0.2s ease-in-out',
-    '&:hover': {
-        backgroundColor: primaryRed2,
+    '&&&': {
+        display: 'flex',
+        textTransform: 'none',
+        fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
+        fontSize: '1em',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '2.5em',
+        backgroundColor: primaryRed,
+        padding: '0 2em',
+        marginRight: '1em',
+        borderRadius: '.7em',
+        fontWeight: 600,
+        color: 'white',
+        cursor: 'pointer',
+        transition: '0.2s ease-in-out',
+        '&:hover': {
+            backgroundColor: primaryRed2,
+        }
     }
 }));
 
 const CustomSnackbar = styled(Snackbar)(() => ({
-    '& .MuiPaper-root': {
-        fontWeight: 600,
-        color: 'white',
-    },
-    '& .MuiAlert-standardSuccess': {
-        backgroundColor: primaryEmerald,
-    },
-    '& .MuiAlert-standardError': {
-        backgroundColor: primaryRed2,
-    },
-    '& .MuiAlert-icon': {
-        color: 'white',
-    },
+    '&&&': {
+        '& .MuiPaper-root': {
+            fontWeight: 600,
+            color: 'white',
+        },
+        '& .MuiAlert-standardSuccess': {
+            backgroundColor: primaryEmerald,
+        },
+        '& .MuiAlert-standardError': {
+            backgroundColor: primaryRed2,
+        },
+        '& .MuiAlert-icon': {
+            color: 'white',
+        },
+    }
 }));
 
 export default EditCard

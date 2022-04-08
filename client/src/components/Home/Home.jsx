@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Box, Button, Grid } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
@@ -8,8 +8,10 @@ import GoogleLogin from 'react-google-login';
 
 import '../../utils/full-screen.css'
 import MindsteroidHome from '../Utils/SVGs/MindsteroidHome';
-import { backgroundLightBlue, darkTextColor, googleBlue, googleDarkBlue, primaryDarkEmerald, primaryEmerald } from '../../utils';
+import { backgroundLightBlue, darkTextColor, getUserId, googleBlue, googleDarkBlue, primaryDarkEmerald, primaryEmerald } from '../../utils';
 import LogoNavbar from '../Navbars/LogoNavbar';
+import { firstLoginFolder, signup } from '../../actions/auth';
+import { getUserByEmail, getUserByGoogleId } from '../../api';
 
 const Home = () => {
 
@@ -21,9 +23,34 @@ const Home = () => {
         const token = res?.tokenId;
 
         try {
-            dispatch({ type: 'AUTH', data: { result, token } });
-
-            navigate('/')
+            let localUser = await getUserByEmail(result.email);
+            localUser = localUser?.data?.result
+            
+            if(!localUser || localUser?.isGoogleAccount ) {
+                let { data: user} = await getUserByGoogleId(result.googleId);
+                if (!user.result) 
+                {
+                    const customData = { 
+                        firstName: result.givenName,
+                        lastName: result.familyName,
+                        email: result.email,
+                        googleId: result.googleId,
+                        isGoogleAccount: true,
+                        imageUrl: result.imageUrl,
+                    }
+                    await dispatch(signup(customData, navigate));
+                    const res = await (getUserByGoogleId(result.googleId))
+                    user = res.data
+                    await dispatch(firstLoginFolder(getUserId(user)))        
+                }
+                dispatch({ type: 'AUTH', data: { result, token } });
+    
+                navigate('/folder/' + getUserId(user))
+            } else {
+                // TODO: Show error on popup
+                console.error('Ya existe una cuenta no vinculada a Google con este correo')
+            }
+            
         } catch (error) {
             console.error(error);
         }
@@ -32,10 +59,26 @@ const Home = () => {
     const googleFailure = () => {
         console.error('No ha sido posible iniciar sesión con Google. Inténtalo más tarde')    
     };
-
+    
     const handleSignIn = () => {
         navigate('/auth')
     }
+    
+    useEffect(async () => {    
+        let user = JSON.parse(localStorage.getItem('profile'))?.result;
+        
+        if (user) {
+            let pathId;
+            if (user.googleId) {
+                user = await getUserByGoogleId(user.googleId)
+                pathId = getUserId(user.data)
+            } else {
+                pathId = user._id;
+            }
+            
+            navigate('/folder/' + pathId)
+        }
+    })
 
     return (
         <FullScreen>
@@ -63,7 +106,7 @@ const Home = () => {
                                 <HorizontalLine><p>o</p></HorizontalLine>
                             </LineContainer>
                             <SigninButton onClick={ handleSignIn } fullWidth>
-                                Registrarse gratis
+                                Iniciar sesión
                             </SigninButton>
                         </MainContent>
                     </Box>

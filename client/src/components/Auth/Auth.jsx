@@ -5,26 +5,47 @@ import { useDispatch } from 'react-redux';
 import { GoogleLogin } from 'react-google-login';
 import { useNavigate } from 'react-router';
 
+import { firstLoginFolder, signin, signup } from '../../actions/auth'
 import { Button, Grid } from '@material-ui/core';
-import { backgroundLightBlue, darkTextColor, googleBlue, googleDarkBlue, primaryBlue, primaryDarkBlue, primaryDarkEmerald, primaryEmerald } from '../../utils';
+import { backgroundLightBlue, darkTextColor, getUserId, googleBlue, googleDarkBlue, primaryBlue, primaryDarkBlue, primaryDarkEmerald, primaryEmerald } from '../../utils';
 import Input from './Input';
 import LogoNavbar from '../Navbars/LogoNavbar';
+import { getUserByEmail, getUserByGoogleId } from '../../api';
+
+const initialState = { 
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    isGoogleAccount: false,
+};
 
 const Auth = () => {
 
     const [ showPassword, setShowPassword ] = useState(false);
     const [ showPassword2, setShowPassword2 ] = useState(false);
     const [ isSignup, setIsSignup ] = useState(false);
+    const [ formData, setFormData ] = useState(initialState);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleSubmit = () => {
-
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        if (isSignup) {
+            
+            await dispatch(signup(formData, navigate));
+            await dispatch(firstLoginFolder(getUserId(JSON.parse(localStorage.getItem('profile')))))        
+            navigate('/');
+        } else {
+            dispatch(signin(formData, navigate));
+        }
     }
 
-    const handleChange = () => {
-
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value })
     }
 
     const handleShowPassword = () => {
@@ -46,9 +67,33 @@ const Auth = () => {
         const token = res?.tokenId;
 
         try {
-            dispatch({ type: 'AUTH', data: { result, token } });
-
-            navigate('/')
+            let localUser = await getUserByEmail(result.email);
+            localUser = localUser?.data?.result
+            
+            if(!localUser || localUser?.isGoogleAccount ) {
+                let { data: user} = await getUserByGoogleId(result.googleId);
+                if (!user.result) 
+                {
+                    const customData = { 
+                        firstName: result.givenName,
+                        lastName: result.familyName,
+                        email: result.email,
+                        googleId: result.googleId,
+                        isGoogleAccount: true,
+                        imageUrl: result.imageUrl,
+                    }
+                    await dispatch(signup(customData, navigate));
+                    const res = await (getUserByGoogleId(result.googleId))
+                    user = res.data
+                    await dispatch(firstLoginFolder(getUserId(user)))        
+                }
+                dispatch({ type: 'AUTH', data: { result, token } });
+    
+                navigate('/folder/' + getUserId(user))
+            } else {
+                // TODO: Show error on popup
+                console.error('Ya existe una cuenta no vinculada a Google con este correo')
+            }
         } catch (error) {
             console.error(error);
         }
@@ -64,71 +109,82 @@ const Auth = () => {
 
 
     return (
-        <div>
+        <FullScreen>
             <NavbarContainer>
                 <LogoNavbar logoHandle={ goHome }/>
             </NavbarContainer>
-            <Grid
-                container
-                spacing={0}
-                direction='column'
+            <Grid 
+                container style={{height: '100%', paddingTop: '2em',}}
                 alignItems='center'
                 justifyContent='center'
-                style={{
-                    marginTop: '3em',
-                }}>
-
-                <SignupContainer item xs={10} sm={8} md={12}>
-                    <CustomTitle>{ isSignup ? 'Registrarse' : 'Iniciar Sesión'}</CustomTitle>
-                    <p style={{padding: 0, margin: '0 0 1.5em 0',}}>Saca el máximo provecho a tus horas de estudio.</p>
-                    <form onSubmit={ handleSubmit }>
-                        <Grid container spacing={2}>
-                            { !isSignup && 
-                                <GoogleContainer>
-                                    <GoogleLogin 
-                                        clientId={ process.env.REACT_APP_GOOGLE_ID }
-                                        render={(renderProps) => (
-                                            <GoogleButton fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled}>
-                                                <FcGoogle /><span>Iniciar sesión con Google</span>
-                                            </GoogleButton>
-                                        )}
-                                        onSuccess={ googleSuccess }
-                                        onFailure={ googleFailure }
-                                        cookiePolicy='single_host_origin'
-                                    />
-                                    <LineContainer>
-                                        <HorizontalLine><p>o</p></HorizontalLine>
-                                    </LineContainer>
-                                </GoogleContainer>
-                            }
-                            {
-                                isSignup && (
-                                    <>
-                                        <Input name="firstName" label="Nombre" handleChange={ handleChange } autoFocus half />
-                                        <Input name="secondName" label="Apellidos" handleChange={ handleChange } half />                        
-                                    </>
-                                )
-                            }
-                            <Input name="email" label="Correo electrónico" handleChange={ handleChange } type='email' />
-                            <Input name="password" label="Contraseña" handleChange={ handleChange } type={ showPassword ? 'text' : 'password' } handleShowPassword={ handleShowPassword } />
-                            { isSignup && <Input name="confirmPassword" label="Repetir contraseña" handleChange={handleChange} type={ showPassword2 ? 'text' : 'password' } handleShowPassword={ handleShowPassword2 }/> }
-                            <SigninButton type='submit' fullWidth>
-                                { isSignup ? 'Registrarse' : 'Iniciar Sesión'}
-                            </SigninButton>
-                            <Grid container justifyContent='flex-end'>
-                                <Grid item>
-                                    <Button onClick={ switchMode } style={{ color: darkTextColor, fontSize: '.8em', textTransform: 'none',}}>
-                                        { isSignup ? '¿Ya dispones de una cuenta? Inicia sesión' : '¿Todavía no dispones de una cuenta? ¡Regístrate!'}
-                                    </Button>
+                >
+                <Grid
+                    display={'flex'}
+                    alignItems='center'
+                    item
+                    container
+                    spacing={0}
+                    direction='column'
+                >
+                    <SignupContainer item xs={10} sm={8} md={12}>
+                        <CustomTitle>{ isSignup ? 'Registrarse' : 'Iniciar sesión'}</CustomTitle>
+                        <p style={{padding: 0, margin: '0 0 1.5em 0',}}>Saca el máximo provecho a tus horas de estudio.</p>
+                        <form onSubmit={ handleSubmit }>
+                            <Grid container spacing={2}>
+                                { !isSignup && 
+                                    <GoogleContainer>
+                                        <GoogleLogin 
+                                            clientId={ process.env.REACT_APP_GOOGLE_ID }
+                                            render={(renderProps) => (
+                                                <GoogleButton fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled}>
+                                                    <FcGoogle /><span>Iniciar sesión con Google</span>
+                                                </GoogleButton>
+                                            )}
+                                            onSuccess={ googleSuccess }
+                                            onFailure={ googleFailure }
+                                            cookiePolicy='single_host_origin'
+                                        />
+                                        <LineContainer>
+                                            <HorizontalLine><p>o</p></HorizontalLine>
+                                        </LineContainer>
+                                    </GoogleContainer>
+                                }
+                                {
+                                    isSignup && (
+                                        <>
+                                            <Input name="firstName" label="Nombre" handleChange={ handleChange } autoFocus half />
+                                            <Input name="lastName" label="Apellidos" handleChange={ handleChange } half />                        
+                                        </>
+                                    )
+                                }
+                                <Input name="email" label="Correo electrónico" handleChange={ handleChange } type='email' />
+                                <Input name="password" label="Contraseña" handleChange={ handleChange } type={ showPassword ? 'text' : 'password' } handleShowPassword={ handleShowPassword } />
+                                { isSignup && <Input name="confirmPassword" label="Repetir contraseña" handleChange={handleChange} type={ showPassword2 ? 'text' : 'password' } handleShowPassword={ handleShowPassword2 }/> }
+                                <SigninButton type='submit' fullWidth>
+                                    { isSignup ? 'Registrarse' : 'Iniciar Sesión'}
+                                </SigninButton>
+                                <Grid container justifyContent='flex-end'>
+                                    <Grid item>
+                                        <Button onClick={ switchMode } style={{ color: darkTextColor, fontSize: '.8em', textTransform: 'none',}}>
+                                            { isSignup ? '¿Ya dispones de una cuenta? Inicia sesión' : '¿Todavía no dispones de una cuenta? ¡Regístrate!'}
+                                        </Button>
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                    </form>
-                </SignupContainer>
+                        </form>
+                    </SignupContainer>
+                </Grid>
             </Grid>
-        </div>
+        </FullScreen>
     )
 }
+
+const FullScreen = styled.div`
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    // overflow: hidden;
+`;
 
 const CustomTitle = styled.h2`
 
@@ -136,8 +192,9 @@ const CustomTitle = styled.h2`
 
 const NavbarContainer = styled.div`
     & > div {
-        position: static !important;
+        position: absolute !important;
         width: 100% !important;
+        top: 0;
     }
 `;
 

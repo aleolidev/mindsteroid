@@ -73,27 +73,29 @@ const PathArrow = styled(FiChevronRight)(() => ({
     margin: '-.2em .5em 0 0',
 }));
 
-const PathButton = styled(Button)(() => ({
-    borderRadius: '.5em',
-    padding: '.25em .75em',
-    marginRight: '.5em',
-    color: darkTextColor,
-    fontSize: '1.3em',
-    fontWeight: 800,
-    fontFamily: '\'Khula\', \'Source Sans Pro\', sans-serif',
-    backgroundColor: 'transparent',
-    transition: '0.2s ease-in-out',
-    textTransform: 'none',
-    svg: {    
-        transition: '0.2s ease-in-out',
-    },
-    '&:hover': {
-          backgroundColor: backgroundLightBlue,
-          svg: {
-            color: primaryBlue,
-          }
-    },
-}));
+const PathButton = styled(Button)`
+    &&& {
+            border-radius: .5em;
+        padding: .25em .75em;
+        margin-right: .5em;
+        color: ${ darkTextColor };
+        font-size: 1.3em;
+        font-weight: 800;
+        font-family: 'Khula', 'Source Sans Pro', sans-serif;
+        background-color: transparent;
+        transition: 0.2s ease-in-out;
+        text-transform: none;
+        svg: {    
+            transition: 0.2s ease-in-out;
+        },
+        &:hover: {
+            background-color: ${ backgroundLightBlue };
+            svg: {
+                color: ${ primaryBlue };
+            }
+        },
+    }
+`
 
 const PathContainer = styled.div`
     display: flex;
