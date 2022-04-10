@@ -20,7 +20,6 @@ const FolderPath = ({ folderPath, lastIsDeck, rightPanel }) => {
     const openFolder = (openId) => {
         dispatch(getFolders(openId));
         dispatch(getDecks(openId));
-        dispatch(getCards(openId));
         navigate(`/folder/${openId}`)
     }
 

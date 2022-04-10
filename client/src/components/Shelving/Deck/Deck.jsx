@@ -59,6 +59,7 @@ const Deck = ({ deck, handleUpdateName, deckObj, index, actions }) => {
 
     return (
         <div name='deckBox'>
+            {/* TODO: Set onClick for mobile devices */}
             <Card name="card" onContextMenu={(e) => handleContextMenu(e)} onDoubleClick={(e) => openDeck(e)}>
                 <StyledMenu
                     sx={{

@@ -32,11 +32,14 @@ const NewCard = () => {
     const handleNewCard = async () => {
         const question = questionRef.current?.getInnerHtml();
         const answer = answerRef.current?.getInnerHtml();
+        
+        const user = JSON.parse(localStorage.getItem('profile'))
 
         const card = {
             question: question,
             answer: answer,
             parent: deckId,
+            creator: user?.result?._id,
         }
         
         try {

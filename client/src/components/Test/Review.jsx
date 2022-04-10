@@ -1,10 +1,27 @@
 import React from 'react'
 import styled from 'styled-components'
-import { backgroundLightGray, darkTextColor, backgroundLightBlue, primaryEmerald } from '../../utils'
-import { primaryDarkEmerald, primaryYellow, primaryDarkYellow, primaryRed, primaryRed2 } from '../../utils'
+import { useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
 
-function Test() {
+import { backgroundLightGray, darkTextColor, backgroundLightBlue, primaryEmerald } from '../../utils'
+import { primaryDarkEmerald, primaryYellow, primaryDarkYellow, primaryRed, primaryRed2 } from '../../utils'
+import { setOrUpdateCardStatus } from '../../actions/auth';
+
+function Review() {
+
+    const dispatch = useDispatch();
+
+    const handleHard = async () => {
+        const progress = { 
+            '_id': '62515ab9c9c1e5a4c846a98a',
+            'cardset': [{
+                '_id': '62515abfc9c1e5a4c846a99a',
+                'status': 'Review',
+            }]
+        };
+        await dispatch(setOrUpdateCardStatus(progress));
+    }
+
     return (
         <Grid container>
             <Grid item xs={1} md={2} />
@@ -22,9 +39,9 @@ function Test() {
                     </Flashcard>
                     <ButtonsContainer>
                         <ShowAnswer>Respuesta</ShowAnswer>
-                        <Hard>Difícil</Hard>
-                        <Review>Repasar</Review>
-                        <Easy>Fácil</Easy>
+                        <HardButton onClick={ handleHard }>Difícil</HardButton>
+                        <ReviewButton>Repasar</ReviewButton>
+                        <EasyButton>Fácil</EasyButton>
                     </ButtonsContainer>
                 </Container>
             </Grid>
@@ -81,13 +98,23 @@ const CurrentMark = styled.div`
 `;
 
 const Flashcard = styled.div`
-    margin: 2em;
-    padding: 1.5em;
-    width: 100%;
-    height: 18em;
-    background-color: ${ backgroundLightBlue };
-    border-radius: 1.5em;
-    color: ${ darkTextColor };
+    &&& {
+        margin: 2em;
+        padding: 1.5em;
+        width: 100%;
+        height: 18em;
+        color: ${ darkTextColor };
+        border-radius: 1em;
+        border: 2px solid ${ backgroundLightBlue };
+        transition: 0.2s ease-in-out;
+        &:hover {
+            border: 2px solid transparent;
+            box-shadow: 
+                0px 3px 5px -5px rgb(0 0 0 / 20%), 
+                0px 5px 10px 1px rgb(0 0 0 / 14%), 
+                0px 2px 14px 2px rgb(0 0 0 / 12%)
+        }
+    }
 `;
 
 const ButtonsContainer = styled.div`
@@ -112,7 +139,7 @@ const ShowAnswer = styled.div`
     }
 `;
 
-const Hard = styled.div`
+const HardButton = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -130,7 +157,7 @@ const Hard = styled.div`
     }
 `;
 
-const Review = styled.div`
+const ReviewButton = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -148,7 +175,7 @@ const Review = styled.div`
     }
 `;
 
-const Easy = styled.div`
+const EasyButton = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -167,4 +194,4 @@ const Easy = styled.div`
 `;
 
 
-export default Test
+export default Review

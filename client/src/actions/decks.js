@@ -22,6 +22,7 @@ export const createDeck = (deck, id) => async (dispatch) => {
         const fatherFolder = await api.getFolderById(id);
         const fatherData = fatherFolder.data;
         fatherData.subdecks.push(data._id)
+        console.log('fatherData:', fatherData)
         const newFather = await api.updateFolder(id, fatherData);
         
         dispatch({ type: 'UPDATE_FOLDER', payload: newFather.data})

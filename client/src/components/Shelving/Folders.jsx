@@ -37,7 +37,8 @@ const Folders = forwardRef(({ id }, ref) => {
         
     // Adds a new item to local array of folders
     const handleFolderAdd = () => {
-        setFoldersData([{ name: 'Nueva carpeta', parent: id}, ...foldersData])
+        const user = JSON.parse(localStorage.getItem('profile'))
+        setFoldersData([{ name: 'Nueva carpeta', parent: id, creator: user?.result?._id}, ...foldersData])
     }
 
     // Saves the last created folder
@@ -47,7 +48,6 @@ const Folders = forwardRef(({ id }, ref) => {
 
     const handleUpdateName = (index, name) => {
         const values = [...folders];
-        console.log(index, name)
         values[index].name = name;
         setFoldersData(values);
         dispatch(updateFolder(foldersData[index]))

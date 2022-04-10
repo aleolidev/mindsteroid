@@ -4,7 +4,7 @@ import { Deck, Folder } from '../models/models.js';
 
 export const getDecks = async (req, res) => {
     try {
-        const postDeck = await Deck.find();
+        const postDeck = await Deck.find({ "creator": req.userobjectid});
 
         res.status(200).json(postDeck);
     } catch (error) {
@@ -16,6 +16,9 @@ export const getDeckById = async (req, res) => {
     try {
         const postDeck = await Deck.findById(req.params.id);
 
+        if ((postDeck) && (req.userobjectid !== postDeck.creator.toString()))
+            return res.status(403).json({ message: "No tienes permisos para acceder a este contenido "})
+
         res.status(200).json(postDeck);
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -26,6 +29,9 @@ export const getDeckById = async (req, res) => {
 export const getDecksById = async (req, res) => {
     try {
         const postDeck = await Folder.findById(req.params.id);
+
+        if ((postDeck) && (req.userobjectid !== postDeck.creator.toString()))
+            return res.status(403).json({ message: "No tienes permisos para acceder a este contenido "})
 
         let subdecks = await Deck.find({ "_id": { "$in": postDeck.subdecks}});
 
@@ -55,6 +61,11 @@ export const updateDeck = async (req, res) => {
 
     if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No deck with that id');
 
+    const postDeck = await Folder.findById(req.params.id);
+
+    if ((postDeck) && (req.userobjectid !== postDeck.creator.toString()))
+        return res.status(403).json({ message: "No tienes permisos para acceder a este contenido "})
+
     const updatedDeck = await Deck.findByIdAndUpdate(_id, deck, { new: true });
 
     res.json(updatedDeck);
@@ -64,6 +75,11 @@ export const deleteDeck = async (req, res) => {
     const { id } = req.params;
 
     if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No deck with that id');
+
+    const postDeck = await Folder.findById(req.params.id);
+
+    if ((postDeck) && (req.userobjectid !== postDeck.creator.toString()))
+        return res.status(403).json({ message: "No tienes permisos para acceder a este contenido "})
 
     let parentId = await Deck.findById(id);
     parentId = parentId.parent.toString();

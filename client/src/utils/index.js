@@ -53,6 +53,7 @@ export const isMobile = () => {
 };
 
 export const getUserId = (user) => {
+    
     if (user?.googleId) return user.googleId;
     if (user?.result?._id) return user.result._id;
     if (user?._id) return user._id;

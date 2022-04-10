@@ -3,6 +3,10 @@ import mongoose from 'mongoose';
 const cardSchema = mongoose.Schema({
     question: String,
     answer: String,
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
     parent: {
         type: mongoose.Schema.Types.ObjectId,
         default: null
@@ -19,7 +23,10 @@ const cardSchema = mongoose.Schema({
 
 const deckSchema = mongoose.Schema({
     name: String,
-    creator: String,
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
     parent: {
         type: mongoose.Schema.Types.ObjectId,
         default: null
@@ -43,7 +50,10 @@ const deckSchema = mongoose.Schema({
 
 const folderSchema = mongoose.Schema({
     name: String,
-    creator: String,
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
     parent: {
         type: mongoose.Schema.Types.ObjectId,
         default: null

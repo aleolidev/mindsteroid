@@ -66,6 +66,7 @@ function Navbar() {
                 </Grid>
                 <Hidden smDown>
                     <Grid item xs={false} md={6}  order={{ xs: 3, md: 1}}>
+                        {/* TODO: Add search functionality */}
                         <InputContainer>
                             <Icon>
                                 <MdSearch />

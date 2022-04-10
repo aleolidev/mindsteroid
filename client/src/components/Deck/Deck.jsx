@@ -64,6 +64,14 @@ const Deck = () => {
         return hierarchy;
     }
 
+    const handleTest = () => {
+        navigate(`/test/${ id }`)
+    }
+
+    const handleReview = () => {
+        navigate(`/review/${ id }`)
+    }
+
     useEffect(async () => {
         setFolderPath([...await getHierarchy()]);
     }, [id])
@@ -76,8 +84,8 @@ const Deck = () => {
         <Container className="workspace">
             <FolderPath folderPath={ folderPath } lastIsDeck={ true } rightPanel={
                 <RightIconsContainer style={{display: 'flex', flexWrap: 'wrap',}}>
-                    <RightButtons><MdOutlineCheck />Examen</RightButtons>
-                    <RightButtons style={{marginRight: 0,}}><MdOutlineRefresh />Practicar</RightButtons>
+                    <RightButtons onClick={ handleTest }><MdOutlineCheck />Examen</RightButtons>
+                    <RightButtons onClick={ handleReview } style={{marginRight: 0,}}><MdOutlineRefresh />Repasar</RightButtons>
                     <AddNewCardButton onClick={ handleNewCard }><MdAdd /></AddNewCardButton>
                 </RightIconsContainer>
             } />

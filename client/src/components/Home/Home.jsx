@@ -41,9 +41,9 @@ const Home = () => {
                     await dispatch(signup(customData, navigate));
                     const res = await (getUserByGoogleId(result.googleId))
                     user = res.data
-                    await dispatch(firstLoginFolder(getUserId(user)))        
+                    await dispatch(firstLoginFolder(getUserId(user)))
                 }
-                dispatch({ type: 'AUTH', data: { result, token } });
+                dispatch({ type: 'AUTH', data: { result: user.result, token } });
     
                 navigate('/folder/' + getUserId(user))
             } else {

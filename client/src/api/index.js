@@ -14,6 +14,7 @@ const authUrl = '/user';
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('profile')) {
         req.headers.authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`;
+        req.headers.userObjectId = JSON.parse(localStorage.getItem('profile'))?.result?._id;
     }
   
     return req;
@@ -47,3 +48,6 @@ export const signIn = (formData) => API.post(`${authUrl}/signin`, formData);
 export const signUp = (formData) => API.post(`${authUrl}/signup`, formData);
 export const getUserByGoogleId = (googleId) => API.get(`${authUrl}/${googleId}`);
 export const getUserByEmail = (email) => API.get(`${authUrl}/get/${email}`);
+
+export const getReviewCardsById = (id) => API.get(`${authUrl}/review-cards/${id}`)
+export const setOrUpdateCardStatus = (data) => API.post(`${authUrl}/card`, data)

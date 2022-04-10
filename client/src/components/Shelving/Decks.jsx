@@ -37,7 +37,8 @@ const Decks = forwardRef(({ id }, ref) => {
 
     // Adds a new item to local array of folders
     const handleDeckAdd = () => {
-        setDecksData([{ name: 'Nuevo mazo', parent: id}, ...decksData])
+        const user = JSON.parse(localStorage.getItem('profile'))
+        setDecksData([{ name: 'Nuevo mazo', parent: id, creator: user?.result?._id}, ...decksData])
     }
 
     // Saves the last created folder

@@ -99,6 +99,7 @@ const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
 
     return (
         <div name='folderBox'>
+            {/* TODO: Set onClick for mobile devices */}
             <Card name="card" onContextMenu={(e) => handleContextMenu(e)} onDoubleClick={(e) => openFolder(e)}>
                 <StyledMenu
                     sx={{
@@ -145,7 +146,6 @@ const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
                 title="Cambiar nombre" 
                 currentValue={ folder.name }
                 handleSave={(newName) => {
-                    console.log('send update with index:', index, 'and name', newName)
                     handleUpdateName(index, newName);
                     handleCloseDialog();
                 }} 

@@ -11,6 +11,7 @@ import 'quill/dist/quill.snow.css';
 
 import { getCards, deleteCard } from '../../actions/cards';
 import { backgroundLightBlue, primaryBlue, textColor, primaryEmerald, primaryLightEmerald1, primaryRed, primaryRed2, darkTextColor } from '../../utils/index';
+import { getReviewCardsById, setOrUpdateCardStatus } from '../../api';
 
 const DeckQuestions = ({ id }) => {
 
@@ -20,8 +21,17 @@ const DeckQuestions = ({ id }) => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        dispatch(getCards(id));
+    useEffect(async () => {
+        await dispatch(getCards(id));
+        // const progress = { 
+        //     '_id': '62515ab9c9c1e5a4c846a98c',
+        //     'cardset': [{
+        //         '_id': '62515abfc9c1e5a4c846a99c',
+        //         'status': 'Review',
+        //     }]
+        // };
+        // const res = await setOrUpdateCardStatus(progress);
+        // const res = await getReviewCardsById(id);
     }, [dispatch]);
 
     const handleRemoveCard = (cardId) => {

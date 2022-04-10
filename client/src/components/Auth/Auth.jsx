@@ -35,7 +35,6 @@ const Auth = () => {
         e.preventDefault();
         
         if (isSignup) {
-            
             await dispatch(signup(formData, navigate));
             await dispatch(firstLoginFolder(getUserId(JSON.parse(localStorage.getItem('profile')))))        
             navigate('/');
@@ -87,7 +86,7 @@ const Auth = () => {
                     user = res.data
                     await dispatch(firstLoginFolder(getUserId(user)))        
                 }
-                dispatch({ type: 'AUTH', data: { result, token } });
+                dispatch({ type: 'AUTH', data: { result: user.result, token } });
     
                 navigate('/folder/' + getUserId(user))
             } else {
@@ -158,6 +157,7 @@ const Auth = () => {
                                     )
                                 }
                                 <Input name="email" label="Correo electrónico" handleChange={ handleChange } type='email' />
+                                {/* TODO: Validate that it's a safe password */}
                                 <Input name="password" label="Contraseña" handleChange={ handleChange } type={ showPassword ? 'text' : 'password' } handleShowPassword={ handleShowPassword } />
                                 { isSignup && <Input name="confirmPassword" label="Repetir contraseña" handleChange={handleChange} type={ showPassword2 ? 'text' : 'password' } handleShowPassword={ handleShowPassword2 }/> }
                                 <SigninButton type='submit' fullWidth>
