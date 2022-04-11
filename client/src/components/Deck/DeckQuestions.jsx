@@ -11,7 +11,8 @@ import 'quill/dist/quill.snow.css';
 
 import { getCards, deleteCard } from '../../actions/cards';
 import { backgroundLightBlue, primaryBlue, textColor, primaryEmerald, primaryLightEmerald1, primaryRed, primaryRed2, darkTextColor } from '../../utils/index';
-import { getReviewCardsById, setOrUpdateCardStatus } from '../../api';
+import { setOrUpdateCardStatus } from '../../api';
+import { getReviewCardsById, getTestCardsById } from '../../actions/auth';
 
 const DeckQuestions = ({ id }) => {
 
@@ -23,6 +24,8 @@ const DeckQuestions = ({ id }) => {
 
     useEffect(async () => {
         await dispatch(getCards(id));
+        await dispatch(getReviewCardsById(id))
+        await dispatch(getTestCardsById(id))
         // const progress = { 
         //     '_id': '62515ab9c9c1e5a4c846a98c',
         //     'cardset': [{
@@ -196,9 +199,8 @@ const IndexBox = styled.div`
 
 const CardBox = styled.div`
     height: auto !important;
-    overflowY: auto !important;
+    overflow-y: auto !important;
     width: 100%;
-    cursor: pointer;
     padding: 1em 1.2em;
     margin: .5em 0;
     border-radius: .5em 0 0 .5em;

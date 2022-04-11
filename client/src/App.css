@@ -2,38 +2,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap');
 
 body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Khula', 'Source Sans Pro', sans-serif;
-  background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Khula', 'Source Sans Pro', sans-serif;
+    background-color: #ffffff;
 }
 
 h1, h2, h3, h4, h5, h6, a, ul, li {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 /* CUSTOM SCROLLBAR */
 /* width */
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+    width: 12px;
+    height: 12px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #fefcfc;
+    background: #fefcfc;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #cdcee1;
-  border-radius: 40px;
-  border: 3px solid #fefcfc;
+    background: #cdcee1;
+    border-radius: 40px;
+    border: 3px solid #fefcfc;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #aeafcb;
+    background: #aeafcb;
+}
+
+.custom-cardflip {
+    width: 100%;
+}
+
+.custom-cardflip > .react-card-flipper {
+    position: static !important;
 }

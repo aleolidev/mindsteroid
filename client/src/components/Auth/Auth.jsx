@@ -103,7 +103,12 @@ const Auth = () => {
     };
 
     const goHome = () => {
-        navigate('/')
+        const user = JSON.parse(localStorage.getItem('profile'))?.result
+        if (user) {
+            navigate(`/folder/${user._id}`)
+        } else {
+            navigate('/');
+        }
     }
 
 

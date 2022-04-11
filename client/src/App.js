@@ -12,7 +12,6 @@ import Test from './components/Test/Test';
 import Deck from './components/Deck/Deck';
 import './App.css';
 import EditCard from './components/Cards/EditCard';
-import Review from './components/Test/Review';
 
 const AppRouting = () => {
 
@@ -43,8 +42,8 @@ const AppRouting = () => {
                     <Route path="/deck/:id" element={<Deck />} />
                     <Route path="/deck/:id/new-card" element={<NewCard />} />
                     <Route path="/card/:id" element={<EditCard />} />
-                    <Route path="/test/:id" element={<Test />} />
-                    <Route path="/review/:id" element={<Review />} />
+                    <Route path="/test/:id" element={<Test isReview={ false } />} />
+                    <Route path="/review/:id" element={<Test isReview={ true } />} />
 
                     {/* Removes any trailing slash from all urls */}
                     {/* <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} /> */}

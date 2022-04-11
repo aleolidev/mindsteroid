@@ -50,4 +50,5 @@ export const getUserByGoogleId = (googleId) => API.get(`${authUrl}/${googleId}`)
 export const getUserByEmail = (email) => API.get(`${authUrl}/get/${email}`);
 
 export const getReviewCardsById = (id) => API.get(`${authUrl}/review-cards/${id}`)
+export const getTestCardsById = (id) => API.get(`${authUrl}/test-cards/${id}`)
 export const setOrUpdateCardStatus = (data) => API.post(`${authUrl}/card`, data)

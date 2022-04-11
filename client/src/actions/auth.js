@@ -43,7 +43,19 @@ export const getReviewCardsById = (id) => async (dispatch) => {
         dispatch({ type: 'START_LOADING_STUDYING_DATA' });
         const { data } = await api.getReviewCardsById(id)
         
-        dispatch({ type: 'FETCH_ALL_STUDYING_DATA', payload: data });
+        dispatch({ type: 'FETCH_ALL_REVIEW_STUDYING_DATA', payload: data });
+        dispatch({ type: 'END_LOADING_STUDYING_DATA' });
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+export const getTestCardsById = (id) => async (dispatch) => {
+    try {
+        dispatch({ type: 'START_LOADING_STUDYING_DATA' });
+        const { data } = await api.getTestCardsById(id)
+        
+        dispatch({ type: 'FETCH_ALL_TEST_STUDYING_DATA', payload: data });
         dispatch({ type: 'END_LOADING_STUDYING_DATA' });
     } catch (error) {
         console.log(error.message)

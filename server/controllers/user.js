@@ -93,20 +93,45 @@ export const getReviewCardsById = async (req, res) => {
             return res.status(403).json({ message: "No tienes permisos para acceder a este contenido "})
 
         const cardset = await Card.find({ "_id": { "$in": deck.cardset}});
-        
+
         const user = await User.find({ "_id": req.userobjectid }).lean()
 
-        let cardsToRemove = user[0].progress.filter(
-            deck => deck._id.toString() == req.params.id && 
-            deck.cardset.every(card => card.status == 'Easy')
-        );
+        const deckData = user[0].progress.filter(
+            deck => deck._id.toString() == req.params.id
+        )[0]?.cardset
+        
+        let cardsToRemove = deckData?.filter(
+            card => card.status == 'Easy' 
+        )
 
-        cardsToRemove = cardsToRemove[0].cardset;
+        let cardDifference;
 
-        const cardDifference = cardset.filter(card1 => 
-            !cardsToRemove.some(card2 => card1._id.toString() == card2._id.toString()))
+        if (cardsToRemove && cardsToRemove.length > 0) {
+            cardDifference = cardset.filter(card1 => 
+                !cardsToRemove.some(card2 => card1._id.toString() == card2._id.toString()))
+        } else {
+            cardDifference = cardset;
+        }     
 
-        res.status(200).json(cardDifference);
+        res.status(200).json({ ...cardDifference });
+    } catch (error) {
+        console.log(error)
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const getTestCardsById = async (req, res) => {
+    try {
+        const deck = await Deck.findById(req.params.id);
+
+        if ((deck) && (req.userobjectid !== deck.creator.toString()))
+            return res.status(403).json({ message: "No tienes permisos para acceder a este contenido "})
+
+        const cardset = await Card.find({ "_id": { "$in": deck.cardset}});
+
+        if (cardset)    
+            return res.status(200).json({ ...cardset });
+        res.status(404).json({ message: "No se encontró el mazo"})
     } catch (error) {
         console.log(error)
         res.status(404).json({ message: error.message });

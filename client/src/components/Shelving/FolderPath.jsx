@@ -74,7 +74,7 @@ const PathArrow = styled(FiChevronRight)(() => ({
 
 const PathButton = styled(Button)`
     &&& {
-            border-radius: .5em;
+        border-radius: .5em;
         padding: .25em .75em;
         margin-right: .5em;
         color: ${ darkTextColor };
