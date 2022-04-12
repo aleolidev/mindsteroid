@@ -99,16 +99,18 @@ const Folders = forwardRef(({ id }, ref) => {
 
     const folderActions = [
         {action: null, title: <Item icon={ <HiOutlinePencil/ > }>Cambiar nombre</Item>},
-        // TODO: Add delete confirmation
         {action: null, title: <Item icon={ <CgTrashEmpty/ > }>Eliminar</Item>},
     ]
+
+    if (folders === null || folders === undefined || folders.length == 0) {
+        return (<></>)
+    }
     
     return (
         <div>
             <TitleText>Carpetas</TitleText>
             <TitleUnderline />
             <CustomGrid name="folderContainer" container ref={foldersRef}>
-                {/* TODO: Add blank page message */}
                 {folders.map((folder, index) => (
                     <Grid name="folderGrid" key={folder._id} item xs={12} sm={6} md={3} >
                         <Folder folder={folder} handleUpdateName={handleUpdateName} folderObj={foldersData[index]} index={index} actions={folderActions}/>

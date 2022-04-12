@@ -82,14 +82,12 @@ const EditCard = () => {
                 <Grid item xs={12} md={6}>
                     <Question>
                         <Subtitle>Pregunta</Subtitle>
-                        {/* TODO: Validate is !== null && "" && undefined */}
                         <Editor ref={questionRef} placeholder={'Write something...'} />
                     </Question>
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Answer>
                         <Subtitle>Respuesta</Subtitle>
-                        {/* TODO: Validate is !== null && "" && undefined */}
                         <Editor ref={answerRef} placeholder={'Write something...'} />
                     </Answer>
                 </Grid>

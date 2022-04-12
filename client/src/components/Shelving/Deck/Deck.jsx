@@ -1,17 +1,23 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { darkTextColor, primaryLightEmerald1, primaryLightEmerald2, backgroundLightBlue, inputSvgColor, primaryEmerald } from '../../../utils'
+import { darkTextColor, primaryLightEmerald1, primaryLightEmerald2, backgroundLightBlue, inputSvgColor, primaryEmerald, primaryRed, primaryRed2 } from '../../../utils'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { deleteDeck } from '../../../actions/decks';
-import { Menu, MenuItem } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Menu, MenuItem } from '@material-ui/core';
 import { MdCollectionsBookmark } from 'react-icons/md';
 import CustomDialog from '../../Utils/CustomDialog';
+import * as api from '../../../api/index';
+import { deleteCard } from '../../../actions/cards';
 
 const Deck = ({ deck, handleUpdateName, deckObj, index, actions }) => {
 
     const [ contextMenu, setContextMenu ] = useState(null);
     const [ openDialog, setOpenDialog ] = useState(false);
+
+    const [ confirmDeleteOpen, setConfirmDeleteOpen ] = useState(false);
+    const [ lastDeleteSelection, setLastDeleteSelection ] = useState(null);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -30,10 +36,26 @@ const Deck = ({ deck, handleUpdateName, deckObj, index, actions }) => {
         setOpenDialog(false);
     };
 
-    const deleteDeckAndContent = async (id) => {  
-        // TODO: Do all in a single API call   
-        // TODO: Remove questions too
-        dispatch(deleteDeck(id));
+    const handleConfirmDelete = (id) => {
+        setLastDeleteSelection(id);
+        setConfirmDeleteOpen(true);
+    };
+    
+    const handleCloseDelete = () => {
+        setConfirmDeleteOpen(false);
+    };
+
+    const deleteDeckAndContent = async () => { 
+        if (lastDeleteSelection !== null && lastDeleteSelection !== undefined) {
+            let cards = [await api.fetchCardsById(lastDeleteSelection)];
+            for(const card in cards) {
+                dispatch(deleteCard(cards[card]));
+            }
+            dispatch(deleteDeck(lastDeleteSelection));
+        } else {
+            console.error('Unexpected error.')
+        }
+        handleCloseDelete();
     };
 
 
@@ -59,7 +81,6 @@ const Deck = ({ deck, handleUpdateName, deckObj, index, actions }) => {
 
     return (
         <div name='deckBox'>
-            {/* TODO: Set onClick for mobile devices */}
             <Card name="card" onContextMenu={(e) => handleContextMenu(e)} onDoubleClick={(e) => openDeck(e)}>
                 <StyledMenu
                     sx={{
@@ -86,7 +107,7 @@ const Deck = ({ deck, handleUpdateName, deckObj, index, actions }) => {
                                 handleOpenDialog();
                             }
                             else if (item.title.props.children == 'Eliminar') {  
-                                deleteDeckAndContent(deckObj._id);
+                                handleConfirmDelete(deckObj._id);
                             }
                             else if (item.action !== null && item.action !== undefined) {
                                 item.action();
@@ -110,6 +131,25 @@ const Deck = ({ deck, handleUpdateName, deckObj, index, actions }) => {
                     handleCloseDialog();
                 }} 
             />
+            <Dialog
+                open={confirmDeleteOpen}
+                onClose={handleCloseDelete}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    ¿Estás seguro de que deseas eliminar este elemento?
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Una vez confirmada esta acción se borrará el elemento seleccionado y todo lo que contenga en su interior. ¿Quieres continuar?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <CancelButton onClick={handleCloseDelete} autoFocus>Cancelar</CancelButton>
+                    <DeleteButton onClick={deleteDeckAndContent}>Eliminar</DeleteButton>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }
@@ -183,6 +223,45 @@ const StyledMenu = styled(Menu)(() => ({
         padding: 0,
     }
 }));
+
+const CancelButton = styled(Button)`
+    margin: 0 .5em .5em 0;
+    transition: 0.2s ease-in-out;
+    padding: .5em 1em;
+    border-radius: .75em;
+    text-align: center;
+    text-transform: none;
+    font-family: 'Khula', 'Source Sans Pro', sans-serif;
+    font-weight: 600;
+    font-size: 1em;
+    color: ${ darkTextColor };
+    &:hover {
+        background-color: ${ backgroundLightBlue };
+        svg {
+            color: white;
+        }
+    }
+`;
+
+const DeleteButton = styled(Button)`
+    margin: 0 .5em .5em 0;
+    transition: 0.2s ease-in-out;
+    padding: .5em 1em;
+    border-radius: .75em;
+    text-align: center;
+    text-transform: none;
+    font-family: 'Khula', 'Source Sans Pro', sans-serif;
+    font-weight: 600;
+    font-size: 1em;
+    background-color: ${ primaryRed };
+    color: white;
+    &:hover {
+        background-color: ${ primaryRed2 };
+        svg {
+            color: white;
+        }
+    }
+`;
 
 
 const StyledMenuItem = styled(MenuItem)(() => ({

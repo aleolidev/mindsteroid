@@ -71,12 +71,11 @@ function Navbar() {
                 </Grid>
                 <Hidden smDown>
                     <Grid item xs={false} md={6}  order={{ xs: 3, md: 1}}>
-                        {/* TODO: Add search functionality */}
                         <InputContainer>
                             <Icon>
                                 <MdSearch />
                             </Icon>
-                            <Input type="text" placeholder="Buscar..." />
+                            <Input type="text" placeholder="Buscar... (No funcional por el momento)" />
                         </InputContainer>
                     </Grid>
                 </Hidden>
@@ -97,7 +96,6 @@ function Navbar() {
                                     }
                                     <CustomMenu ref={ profileMenuRef }>
                                         <MenuContainer container>
-                                            {/* TODO: Add option to add custom icon */}
                                             { user.result.imageUrl ? 
                                                 (<BigUserIcon src={ user.result.imageUrl } />)
                                                 : (<BigUserIcon src={ DefaultUser } />)

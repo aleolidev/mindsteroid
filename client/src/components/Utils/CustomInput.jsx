@@ -25,7 +25,7 @@ const CustomInput = styled(TextField)`
         padding: 1em 1.5em;
         color: ${ darkTextColor };
         font-size: 1em;
-        font-family: \'Khula\', sans-serif;
+        font-family: '\'Khula\', \'Source Sans Pro\', sans-serif';
         background-color: ${ backgroundLightBlue };
         font-weight: 600;
         width: 100%;

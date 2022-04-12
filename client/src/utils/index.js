@@ -21,8 +21,8 @@ export const primaryDarkEmerald = "#00A84B";
 export const primaryRed = "#FB3C3C";
 export const primaryRed2 = "#FA2222";
 
-export const primaryYellow = "#DDBE22";
-export const primaryDarkYellow = "#E0A21C";
+export const primaryYellow = "#E7C30E";
+export const primaryDarkYellow = "#EBAA0E";
 
 // = Text =
 export const textColor = "#584478";

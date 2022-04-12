@@ -13,11 +13,14 @@ import { useParams } from 'react-router-dom';
 import * as api from '../../api';
 import CustomContainer from '../Utils/CustomContainer';
 import { MdOutlineAddToPhotos, MdOutlineCreateNewFolder } from 'react-icons/md';
-import { darkTextColor, lightSvg } from '../../utils'
+import GrayMindsteroid from '../../assets/gray-mindsteroid.png'
+import { backgroundLightBlue } from '../../utils';
+import { IoMdFingerPrint } from 'react-icons/io';
 
 const Shelving = () => {
     const { folders, isLoading: foldersIsLoading } = useSelector((state) => state.folders);
-    // const { decks, isLoading: decksIsLoading } = useSelector((state) => state.decks);
+    const { decks, isLoading: decksIsLoading } = useSelector((state) => state.decks);
+
     const [ folderPath, setFolderPath] = useState([]);
     const dispatch = useDispatch();
 
@@ -70,28 +73,59 @@ const Shelving = () => {
         setFolderPath([...await getFolderHierarchy()]);
     }, [id])
 
-    // if(!folders || !decks || foldersIsLoading || decksIsLoading) {
-    if(!folders || foldersIsLoading) {
-            return null;
-    } 
-
+    
     const actions = [
         {action: foldersRef.current?.handleFolderAdd, title: <Item icon={ <MdOutlineCreateNewFolder/ > }>Nueva carpeta</Item>},
         {action: decksRef.current?.handleDeckAdd, title: <Item icon={ <MdOutlineAddToPhotos/ > }>Nuevo mazo</Item>},
     ]
 
-    return (
-        <Container className="workspace">
-            <FolderPath folderPath={ folderPath } lastIsDeck={ false } />
+    if(foldersIsLoading || decksIsLoading) {
+        return null;
+    }
 
-            <CustomContainer actions={actions} availableSpaces={['folderContainer', 'folderGrid', 'folderBox', 'deckContainer', 'deckGrid', 'deckBox']}>
-                <Folders id={ id } ref={ foldersRef } />
-                <Decks id={ id } ref={ decksRef } />
-            </CustomContainer>
-        </Container>
+    const noSectionToShow = ((folders === null || folders === undefined || folders.length == 0) && (decks === null || decks === undefined || decks.length == 0))
+
+    return (
+        <CustomContainer fullHeight={noSectionToShow} actions={actions} availableSpaces={['blankPage', 'logo', 'addContent']}>
+            <Container className="workspace" style={{height: '100%' }}>
+                <FolderPath folderPath={ folderPath } lastIsDeck={ false } />
+                
+                <BlankPage name='blankPage' style={{display: noSectionToShow ? 'flex' : 'none' }}>
+                    <img name='logo' src={GrayMindsteroid} />
+                    <AddContent name='addContent'>¡Empieza a añadir contenido!</AddContent>
+                </BlankPage>
+
+                <CustomContainer actions={actions} availableSpaces={['folderContainer', 'folderGrid', 'folderBox', 'deckContainer', 'deckGrid', 'deckBox']}>
+                    <Folders id={ id } ref={ foldersRef } />
+                    <Decks id={ id } ref={ decksRef } />
+                </CustomContainer>
+            </Container>
+        </CustomContainer>
     )
 }
 
 const Container = styled.div``;
+
+const BlankPage = styled.div`
+
+    &&& {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        img {
+            height: 12em;
+            margin-bottom: 4em;
+        }
+    }
+`
+
+const AddContent = styled.h2`
+    color: ${ backgroundLightBlue };
+    font-family: 'Khula', 'Source Sans Pro', sans-serif;
+    // margin-bottom: 2em;
+`
 
 export default Shelving;

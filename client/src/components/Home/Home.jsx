@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Box, Button, Grid } from '@material-ui/core';
+import { Box, Button, Grid, Snackbar } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { FcGoogle } from 'react-icons/fc';
@@ -8,12 +8,15 @@ import GoogleLogin from 'react-google-login';
 
 import '../../utils/full-screen.css'
 import MindsteroidHome from '../Utils/SVGs/MindsteroidHome';
-import { backgroundLightBlue, darkTextColor, getUserId, googleBlue, googleDarkBlue, primaryDarkEmerald, primaryEmerald } from '../../utils';
+import { backgroundLightBlue, darkTextColor, getUserId, googleBlue, googleDarkBlue, primaryDarkEmerald, primaryEmerald, primaryRed } from '../../utils';
 import LogoNavbar from '../Navbars/LogoNavbar';
 import { firstLoginFolder, signup } from '../../actions/auth';
 import { getUserByEmail, getUserByGoogleId } from '../../api';
+import { Alert } from '@material-ui/lab';
 
 const Home = () => {
+
+    const [ snackbarOpen, setSnackbarOpen ] = useState(false);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -47,8 +50,7 @@ const Home = () => {
     
                 navigate('/folder/' + getUserId(user))
             } else {
-                // TODO: Show error on popup
-                console.error('Ya existe una cuenta no vinculada a Google con este correo')
+                handleClickSnackbar()
             }
             
         } catch (error) {
@@ -63,6 +65,16 @@ const Home = () => {
     const handleSignIn = () => {
         navigate('/auth')
     }
+    const handleClickSnackbar = () => {
+        setSnackbarOpen(true);
+    };
+    
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
     
     useEffect(async () => {    
         let user = JSON.parse(localStorage.getItem('profile'))?.result;
@@ -115,6 +127,13 @@ const Home = () => {
                     <HomeBackground />
                 </Grid>
             </Grid>
+
+            {/* Snackbar */}
+            <CustomSnackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+                    Ya existe una cuenta no vinculada a Google con este correo
+                </Alert>
+            </CustomSnackbar>
         </FullScreen>
     )
 }
@@ -240,5 +259,23 @@ const HorizontalLine = styled.span`
         display: inline-block;
     }
 `;
+
+const CustomSnackbar = styled(Snackbar)(() => ({
+    '&&&': {
+        '& .MuiPaper-root': {
+            fontWeight: 600,
+            color: 'white',
+        },
+        '& .MuiAlert-standardSuccess': {
+            backgroundColor: primaryEmerald,
+        },
+        '& .MuiAlert-standardError': {
+            backgroundColor: primaryRed,
+        },
+        '& .MuiAlert-icon': {
+            color: 'white',
+        },
+    }
+}));
 
 export default Home

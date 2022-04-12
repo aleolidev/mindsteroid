@@ -6,11 +6,12 @@ import { GoogleLogin } from 'react-google-login';
 import { useNavigate } from 'react-router';
 
 import { firstLoginFolder, signin, signup } from '../../actions/auth'
-import { Button, Grid } from '@material-ui/core';
-import { backgroundLightBlue, darkTextColor, getUserId, googleBlue, googleDarkBlue, primaryBlue, primaryDarkBlue, primaryDarkEmerald, primaryEmerald } from '../../utils';
+import { Button, Grid, Snackbar } from '@material-ui/core';
+import { backgroundLightBlue, darkTextColor, getUserId, googleBlue, googleDarkBlue, primaryBlue, primaryDarkBlue, primaryDarkEmerald, primaryEmerald, primaryRed } from '../../utils';
 import Input from './Input';
 import LogoNavbar from '../Navbars/LogoNavbar';
 import { getUserByEmail, getUserByGoogleId } from '../../api';
+import { Alert } from '@material-ui/lab';
 
 const initialState = { 
     firstName: '',
@@ -27,6 +28,8 @@ const Auth = () => {
     const [ showPassword2, setShowPassword2 ] = useState(false);
     const [ isSignup, setIsSignup ] = useState(false);
     const [ formData, setFormData ] = useState(initialState);
+    const [ snackbarOpen, setSnackbarOpen ] = useState(false);
+    const [ errorMessage, setErrorMessage ] = useState('Algo salió mal...')
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -34,12 +37,17 @@ const Auth = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        if (isSignup) {
-            await dispatch(signup(formData, navigate));
-            await dispatch(firstLoginFolder(getUserId(JSON.parse(localStorage.getItem('profile')))))        
-            navigate('/');
-        } else {
-            dispatch(signin(formData, navigate));
+        try {
+            if (isSignup) {
+                await dispatch(signup(formData, navigate));
+                await dispatch(firstLoginFolder(getUserId(JSON.parse(localStorage.getItem('profile')))))        
+                navigate('/');
+            } else {
+                await dispatch(signin(formData, navigate));
+            }
+        } catch (error) {
+            setErrorMessage(error.response?.data?.message)
+            handleClickSnackbar();
         }
     }
 
@@ -54,6 +62,17 @@ const Auth = () => {
     const handleShowPassword2 = () => {
         setShowPassword2((prevShowPassword) => !prevShowPassword);
     }
+
+    const handleClickSnackbar = () => {
+        setSnackbarOpen(true);
+    };
+    
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+    };
 
     const switchMode = () => {
         setIsSignup((prevIsSignup) => !prevIsSignup);
@@ -90,11 +109,12 @@ const Auth = () => {
     
                 navigate('/folder/' + getUserId(user))
             } else {
-                // TODO: Show error on popup
-                console.error('Ya existe una cuenta no vinculada a Google con este correo')
+                setErrorMessage('Ya existe una cuenta no vinculada a Google con este correo');
+                handleClickSnackbar()
             }
         } catch (error) {
-            console.error(error);
+            setErrorMessage(error.response?.data?.message)
+            handleClickSnackbar()
         }
     };
 
@@ -162,7 +182,6 @@ const Auth = () => {
                                     )
                                 }
                                 <Input name="email" label="Correo electrónico" handleChange={ handleChange } type='email' />
-                                {/* TODO: Validate that it's a safe password */}
                                 <Input name="password" label="Contraseña" handleChange={ handleChange } type={ showPassword ? 'text' : 'password' } handleShowPassword={ handleShowPassword } />
                                 { isSignup && <Input name="confirmPassword" label="Repetir contraseña" handleChange={handleChange} type={ showPassword2 ? 'text' : 'password' } handleShowPassword={ handleShowPassword2 }/> }
                                 <SigninButton type='submit' fullWidth>
@@ -180,6 +199,13 @@ const Auth = () => {
                     </SignupContainer>
                 </Grid>
             </Grid>
+            
+            {/* Snackbar */}
+            <CustomSnackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+                    { errorMessage }
+                </Alert>
+            </CustomSnackbar>
         </FullScreen>
     )
 }
@@ -311,5 +337,23 @@ const HorizontalLine = styled.span`
         display: inline-block;
     }
 `;
+
+const CustomSnackbar = styled(Snackbar)(() => ({
+    '&&&': {
+        '& .MuiPaper-root': {
+            fontWeight: 600,
+            color: 'white',
+        },
+        '& .MuiAlert-standardSuccess': {
+            backgroundColor: primaryEmerald,
+        },
+        '& .MuiAlert-standardError': {
+            backgroundColor: primaryRed,
+        },
+        '& .MuiAlert-icon': {
+            color: 'white',
+        },
+    }
+}));
 
 export default Auth

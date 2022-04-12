@@ -44,8 +44,8 @@ export const fetchCards = () => API.get(cardsUrl);
 export const createCard = (newCard) => API.post(cardsUrl, newCard);
 export const fetchCardsById = (id) => API.get(`${cardsUrl}/${id}`)
 
-export const signIn = (formData) => API.post(`${authUrl}/signin`, formData);
-export const signUp = (formData) => API.post(`${authUrl}/signup`, formData);
+export const signIn = (formData) => API.post(`${authUrl}/signin`, formData).catch(error => {throw error});
+export const signUp = (formData) => API.post(`${authUrl}/signup`, formData).catch(error => {throw error});
 export const getUserByGoogleId = (googleId) => API.get(`${authUrl}/${googleId}`);
 export const getUserByEmail = (email) => API.get(`${authUrl}/get/${email}`);
 

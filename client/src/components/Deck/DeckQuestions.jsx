@@ -11,7 +11,7 @@ import 'quill/dist/quill.snow.css';
 
 import { getCards, deleteCard } from '../../actions/cards';
 import { backgroundLightBlue, primaryBlue, textColor, primaryEmerald, primaryLightEmerald1, primaryRed, primaryRed2, darkTextColor } from '../../utils/index';
-import { setOrUpdateCardStatus } from '../../api';
+import GrayMindsteroid from '../../assets/gray-mindsteroid.png'
 import { getReviewCardsById, getTestCardsById } from '../../actions/auth';
 
 const DeckQuestions = ({ id }) => {
@@ -48,29 +48,34 @@ const DeckQuestions = ({ id }) => {
     return(
         <Container>
             <ButtonsContainer container>
-            <TitleContainer>
-                <TitleText>Tarjetas</TitleText>
-                <TitleUnderline />
-            </TitleContainer>
-                {/* TODO: Add blank page message */}
-                {cards.map((card, index) => (
-                    <Question onClick={ () => handleEditCard(card._id) } key={card._id} className='ql-snow'>
-                        <IndexBox className='indexBox'>{index + 1}.</IndexBox>
-                        <CardBox item xs={9} sm={10} className='cardBox ql-editor'>
-                            { parse(card.question) }
-                        </CardBox>
-                        <DeleteColumn className='cardBox'>
-                            <DeleteButton onClick={(e) => {
-                                e.stopPropagation(); // Avoid the <Question> onClick call
-                                handleRemoveCard(card._id);
-                            }}><IoMdTrash /></DeleteButton>
-                        </DeleteColumn>
-                        {/* <Grid item container xs={2} sm={1} direction='row' justifyContent='flex-end'>
-                        </Grid>
-                        <Grid item container xs={1}>
-                        </Grid> */}
-                    </Question>
-                ))}
+            {
+                (cards === null || cards === undefined || cards.length == 0) ?
+                    (<BlankPage style={{width: '100%',}}>
+                        <img src={GrayMindsteroid} />
+                        <AddContent>¡Empieza a añadir contenido!</AddContent>
+                    </BlankPage>)
+                    :
+                    (<div style={{width: '100%',}}>
+                        <TitleContainer>
+                            <TitleText>Tarjetas</TitleText>
+                            <TitleUnderline />
+                        </TitleContainer>
+                            {cards.map((card, index) => (
+                                <Question onClick={ () => handleEditCard(card._id) } key={card._id} className='ql-snow'>
+                                    <IndexBox className='indexBox'>{index + 1}.</IndexBox>
+                                    <CardBox item xs={9} sm={10} className='cardBox ql-editor'>
+                                        { parse(card.question) }
+                                    </CardBox>
+                                    <DeleteColumn className='cardBox'>
+                                        <DeleteButton onClick={(e) => {
+                                            e.stopPropagation(); // Avoid the <Question> onClick call
+                                            handleRemoveCard(card._id);
+                                        }}><IoMdTrash /></DeleteButton>
+                                    </DeleteColumn>
+                                </Question>
+                            ))}
+                    </div>)
+            }
             </ButtonsContainer>
         </Container>
     )
@@ -176,26 +181,7 @@ const IndexBox = styled.div`
     margin: .5em 1em .5em 0;
     height: 3em;
     border-radius: .5em;
-    // background-color: ${ backgroundLightBlue };
 `;
-
-// const CardBox = styled(Grid)(() => ({
-//     height: 'auto !important',
-//     overflowY: 'auto !important',
-//     cursor: 'pointer',
-//     padding: '1em 1.2em',
-//     margin: '.5em 0',
-//     borderRadius: '.5em 0 0 .5em',
-//     border: '2px solid ' + backgroundLightBlue,
-//     borderRight: 0,
-//     cursor: 'pointer',
-//     transition: '0.2s ease-in-out',
-//     p: {
-//         margin: 0,
-//         padding: 0,
-//     },
-    
-// }));
 
 const CardBox = styled.div`
     height: auto !important;
@@ -214,5 +200,26 @@ const CardBox = styled.div`
     };
     
 `;
+
+const BlankPage = styled.div`
+
+    &&& {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        img {
+            height: 12em;
+            margin: 4em 0;
+        }
+    }
+`
+
+const AddContent = styled.h2`
+    color: ${backgroundLightBlue};
+    font-family: 'Khula', 'Source Sans Pro', sans-serif;
+    margin-bottom: 2em;
+`
 
 export default DeckQuestions;

@@ -25,13 +25,14 @@ const AppRouting = () => {
     }
 
     return (
-        <div>
+        <div style={{height: "100%",}}>
             { !isPageFullSize() ? 
                 <Navbar />
                 : null
             }
             <Container style={{
                 margin: isPageFullSize() ? '0' : '1.5em 2.5em 2.5em 2.5em',
+                height: "75%",
             }}>
                 <Routes>
                     {/* <Route path="/" element={<Navigate replace to="/folder" />} /> */}

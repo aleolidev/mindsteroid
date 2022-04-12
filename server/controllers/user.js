@@ -39,6 +39,9 @@ export const signup = async (req, res) => {
         
         if (password !== confirmPassword) return res.status(400).json({ message: 'Las contraseñas no coinciden.' })
 
+        if (!isGoogleAccount && (password === null || password === undefined || password.length < 8) ) 
+            return res.status(400).json({ message: 'La contraseña es demasiado corta.' })
+
         if (password !== null && password !== undefined && password !== '' &&
             confirmPassword !== null && confirmPassword !== undefined && confirmPassword !== '') {
             hashedPassword = await bcrypt.hash(password, 12);

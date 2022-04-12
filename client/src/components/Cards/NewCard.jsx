@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
@@ -14,16 +14,17 @@ import ConfigDialog from './ConfigDialog';
 const NewCard = () => {
 
     const [ openDialog, setOpenDialog ] = useState(false);
-    const [ keepAdding, setKeepAdding ] = useState(false);
     const [ snackbarOpen, setSnackbarOpen ] = useState(false);
+    const [ keepAddLazy, setKeepAddLazy ] = useState(false); // Needed to update everytime the real changes
     const [ snackbarStatus, setSnackbarStatus ] = useState({
         severity: "success", 
         message: "Tarjeta añadida correctamente"
     });
-
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    
+    const keepAdding = useRef(false);
     const questionRef = useRef();
     const answerRef = useRef();
     
@@ -32,36 +33,55 @@ const NewCard = () => {
     const handleNewCard = async () => {
         const question = questionRef.current?.getInnerHtml();
         const answer = answerRef.current?.getInnerHtml();
-        
-        const user = JSON.parse(localStorage.getItem('profile'))
 
-        const card = {
-            question: question,
-            answer: answer,
-            parent: deckId,
-            creator: user?.result?._id,
-        }
+        const cleanQuestion = getHTMLText(question).replace(' ', '');
+        const cleanAnswer = getHTMLText(answer).replace(' ', '');
         
-        try {
-            await dispatch(createCard({...card}, deckId))
-            if (keepAdding) {
+        if (cleanQuestion != '' && cleanAnswer != '') {
+            const user = JSON.parse(localStorage.getItem('profile'))
+    
+            const card = {
+                question: question,
+                answer: answer,
+                parent: deckId,
+                creator: user?.result?._id,
+            }
+            
+            try {
+                await dispatch(createCard({...card}, deckId))
+                if (keepAdding.current) {
+                    setSnackbarStatus({
+                        severity: "success", 
+                        message: "Tarjeta añadida correctamente"
+                    })
+                    handleOpenSnackbar();
+                    questionRef.current?.cleanInnerHtml();
+                    answerRef.current?.cleanInnerHtml();
+                } else {
+                    returnToDeck();
+                }
+            } catch (error) {
                 setSnackbarStatus({
-                    severity: "success", 
-                    message: "Tarjeta añadida correctamente"
+                    severity: "error", 
+                    message: `ERROR: ${ error.message }`
                 })
                 handleOpenSnackbar();
-                questionRef.current?.cleanInnerHtml();
-                answerRef.current?.cleanInnerHtml();
-            } else {
-                returnToDeck();
             }
-        } catch (error) {
+        } else {
             setSnackbarStatus({
                 severity: "error", 
-                message: `ERROR: ${ error.message }`
+                message: (cleanAnswer != '') ? "El campo 'Pregunta' no puede estar vacío." : 
+                        (cleanQuestion != '') ? "El campo 'Respuesta' no puede estar vacío." :
+                        "Los campos 'Pregunta' y 'Respuesta' no pueden estar vacíos."
             })
             handleOpenSnackbar();
         }
+    }
+
+    const getHTMLText = (html) => {
+        var divContainer= document.createElement("div");
+        divContainer.innerHTML = html;
+        return divContainer.textContent || divContainer.innerText || "";
     }
 
     const returnToDeck = () => {
@@ -77,8 +97,11 @@ const NewCard = () => {
     };
 
     const handleKeepAdding = () => {
-        // TODO: Add it to cookies
-        setKeepAdding(!keepAdding);
+        console.log('from:', keepAdding.current)
+        keepAdding.current = !keepAdding.current;
+        setKeepAddLazy(keepAdding.current)
+        console.log('to:', keepAdding.current)
+        localStorage.setItem('keepAddingCards', JSON.stringify({ status: keepAdding.current }));
     }
 
 
@@ -94,6 +117,18 @@ const NewCard = () => {
         setSnackbarOpen(false);
     };
 
+    useEffect(() => {
+        const keepAddStatus = JSON.parse(localStorage.getItem('keepAddingCards'))?.status;
+        console.log('keepAddStatus:', keepAddStatus)
+        if (keepAddStatus === true || keepAddStatus === false)
+            keepAdding.current = keepAddStatus;
+        else {
+            localStorage.setItem('keepAddingCards', JSON.stringify({ status: false }));
+            keepAdding.current = false;
+        }
+        setKeepAddLazy(keepAdding.current)
+    })
+
     return (
         <Container>
             <TitleContainer>
@@ -105,14 +140,12 @@ const NewCard = () => {
                 <Grid item xs={12} md={6}>
                     <Question>
                         <Subtitle>Pregunta</Subtitle>
-                        {/* TODO: Validate is !== null && "" && undefined */}
                         <Editor ref={questionRef} placeholder={'Write something...'} />
                     </Question>
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Answer>
                         <Subtitle>Respuesta</Subtitle>
-                        {/* TODO: Validate is !== null && "" && undefined */}
                         <Editor ref={answerRef} placeholder={'Write something...'} />
                     </Answer>
                 </Grid>
@@ -126,7 +159,7 @@ const NewCard = () => {
                 open={ openDialog } 
                 handleClose={ handleCloseDialog } 
                 title="Configuración" 
-                keepAdding= { keepAdding }
+                keepAdding= { keepAdding.current }
                 keepAddingHandle= { handleKeepAdding}
             />
 
@@ -150,7 +183,7 @@ const TitleContainer = styled.div`
 
 
 const ConfigButton = styled.div`
-    &&&: {
+    &&& {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -273,7 +306,7 @@ const CustomSnackbar = styled(Snackbar)(() => ({
             backgroundColor: primaryEmerald,
         },
         '& .MuiAlert-standardError': {
-            backgroundColor: primaryRed2,
+            backgroundColor: primaryRed,
         },
         '& .MuiAlert-icon': {
             color: 'white',

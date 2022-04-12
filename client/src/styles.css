@@ -1,3 +1,7 @@
+#root {
+    height: 100%;
+}
+
 #root .ql-container {
     border-bottom-left-radius: .75em;
     border-bottom-right-radius: .75em;

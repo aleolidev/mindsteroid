@@ -9,7 +9,7 @@ export const signin = (formData, navigate) => async (dispatch) => {
 
         navigate('/');
     } catch (error) {
-        console.error(error);
+        throw error;
     }
 }
 
@@ -20,7 +20,7 @@ export const signup = (formData, navigate) => async (dispatch) => {
 
         dispatch({ type: 'AUTH', data });
     } catch (error) {
-        console.error(error);
+        throw error;
     }
 }
 

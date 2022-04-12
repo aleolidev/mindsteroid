@@ -98,16 +98,18 @@ const Decks = forwardRef(({ id }, ref) => {
 
     const deckActions = [
         {action: null, title: <Item icon={ <HiOutlinePencil/ > }>Cambiar nombre</Item>},
-        // TODO: Add delete confirmation
         {action: null, title: <Item icon={ <CgTrashEmpty/ > }>Eliminar</Item>},
     ]
+
+    if (decks === null || decks === undefined || decks.length == 0) {
+        return (<></>)
+    }
 
     return (
         <div>
             <TitleText>Mazos</TitleText>
             <TitleUnderline />
             <CustomGrid name='deckContainer' container ref={ decksRef }>
-                {/* TODO: Add blank page message */}
                 {decks.map((deck, index) => (
                     <Grid name="deckGrid" key={deck._id} item xs={12} sm={6} md={3} >
                         {/* { deck.name } */}

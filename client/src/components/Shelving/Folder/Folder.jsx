@@ -1,19 +1,24 @@
 import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
-import { darkTextColor, primaryLightEmerald1, primaryLightEmerald2, backgroundLightBlue, inputSvgColor, primaryEmerald } from '../../../utils'
+import { darkTextColor, primaryLightEmerald1, primaryLightEmerald2, backgroundLightBlue, inputSvgColor, primaryEmerald, primaryRed, primaryRed2 } from '../../../utils'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getFolders, deleteFolder } from '../../../actions/folders';
 import { deleteDeck, getDecks} from '../../../actions/decks';
-import { Menu, MenuItem } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Menu, MenuItem } from '@material-ui/core';
 import { HiFolder } from 'react-icons/hi';
 import CustomDialog from '../../Utils/CustomDialog';
 import * as api from '../../../api';
+import { deleteCard } from '../../../actions/cards';
 
 const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
 
     const [ contextMenu, setContextMenu ] = useState(null);
     const [ openDialog, setOpenDialog ] = useState(false);
+
+    const [ confirmDeleteOpen, setConfirmDeleteOpen ] = useState(false);
+    const [ lastDeleteSelection, setLastDeleteSelection ] = useState(null);
+    
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -34,6 +39,15 @@ const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
         setOpenDialog(false);
     };
 
+    const handleConfirmDelete = (id) => {
+        setLastDeleteSelection(id);
+        setConfirmDeleteOpen(true);
+    };
+    
+    const handleCloseDelete = () => {
+        setConfirmDeleteOpen(false);
+    };
+
     const getFolderDecks = async (id) => {
         let decks = [];
         const { data } = await api.fetchDecksById(id);
@@ -41,12 +55,23 @@ const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
         if (data !== null && data !== undefined) {
             for (let deck in data) {
                 decks = [data[deck]._id, ...decks];
-                // decks.unshift(data[deck]._id);
-                // decks = [...await recursiveFolders(data[folder]._id), ...folders];
             }
         }
 
         return decks
+    }
+
+    const getDeckCards = async (id) => {
+        let cards = [];
+        const { data } = await api.fetchCardsById(id);
+        
+        if (data !== null && data !== undefined) {
+            for (let card in data) {
+                cards = [data[card]._id, ...cards];
+            }
+        }
+
+        return cards
     }
 
     const recursiveFolders = async (id) => {
@@ -63,17 +88,23 @@ const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
         return folders
     }
 
-    const deleteFolderAndContent = async (id) => {  
-        // TODO: Do all in a single API call
-        let folders = [id];
-        folders = [...await recursiveFolders(id), ...folders];
-        for(const folder in folders) {
-            const decks = await getFolderDecks(folders[folder]);
-            for (const deck in decks) {
-                dispatch(deleteDeck(decks[deck]));
+    const deleteFolderAndContent = async () => {  
+        if (lastDeleteSelection !== null && lastDeleteSelection !== undefined) {
+            let folders = [lastDeleteSelection];
+            folders = [...await recursiveFolders(lastDeleteSelection), ...folders];
+            for(const folder in folders) {
+                const decks = await getFolderDecks(folders[folder]);
+                for (const deck in decks) {
+                    const cards = await getDeckCards(decks[deck]);
+                    for(const card in cards) {
+                        dispatch(deleteCard(cards[card]));
+                    }
+                    dispatch(deleteDeck(decks[deck]));
+                }
+                dispatch(deleteFolder(folders[folder]));
             }
-            dispatch(deleteFolder(folders[folder]));
         }
+        handleCloseDelete();
     };
 
 
@@ -99,7 +130,6 @@ const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
 
     return (
         <div name='folderBox'>
-            {/* TODO: Set onClick for mobile devices */}
             <Card name="card" onContextMenu={(e) => handleContextMenu(e)} onDoubleClick={(e) => openFolder(e)}>
                 <StyledMenu
                     sx={{
@@ -126,7 +156,7 @@ const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
                                 handleOpenDialog();
                             }
                             else if (item.title.props.children == 'Eliminar') {  
-                                deleteFolderAndContent(folderObj._id);
+                                handleConfirmDelete(folderObj._id);
                             }
                             else if (item.action !== null && item.action !== undefined) {
                                 item.action();
@@ -150,6 +180,25 @@ const Folder = ({ folder, handleUpdateName, folderObj, index, actions }) => {
                     handleCloseDialog();
                 }} 
             />
+            <Dialog
+                open={confirmDeleteOpen}
+                onClose={handleCloseDelete}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    ¿Estás seguro de que deseas eliminar este elemento?
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Una vez confirmada esta acción se borrará el elemento seleccionado y todo lo que contenga en su interior. ¿Quieres continuar?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <CancelButton onClick={handleCloseDelete} autoFocus>Cancelar</CancelButton>
+                    <DeleteButton onClick={deleteFolderAndContent}>Eliminar</DeleteButton>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }
@@ -223,6 +272,45 @@ const StyledMenu = styled(Menu)(() => ({
         padding: 0,
     }
 }));
+
+const CancelButton = styled(Button)`
+    margin: 0 .5em .5em 0;
+    transition: 0.2s ease-in-out;
+    padding: .5em 1em;
+    border-radius: .75em;
+    text-align: center;
+    text-transform: none;
+    font-family: 'Khula', 'Source Sans Pro', sans-serif;
+    font-weight: 600;
+    font-size: 1em;
+    color: ${ darkTextColor };
+    &:hover {
+        background-color: ${ backgroundLightBlue };
+        svg {
+            color: white;
+        }
+    }
+`;
+
+const DeleteButton = styled(Button)`
+    margin: 0 .5em .5em 0;
+    transition: 0.2s ease-in-out;
+    padding: .5em 1em;
+    border-radius: .75em;
+    text-align: center;
+    text-transform: none;
+    font-family: 'Khula', 'Source Sans Pro', sans-serif;
+    font-weight: 600;
+    font-size: 1em;
+    background-color: ${ primaryRed };
+    color: white;
+    &:hover {
+        background-color: ${ primaryRed2 };
+        svg {
+            color: white;
+        }
+    }
+`;
 
 
 const StyledMenuItem = styled(MenuItem)(() => ({

@@ -4,7 +4,7 @@ import { isMobile } from '../../utils/index';
 import { Menu, MenuItem } from '@material-ui/core';
 import { darkTextColor, backgroundLightBlue } from '../../utils'
 
-const CustomContainer = ({ children, availableSpaces, actions }) => {
+const CustomContainer = ({ children, availableSpaces, actions, fullHeight }) => {
     const [contextMenu, setContextMenu] = React.useState(null);
 
     const handleContextMenu = (event) => {
@@ -38,7 +38,9 @@ const CustomContainer = ({ children, availableSpaces, actions }) => {
         ); 
     } else {
         return (
-            <Container onContextMenu={handleContextMenu} style={{ cursor: 'context-menu' }}>
+            <Container onContextMenu={handleContextMenu} style={{ 
+                cursor: 'context-menu',
+                height: fullHeight ? '100%' : 'auto',}}>
                 <StyledMenu
                     sx={{
                         width: 300,
@@ -69,7 +71,7 @@ const CustomContainer = ({ children, availableSpaces, actions }) => {
     }
 }
 
-const Container = styled.div`
+const Container = styled.div`}
     // padding-bottom: 5em;
 `;
 

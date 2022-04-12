@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { backgroundLightBlue, darkTextColor, primaryRed, primaryEmerald } from '../../utils/index';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 
-export default function ConfigDialog( { open, handleClose, title, keepAdding, keepAddingHandle } ) {
+export default function ConfigDialog( { open, handleClose, title, keepAdding, value, keepAddingHandle } ) {
     const inputRef = useRef();
 
     return (

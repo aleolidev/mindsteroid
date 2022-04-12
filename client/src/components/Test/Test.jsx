@@ -254,7 +254,8 @@ const ShowAnswer = styled(Button)`
         cursor: pointer;
         transition: 0.2s ease-in-out;
         &:hover {
-            background-color: ${ backgroundLightGray };
+            background-color: ${ primaryEmerald };
+            color: white;
         }
     }
 `;
